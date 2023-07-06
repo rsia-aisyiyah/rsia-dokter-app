@@ -1,0 +1,317 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:rsiap_dokter/api/request.dart';
+import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/utils/helper.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  
+  _getNow() async {
+    var res = await Api().getData('/dokter/pasien/2023/5');
+    var body = json.decode(res.body);
+    return body;
+  }
+
+  _getMe() async {
+    var res = await Api().getData('/dokter');
+    var body = json.decode(res.body);
+    return body;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: primaryColor,
+      body: SafeArea(
+        child: FutureBuilder(
+          future: _getNow(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var res = json.decode(json.encode(snapshot.data));
+              if (res['success']) {
+                if (res['data']['total'] == 0) {
+                  return Center(
+                    child: Text(
+                      "Tidak ada pasien yang sedang berobat",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: fontWeightNormal,
+                        color: textColor,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      color: primaryColor,
+                    ),
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          width: double.infinity,
+                          child: FutureBuilder(
+                            future: _getMe(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                var data =
+                                    json.decode(json.encode(snapshot.data));
+                                if (data['success']) {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                          vertical: MediaQuery.of(context).size.height * 0.04,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              Helper.greeting(),
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: fontWeightNormal,
+                                                color: textColorLight,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 15),
+                                            Text(
+                                              data['data']['nm_dokter'],
+                                              style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.bold,
+                                                color: textColorLight,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              data['data']['no_ijn_praktek'],
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: fontWeightNormal,
+                                                color: textColorLight,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 15),
+                                            Container(
+                                              padding: const EdgeInsets.all(20),
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Pasien Sekarang",
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight: fontWeightNormal,
+                                                      color: textColor,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 5),
+                                                  Text(
+                                                    res['data']['total'].toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight: fontWeightSemiBold,
+                                                      color: textColor,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(height: 15),
+                                            Flex(
+                                              direction: Axis.horizontal,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Container(
+                                                    padding: const EdgeInsets.all(20),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius: BorderRadius.circular(10),
+                                                    ),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          "Pasien Tahun Ini",
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight: fontWeightNormal,
+                                                            color: textColor,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(height: 5),
+                                                        Text(
+                                                          res['data']['total'].toString(),
+                                                          style: TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight: fontWeightSemiBold,
+                                                            color: textColor,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 10),
+                                                Expanded(
+                                                  child: Container(
+                                                    padding: const EdgeInsets.all(20),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius: BorderRadius.circular(10),
+                                                    ),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          "Pasien Bulan Ini",
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight: fontWeightNormal,
+                                                            color: textColor,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(height: 5),
+                                                        Text(
+                                                          res['data']['antrian'].toString(),
+                                                          style: TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight: fontWeightSemiBold,
+                                                            color: textColor,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                } else {
+                                  return Center(
+                                    child: Text(
+                                      data['message'],
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: fontWeightNormal,
+                                        color: textColor,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              } else {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    color: textColor,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                        DraggableScrollableSheet(
+                          initialChildSize: 0.5,
+                          minChildSize: 0.5,
+                          maxChildSize: 0.771,
+                          builder: (context, scrollController) {
+                            return Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                ),
+                              ),
+                              child: ListView.builder(
+                                controller: scrollController,
+                                itemCount: res['data']['per_page'],
+                                itemBuilder: (context, index) {
+                                  var data = res['data']['data'][index];
+                                  return Container(
+                                    margin: const EdgeInsets.only(bottom: 10),
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          data['p_jawab'],
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: fontWeightSemiBold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                          data['hubunganpj'],
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: fontWeightNormal,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                  );
+                }
+              } else {
+                return Center(
+                  child: Text(
+                    res['message'],
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: fontWeightNormal,
+                      color: textColor,
+                    ),
+                  ),
+                );
+              }
+            } else {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: textColor,
+                ),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
