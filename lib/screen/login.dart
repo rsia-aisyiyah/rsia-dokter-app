@@ -54,28 +54,35 @@ class LoginScreenState extends State<LoginScreen> {
       'password': password,
     };
 
-    var res = await Api().auth(data, '/auth/login');
-    var body = json.decode(res.body);
-
-    if (body['success']) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('token', json.encode(body['access_token']));
-
-      Msg.success(context, 'Login success');
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const IndexScreen(),
-        ),
-      );
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-
-      Msg.error(context, body['message']);
-    }
+    var res = await Api().auth(data, '/auth/login').then((res) {
+      if (res.statusCode == 200) {
+        var body = jsonDecode(res.body);
+        if (body['success']) {
+          SharedPreferences.getInstance().then((prefs) {
+            prefs.setString('token', json.encode(body['access_token']));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const IndexScreen(),
+              ),
+            );
+          });
+        } else {
+          Msg.error(context, body['message']);
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      } else {
+        Msg.error(
+          context,
+          'Username atau password salah, atau terdapat kesalahan pada sistem',
+        );
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
   }
 
   @override

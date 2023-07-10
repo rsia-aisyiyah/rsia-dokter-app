@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/screen/login.dart';
 import 'package:rsiap_dokter/screen/index.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/utils/msg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api/request.dart';
@@ -48,7 +49,7 @@ class _CheckAuthState extends State<CheckAuth> {
     SharedPreferences.getInstance().then((prefs) {
       var token = prefs.getString('token');
       if (token != null) {
-        Api().postRequest('/auth/validate').then((res) {
+        Api().postRequest('/auth/me').then((res) {
           if (res.statusCode == 200) {
             if (mounted) {
               setState(() {
@@ -57,6 +58,7 @@ class _CheckAuthState extends State<CheckAuth> {
             }
           } else {
             if (mounted) {
+              Msg.error(context, 'Sesi anda telah berakhir');
               setState(() {
                 isAuth = false;
               });

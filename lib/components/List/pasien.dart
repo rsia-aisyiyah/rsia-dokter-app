@@ -8,9 +8,7 @@ class CreatePasienList extends StatefulWidget {
   final ScrollController scrollController;
 
   const CreatePasienList(
-      {super.key,
-      this.pasien = const [],
-      required this.scrollController});
+      {super.key, this.pasien = const [], required this.scrollController});
 
   @override
   State<CreatePasienList> createState() => _CreatePasienListState();
@@ -148,15 +146,25 @@ class _CreatePasienListState extends State<CreatePasienList> {
           ),
         ),
         Expanded(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: pasien.length,
-            controller: widget.scrollController,
-            padding: const EdgeInsets.all(10),
-            itemBuilder: (context, index) {
-              return createCardPasien(pasien[index]);
-            },
-          ),
+          child: pasien.isEmpty
+              ? Center(
+                  child: Text(
+                    "Tidak ada pasien",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: fontWeightSemiBold,
+                    ),
+                  ),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: pasien.length,
+                  controller: widget.scrollController,
+                  padding: const EdgeInsets.all(10),
+                  itemBuilder: (context, index) {
+                    return createCardPasien(pasien[index]);
+                  },
+                ),
         ),
       ],
     );
