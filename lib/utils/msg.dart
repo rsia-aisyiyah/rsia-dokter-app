@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/config/config.dart';
 
 class Msg {
-  show(BuildContext context, String message) {
+  static show(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message, style: TextStyle(color: textColorLight)),
@@ -12,7 +12,7 @@ class Msg {
     );
   }
 
-  success(BuildContext context, String message) {
+  static success(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message, style: TextStyle(color: textColorLight)),
@@ -22,7 +22,7 @@ class Msg {
     );
   }
 
-  info(BuildContext context, String message) {
+  static info(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message, style: TextStyle(color: textColorLight)),
@@ -32,7 +32,7 @@ class Msg {
     );
   }
 
-  warning(BuildContext context, String message) {
+  static warning(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message, style: TextStyle(color: textColorLight)),
@@ -42,7 +42,7 @@ class Msg {
     );
   }
 
-  error(BuildContext context, String message) {
+  static error(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message, style: TextStyle(color: textColorLight)),

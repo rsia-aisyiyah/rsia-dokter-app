@@ -17,10 +17,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isLoading = true;
-  var _pasienNow;
-  var _ranapNow;
-  var _ralanNow;
-  var _dokter;
+  var _pasienNow = {};
+  var _dokter = {};
 
   @override
   void initState() {
@@ -28,12 +26,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> fetchAllData() async {
-    // TODO : GET Pasien now, ranap dan ralan map di client, jadi tanpa melakukan request ke server lagi
     List<Future> futures = [
       _getDokter(),
       _getPasienNow(),
-      _getRanapNow(),
-      _getRalanNow(),
     ];
 
     await Future.wait(futures);
@@ -50,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _getPasienNow() async {
-    var res = await Api().getData('/dokter/pasien/now');
+    var res = await Api().getData('/dokter/pasien/2023/06');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       setState(() {
@@ -59,40 +54,38 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> _getRanapNow() async {
-    var res = await Api().getData('/dokter/pasien/ranap/now');
-    if (res.statusCode == 200) {
-      var body = json.decode(res.body);
-      setState(() {
-        _ranapNow = body;
-      });
+  // filter pasien rawat inap
+  List filterPasienRawatInap(List pasien) {
+    List pasienRawatInap = [];
+    for (var i = 0; i < pasien.length; i++) {
+      if (pasien[i]['status_lanjut'] == 'Ranap') {
+        pasienRawatInap.add(pasien[i]);
+      }
     }
+    return pasienRawatInap;
   }
 
-  Future<void> _getRalanNow() async {
-    var res = await Api().getData('/dokter/pasien/ralan/now');
-    if (res.statusCode == 200) {
-      var body = json.decode(res.body);
-      setState(() {
-        _ralanNow = body;
-      });
+  List filterPasienRawatJalan(List pasien) {
+    List pasienRawatJalan = [];
+    for (var i = 0; i < pasien.length; i++) {
+      if (pasien[i]['status_lanjut'] == 'Ralan') {
+        pasienRawatJalan.add(pasien[i]);
+      }
     }
+    return pasienRawatJalan;
   }
-
-  final Future<List> _testList = Future<List>.delayed(
-    const Duration(seconds: 2),
-    () => List.generate(20, (i) => i + 1),
-  );
 
   @override
   Widget build(BuildContext context) {
-    var heightDragsheet = MediaQuery.of(context).size.height * 0.6 / MediaQuery.of(context).size.height;
+    var heightDragsheet = MediaQuery.of(context).size.height *
+        0.6 /
+        MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
         child: FutureBuilder(
-          future: _testList,
+          future: fetchAllData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return Container(
@@ -129,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
-                                  "Nama Dokter diambil dari API / Database",
+                                  _dokter['data']['nm_dokter'],
                                   style: TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
@@ -174,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     DefaultTabController(
-                      length: 3,
+                      length: 2,
                       child: DraggableScrollableSheet(
                         initialChildSize: heightDragsheet,
                         minChildSize: heightDragsheet,
@@ -197,38 +190,62 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               children: [
                                 TabBar(
-                                    indicatorColor: primaryColor,
-                                    labelColor: primaryColor,
-                                    unselectedLabelColor:
-                                        textColor.withOpacity(0.2),
-                                    padding: const EdgeInsets.all(10),
-                                    indicator: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(100),
-                                      color: primaryColor.withOpacity(0.2),
+                                  isScrollable: true,
+                                  labelColor: primaryColor,
+                                  indicatorColor: primaryColor,
+                                  unselectedLabelColor:
+                                      textColor.withOpacity(0.2),
+                                  padding: const EdgeInsets.all(10),
+                                  indicator: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: primaryColor.withOpacity(0.2),
+                                  ),
+                                  unselectedLabelStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: fontWeightNormal,
+                                  ),
+                                  labelStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: fontWeightBold,
+                                  ),
+                                  tabs: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      child: const Tab(text: 'Rawat Inap'),
                                     ),
-                                    unselectedLabelStyle: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: fontWeightNormal,
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      child: const Tab(text: 'Rawat Jalan'),
                                     ),
-                                    labelStyle: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: fontWeightBold,
-                                    ),
-                                    // tabs is mapping of mainTabs and get label
-                                    tabs: const [
-                                      Tab(text: "Semua"),
-                                      Tab(text: "Rawat Inap"),
-                                      Tab(text: "Rawat Jalan"),
-                                    ]),
+                                    // Container(
+                                    //   padding: const EdgeInsets.symmetric(
+                                    //     horizontal: 10,
+                                    //   ),
+                                    //   child: const Tab(text: 'Jadwal Operasi'),
+                                    // ),
+                                  ],
+                                ),
                                 Expanded(
-                                  child: TabBarView(children: [
-                                    createListPasien(
-                                        snapshot.data!, "", scrollController),
-                                    createListPasien(snapshot.data!, "ranap",
-                                        scrollController),
-                                    createListPasien(snapshot.data!, "ralan",
-                                        scrollController),
-                                  ]),
+                                  child: TabBarView(
+                                    children: [
+                                      CreatePasienList(
+                                        scrollController: scrollController,
+                                        pasien: filterPasienRawatInap(_pasienNow['data']['data']),
+                                      ),
+                                      CreatePasienList(
+                                        scrollController: scrollController,
+                                        pasien: filterPasienRawatJalan(_pasienNow['data']['data'])
+                                      ),
+                                      // CreatePasienList(
+                                      //   scrollController: scrollController,
+                                      //   pasien: snapshot.data!,
+                                      // ),
+                                    ],
+                                  ),
                                 )
                               ],
                             ),

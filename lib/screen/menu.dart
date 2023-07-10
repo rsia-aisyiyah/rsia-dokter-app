@@ -40,7 +40,7 @@ class _MenuPageState extends State<MenuPage> {
               ),
               child: InkWell(
                 onTap: () {
-                  return Msg().warning(context, "Menu $index Clicked");
+                  return Msg.warning(context, "Menu $index Clicked");
                 },
                 child: cardStatsBg("Sub title menu", "Title Menu $index", context)
               ),

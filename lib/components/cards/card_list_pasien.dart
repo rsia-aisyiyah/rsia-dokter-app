@@ -24,24 +24,20 @@ createCardPasien(pasien) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              pasien.toString(),
+              pasien['p_jawab'],
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              "lorem ipsum dolor sit amet",
+              pasien['hubunganpj'],
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.normal,
               ),
             )
           ],
-        ),
-        Icon(
-          Icons.share_outlined,
-          color: primaryColor,
         ),
       ],
     ),

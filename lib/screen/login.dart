@@ -33,19 +33,35 @@ class LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
     });
 
+    if (username.isEmpty) {
+      Msg.error(context, 'Username tidak boleh kosong');
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    if (password.isEmpty) {
+      Msg.error(context, 'Password tidak boleh kosong');
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
     var data = {
       'username': username,
       'password': password,
     };
 
-    // var res = await Api().auth(data, '/auth/login');
-    // var body = json.decode(res.body);
+    var res = await Api().auth(data, '/auth/login');
+    var body = json.decode(res.body);
 
-    // if (body['success']) {
-    //   SharedPreferences prefs = await SharedPreferences.getInstance();
-    //   prefs.setString('token', json.encode(body['access_token']));
+    if (body['success']) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', json.encode(body['access_token']));
 
-      Msg().success(context, 'Login success');
+      Msg.success(context, 'Login success');
 
       Navigator.pushReplacement(
         context,
@@ -53,13 +69,13 @@ class LoginScreenState extends State<LoginScreen> {
           builder: (context) => const IndexScreen(),
         ),
       );
-    // } else {
-    //   setState(() {
-    //     _isLoading = false;
-    //   });
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
 
-    //   Msg().error(context, body['message']);
-    // }
+      Msg.error(context, body['message']);
+    }
   }
 
   @override
@@ -133,6 +149,7 @@ class LoginScreenState extends State<LoginScreen> {
                         ),
                         child: TextFormField(
                           maxLines: 1,
+                          initialValue: '1.101.1112',
                           decoration: InputDecoration(
                             hintText: "Username",
                             contentPadding: const EdgeInsets.all(10),
@@ -166,6 +183,7 @@ class LoginScreenState extends State<LoginScreen> {
                           maxLines: 1,
                           obscureText: _secureText,
                           style: TextStyle(color: secaondaryColorDark),
+                          initialValue: 'dokter123',
                           decoration: InputDecoration(
                             hintText: "Password",
                             border: InputBorder.none,
@@ -185,7 +203,7 @@ class LoginScreenState extends State<LoginScreen> {
                         child: Center(
                           child: GestureDetector(
                             onTap: () {
-                              Msg().info(
+                              Msg.info(
                                 context,
                                 'Silahkan hubungi tim IT untuk reset password',
                               );

@@ -5,6 +5,8 @@ import 'package:rsiap_dokter/screen/index.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'api/request.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MainApp());
@@ -39,18 +41,28 @@ class _CheckAuthState extends State<CheckAuth> {
   @override
   void initState() {
     super.initState();
-    // _checkIsLoggedin();
+    _checkIsLoggedin();
   }
 
   void _checkIsLoggedin() {
     SharedPreferences.getInstance().then((prefs) {
       var token = prefs.getString('token');
       if (token != null) {
-        if (mounted) {
-          setState(() {
-            isAuth = true;
-          });
-        }
+        Api().postRequest('/auth/validate').then((res) {
+          if (res.statusCode == 200) {
+            if (mounted) {
+              setState(() {
+                isAuth = true;
+              });
+            }
+          } else {
+            if (mounted) {
+              setState(() {
+                isAuth = false;
+              });
+            }
+          }
+        });
       }
     });
   }

@@ -5,7 +5,7 @@ import 'package:rsiap_dokter/screen/menu.dart';
 import 'package:rsiap_dokter/screen/profile.dart';
 
 // API Config
-const String baseUrl = 'http://192.168.100.220/rsiap-api';
+const String baseUrl = 'http://192.168.100.3:8080/rsiap-api';
 const String apiUrl = '$baseUrl/api';
 String jwtSignature = randomString(32);
 

@@ -23,12 +23,11 @@ class _ProfilePageState extends State<ProfilePage> {
   void _logout() async {
     var res = await Api().postRequest('/auth/logout');
     var body = json.decode(res.body);
-    print(body);
 
     if (body['success']) {
       SharedPreferences.getInstance().then((prefs) {
         prefs.remove('token');
-        Msg().success(context, 'Logout success');
+        Msg.success(context, 'Logout success');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
