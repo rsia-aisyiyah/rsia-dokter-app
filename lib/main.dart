@@ -20,7 +20,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: appName,
-      themeMode: ThemeMode.light,
+      debugShowCheckedModeBanner: false,
       home: Directionality(
         textDirection: TextDirection.ltr,
         child: CheckAuth(),
@@ -78,6 +78,6 @@ class _CheckAuthState extends State<CheckAuth> {
       child = const LoginScreen();
     }
 
-    return Scaffold(body: child);
+    return child;
   }
 }

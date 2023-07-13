@@ -31,74 +31,75 @@ class StatsHomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: key,
+      color: backgroundColor,
       padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            Helper.greeting(),
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: fontWeightNormal,
-              color: textColorLight,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            dokter['data']['nm_dokter'],
-            style: TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-              color: textColorLight,
-            ),
-          ),
-          const SizedBox(height: 5),
-          Text(
-            dokter['data']['no_ijn_praktek'],
-            style: TextStyle(
-              fontSize: 14,
-              color: textColorLight,
-            ),
-          ),
-          const SizedBox(height: 15),
-          Flex(
-            direction: Axis.horizontal,
-            children: [
-              Expanded(
-                child: cardStats(
-                  "Pasien Hari Ini",
-                  pasienNow['data']['total'].toString(),
-                ),
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              Helper.greeting(),
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: fontWeightNormal,
+                color: textColor,
               ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Flex(
-            direction: Axis.horizontal,
-            children: [
-              Expanded(
-                child: cardStats(
-                    "Pasien Rawat Inap",
-                    filterPasienRawatInap(
-                      pasienNow['data']['data'],
-                    ).length.toString()),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              dokter['data']['nm_dokter'],
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: textColor,
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: cardStats(
-                    "Pasien Rawat Jalan",
-                    filterPasienRawatJalan(
-                      pasienNow['data']['data'],
-                    ).length.toString()),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              "Akhir STR " + dokter['data']['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
+              style: TextStyle(
+                fontSize: 14,
+                color: textColor,
               ),
-            ],
-          )
-        ],
+            ),
+            const SizedBox(height: 15),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: cardStats(
+                      "Hari Ini",
+                      pasienNow['data']['total'].toString(),
+                      context
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: cardStats(
+                      "Rawat Inap",
+                      filterPasienRawatInap(
+                        pasienNow['data']['data'],
+                      ).length.toString(),
+                      context
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: cardStats(
+                      "Rawat Jalan",
+                      filterPasienRawatJalan(
+                        pasienNow['data']['data'],
+                      ).length.toString(),
+                      context
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

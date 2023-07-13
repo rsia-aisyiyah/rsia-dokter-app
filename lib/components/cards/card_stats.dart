@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/config/config.dart';
 
-cardStats(String title, String value) {
+cardStats(String title, String value, BuildContext context) {
   return Container(
-    padding: const EdgeInsets.all(20),
+    padding: const EdgeInsets.all(15),
+    height: MediaQuery.of(context).size.height * 0.12,
     decoration: BoxDecoration(
-      color: Colors.white,
+      color: accentColorDark,
       borderRadius: BorderRadius.circular(10),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
       children: [
         Text(
           title,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 16,
             fontWeight: fontWeightNormal,
             color: textColor,
           ),
         ),
-        const SizedBox(height: 5),
+        const Spacer(),
         Text(
           value,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 22,
             fontWeight: fontWeightSemiBold,
             color: textColor,
           ),

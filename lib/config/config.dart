@@ -1,11 +1,13 @@
 import 'dart:math';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/screen/home.dart';
 import 'package:rsiap_dokter/screen/menu.dart';
 import 'package:rsiap_dokter/screen/profile.dart';
 
+
 // API Config
-const String baseUrl = 'http://192.168.100.3:8080/rsiap-api';
+const String baseUrl = 'https://sim.rsiaaisyiyah.com/rsiap-api';
 const String apiUrl = '$baseUrl/api';
 String jwtSignature = randomString(32);
 
@@ -22,20 +24,22 @@ Color infoColor = Colors.blue[700]!;
 Color secaondaryColor = Colors.grey[700]!;
 
 // Dark Color
-Color primaryColorDark = Colors.indigo;
+Color primaryColorDark = HexColor('#2bdaa8');
+Color secondaryColorDark = HexColor('#cbf6ea');
+Color accentColorDark = HexColor('#23c799');
+
 Color successColorDark = Colors.teal;
 Color warningColorDark = Colors.orange;
 Color errorColorDark = Colors.pink;
 Color infoColorDark = Colors.blue;
-Color secaondaryColorDark = Colors.grey;
 
 // background color
-Color backgroundColor = Colors.grey[50]!;
+Color backgroundColor = HexColor('#d8f8ef');
 Color backgroundColorDark = Colors.grey[900]!;
 
 // text color
-Color textColor = Colors.black;
-Color textColorLight = Colors.white;
+Color textColor = HexColor("#020d0a");
+Color textColorLight = HexColor("#ffffff");
 
 // font weight
 FontWeight fontWeightLight = FontWeight.w300;

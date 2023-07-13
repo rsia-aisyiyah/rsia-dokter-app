@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
+import 'package:rsiap_dokter/components/cards/card_list_jadwa_operasi.dart';
 import 'package:rsiap_dokter/config/config.dart';
 
-class CreatePasienList extends StatefulWidget {
+class CreateJadwalOperasiList extends StatefulWidget {
   final List pasien;
-
-  const CreatePasienList({super.key, this.pasien = const []});
+  const CreateJadwalOperasiList({super.key, this.pasien = const []});
 
   @override
-  State<CreatePasienList> createState() => _CreatePasienListState();
+  State<CreateJadwalOperasiList> createState() =>
+      _CreateJadwalOperasiListState();
 }
 
-class _CreatePasienListState extends State<CreatePasienList> {
+class _CreateJadwalOperasiListState extends State<CreateJadwalOperasiList> {
   List pasien = [];
 
   @override
@@ -169,7 +169,7 @@ class _CreatePasienListState extends State<CreatePasienList> {
                 itemCount: pasien.length,
                 padding: const EdgeInsets.all(10),
                 itemBuilder: (context, index) {
-                  return createCardPasien(pasien[index]);
+                  return createCardJadwalOperasi(pasien[index]);
                 },
               ),
       ],
