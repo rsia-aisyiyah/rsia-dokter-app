@@ -22,7 +22,7 @@ class _IndexScreenState extends State<IndexScreen> {
     return Scaffold(
       body: navigationItems[_selectedNavbar]['widget'] as Widget,
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: accentColorDark,
+        selectedItemColor: accentColor,
         unselectedItemColor: textColor.withOpacity(0.5),
         currentIndex: _selectedNavbar,
         showUnselectedLabels: false,

@@ -4,8 +4,15 @@ import 'package:rsiap_dokter/config/config.dart';
 
 class CreatePasienList extends StatefulWidget {
   final List pasien;
+  final Function loadMore;
+  final String title;
 
-  const CreatePasienList({super.key, this.pasien = const []});
+  const CreatePasienList({
+    super.key,
+    this.pasien = const [],
+    required this.loadMore,
+    required this.title,
+  });
 
   @override
   State<CreatePasienList> createState() => _CreatePasienListState();
@@ -22,157 +29,95 @@ class _CreatePasienListState extends State<CreatePasienList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: SizedBox(
-                  height: 40,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.all(10),
-                      hintText: "Cari Pasien",
-                      prefixIcon: const Icon(Icons.search),
-                      focusColor: accentColorDark,
-                      prefixIconColor: accentColorDark,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: accentColorDark,
-                        ),
-                      ),
-                    ),
-                  ),
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: pasien.isEmpty ? 1 : pasien.length,
+      padding: const EdgeInsets.all(10),
+      itemBuilder: (context, index) {
+        if (pasien.isEmpty) {
+          return Container(
+            padding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.height / 5),
+            child: Center(
+              child: Text(
+                "Tidak ada data",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: textColor.withOpacity(0.5),
                 ),
               ),
-              const SizedBox(width: 10),
-              InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Container(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        padding: const EdgeInsets.all(15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Filter Pasien",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: fontWeightSemiBold,
-                              ),
-                            ),
+            ),
+          );
+        } else {
+          if (index == 0) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.title,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: fontWeightBold,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () => widget.loadMore(),
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: accentColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(
+                            Icons.filter_list,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                createCardPasien(pasien[index])
+              ],
+            );
+          } 
 
-                            // button ganjul genap
-                            const SizedBox(height: 10),
-                            InkWell(
-                              onTap: () {
-                                // // setState(() {
-                                // //   pasien = widget.pasien.where((element) => element % 2 == 1).toList();
-                                // // });
-                                // Msg.success(context, "Berhasil memfilter pasien ganjil");
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                height: 40,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: accentColorDark,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    "Ganjil",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // henap
-                            const SizedBox(height: 10),
-                            InkWell(
-                              onTap: () {
-                                // setState(() {
-                                //   pasien = pasien = widget.pasien.where((element) => element % 2 == 0).toList();
-                                // });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                height: 40,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: accentColorDark,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    "Genap",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    isScrollControlled: true,
-                  );
-                },
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: accentColorDark,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.filter_list,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        pasien.isEmpty
-            ? SizedBox(
-                height: MediaQuery.of(context).size.height * 0.4,
-                child: Center(
-                  child: Text(
-                    "Tidak ada pasien",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: fontWeightSemiBold,
+          // if last index
+          if (index == pasien.length - 1) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                createCardPasien(pasien[index]),
+                InkWell(
+                  onTap: () => widget.loadMore(),
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: accentColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
                     ),
                   ),
                 ),
-              )
-            : ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: pasien.length,
-                padding: const EdgeInsets.all(10),
-                itemBuilder: (context, index) {
-                  return createCardPasien(pasien[index]);
-                },
-              ),
-      ],
+              ],
+            );
+          }
+
+
+          return createCardPasien(pasien[index]);
+        }
+      },
     );
   }
 }

@@ -4,32 +4,38 @@ import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 
 class StatsHomeWidget extends StatelessWidget {
-  final dokter, pasienNow;
-  const StatsHomeWidget({super.key, this.dokter, this.pasienNow});
+  final dokter, totalHariIni, pasienNow;
+  const StatsHomeWidget({super.key, this.dokter, this.pasienNow, this.totalHariIni});
 
   // filter pasien rawat inap
-  List filterPasienRawatInap(List pasien) {
-    List pasienRawatInap = [];
-    for (var i = 0; i < pasien.length; i++) {
-      if (pasien[i]['status_lanjut'] == 'Ranap') {
-        pasienRawatInap.add(pasien[i]);
+  List filterPasienRawat(String status) {
+    if (status.isNotEmpty) {
+      List pasienFiltered = [];
+      for (var i = 0; i < pasienNow.length; i++) {
+        if (pasienNow[i]['status_lanjut'].toString().toLowerCase() ==
+            status.toLowerCase()) {
+          pasienFiltered.add(pasienNow[i]);
+        }
       }
+      return pasienFiltered;
     }
-    return pasienRawatInap;
+
+    return pasienNow;
   }
 
-  List filterPasienRawatJalan(List pasien) {
-    List pasienRawatJalan = [];
-    for (var i = 0; i < pasien.length; i++) {
-      if (pasien[i]['status_lanjut'] == 'Ralan') {
-        pasienRawatJalan.add(pasien[i]);
-      }
-    }
-    return pasienRawatJalan;
+  double monthBetween(DateTime endDate) {
+    var now = DateTime.now();
+    var difference = endDate.difference(now).inDays;
+    var month = difference / 30;
+    return month;
   }
 
   @override
   Widget build(BuildContext context) {
+    var STRExpired = monthBetween(DateTime.parse(
+      dokter['data']['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
+    ));
+
     return Container(
       color: backgroundColor,
       padding: const EdgeInsets.all(15),
@@ -50,20 +56,75 @@ class StatsHomeWidget extends StatelessWidget {
             Text(
               dokter['data']['nm_dokter'],
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 30,
                 fontWeight: FontWeight.bold,
                 color: textColor,
               ),
             ),
-            const SizedBox(height: 5),
-            Text(
-              "Akhir STR " + dokter['data']['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
-              style: TextStyle(
-                fontSize: 14,
-                color: textColor,
-              ),
+            Container(
+              margin: const EdgeInsets.only(top: 5),
+              padding: STRExpired <= STRExpMin
+                  ? const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    )
+                  : const EdgeInsets.all(0),
+              width: double.infinity,
+              decoration: STRExpired <= STRExpMin
+                  ? BoxDecoration(
+                      color: Colors.yellow[700],
+                      borderRadius: BorderRadius.circular(5),
+                    )
+                  : null,
+              child: STRExpired <= STRExpMin
+                  ? RichText(
+                      text: TextSpan(
+                        text: "STR akan habis dalam ",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: textColor,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: "${STRExpired.toStringAsFixed(1)} Bulan",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: textColor,
+                              fontWeight: fontWeightSemiBold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: ". Segera perpanjang !",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: textColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : RichText(
+                      text: TextSpan(
+                        text: "SIP : ",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: textColor,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: dokter['data']['pegawai']['kualifikasi_staff']
+                                ['nomor_sip'],
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: textColor,
+                              fontWeight: fontWeightSemiBold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
             ),
-            const SizedBox(height: 15),
+            SizedBox(height: STRExpired <= STRExpMin ? 10 : 15),
             IntrinsicHeight(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -71,28 +132,24 @@ class StatsHomeWidget extends StatelessWidget {
                   Expanded(
                     child: cardStats(
                       "Hari Ini",
-                      pasienNow['data']['total'].toString(),
-                      context
+                      totalHariIni.toString(),
+                      context,
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: cardStats(
                       "Rawat Inap",
-                      filterPasienRawatInap(
-                        pasienNow['data']['data'],
-                      ).length.toString(),
-                      context
+                      filterPasienRawat("ranap").length.toString(),
+                      context,
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: cardStats(
                       "Rawat Jalan",
-                      filterPasienRawatJalan(
-                        pasienNow['data']['data'],
-                      ).length.toString(),
-                      context
+                      filterPasienRawat("ralan").length.toString(),
+                      context,
                     ),
                   ),
                 ],

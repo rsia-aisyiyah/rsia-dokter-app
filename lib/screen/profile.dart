@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
+import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/screen/login.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
@@ -72,7 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: fontWeightNormal,
-                              color: textColorLight,
+                              color: textColor,
                             ),
                           ),
                           const SizedBox(height: 15),
@@ -81,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
-                              color: textColorLight,
+                              color: textColor,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -90,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: fontWeightNormal,
-                              color: textColorLight,
+                              color: textColor,
                             ),
                           ),
                         ],
@@ -99,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: textColorLight,
+                          color: backgroundColor,
                           borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(50),
                           ),
@@ -126,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: Text(
                                   'Log Out',
                                   style: TextStyle(
-                                    color: textColorLight,
+                                    color: textColor,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -156,9 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 );
               }
             } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return loadingku(primaryColor);
             }
           },
         ),

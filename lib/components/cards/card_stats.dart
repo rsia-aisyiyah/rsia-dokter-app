@@ -4,9 +4,9 @@ import 'package:rsiap_dokter/config/config.dart';
 cardStats(String title, String value, BuildContext context) {
   return Container(
     padding: const EdgeInsets.all(15),
-    height: MediaQuery.of(context).size.height * 0.12,
+    height: MediaQuery.of(context).size.height * 0.125,
     decoration: BoxDecoration(
-      color: accentColorDark,
+      color: primaryColor,
       borderRadius: BorderRadius.circular(10),
     ),
     child: Column(
@@ -18,7 +18,7 @@ cardStats(String title, String value, BuildContext context) {
           style: TextStyle(
             fontSize: 16,
             fontWeight: fontWeightNormal,
-            color: textColor,
+            color: textColorLight,
           ),
         ),
         const Spacer(),
@@ -27,7 +27,7 @@ cardStats(String title, String value, BuildContext context) {
           style: TextStyle(
             fontSize: 22,
             fontWeight: fontWeightSemiBold,
-            color: textColor,
+            color: textColorLight,
           ),
         ),
       ],

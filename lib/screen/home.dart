@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/List/pasien.dart';
 import 'package:rsiap_dokter/components/List/jadwal_operasi.dart';
+import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/components/others/stats_home.dart';
 import 'package:rsiap_dokter/config/config.dart';
@@ -19,9 +21,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isLoading = true;
+
+  // Data
+  var _jadwalOperasi = {};
   var _pasienNow = {};
   var _dokter = {};
-  var _jadwalOperasi = {};
+
+  // Pagination
+  var currentPage = 1;
+  var lastPage = 1;
+  var nextPageUrl = '';
+  var prevPageUrl = '';
+
+  // Data
+  List dataPasien = [];
 
   @override
   void initState() {
@@ -30,10 +43,18 @@ class _HomePageState extends State<HomePage> {
       if (mounted) {
         setState(() {
           isLoading = false;
+
+          // Pagination
+          currentPage = _pasienNow['data']['current_page'];
+          lastPage = _pasienNow['data']['last_page'];
+          nextPageUrl = _pasienNow['data']['next_page_url'];
+          prevPageUrl = _pasienNow['data']['prev_page_url'];
         });
       }
     });
   }
+
+  // ---------------------- Fetch Data
 
   Future<void> fetchAllData() async {
     List<Future> futures = [
@@ -61,6 +82,7 @@ class _HomePageState extends State<HomePage> {
       var body = json.decode(res.body);
       setState(() {
         _pasienNow = body;
+        dataPasien = body['data']['data'];
       });
     }
   }
@@ -75,25 +97,49 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  List filterPasienRawatInap(List pasien) {
-    List pasienRawatInap = [];
-    for (var i = 0; i < pasien.length; i++) {
-      if (pasien[i]['status_lanjut'] == 'Ranap') {
-        pasienRawatInap.add(pasien[i]);
+  // ---------------------- End Fetch Data
+
+  // ---------------------- Load More Data
+
+  Future<void> loadMoreData() async {
+    if (nextPageUrl.isNotEmpty) {
+      var res = await Api().getDataUrl(nextPageUrl);
+      if (res.statusCode == 200) {
+        var body = json.decode(res.body);
+        setState(() {
+          _pasienNow = body;
+          dataPasien.addAll(body['data']['data']);
+
+          // pagination
+          currentPage = _pasienNow['data']['current_page'];
+          lastPage = _pasienNow['data']['last_page'];
+          nextPageUrl = _pasienNow['data']['next_page_url'];
+          prevPageUrl = _pasienNow['data']['prev_page_url'];
+        });
       }
     }
-    return pasienRawatInap;
   }
 
-  List filterPasienRawatJalan(List pasien) {
-    List pasienRawatJalan = [];
-    for (var i = 0; i < pasien.length; i++) {
-      if (pasien[i]['status_lanjut'] == 'Ralan') {
-        pasienRawatJalan.add(pasien[i]);
+  // ---------------------- End Load More Data
+
+  // ---------------------- Filter Pasien
+
+  List filterPasienRawat(String status) {
+    if (status.isNotEmpty) {
+      List pasienFiltered = [];
+      for (var i = 0; i < dataPasien.length; i++) {
+        if (dataPasien[i]['status_lanjut'].toString().toLowerCase() ==
+            status.toLowerCase()) {
+          pasienFiltered.add(dataPasien[i]);
+        }
       }
+      return pasienFiltered;
     }
-    return pasienRawatJalan;
+
+    return dataPasien;
   }
+
+  // ---------------------- End Filter Pasien
 
   @override
   Widget build(BuildContext context) {
@@ -102,92 +148,118 @@ class _HomePageState extends State<HomePage> {
     } else {
       return DefaultTabController(
         length: 3,
-        child: DraggableHome(
-          title: const Text("Draggable Home"),
-          headerWidget: StatsHomeWidget(
-            dokter: _dokter,
-            pasienNow: _pasienNow,
-          ),
-          body: [
-            Row(
-              children: [
-                const Spacer(),
-                Container(
-                  height: 3,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    color: Colors.grey,
-                  ),
-                ),
-                const Spacer(),
-              ],
+        child: LazyLoadScrollView(
+          onEndOfPage: () => loadMoreData(),
+          child: DraggableHome(
+            title: const Text("Draggable Home"),
+            headerWidget: StatsHomeWidget(
+              dokter: _dokter,
+              pasienNow: dataPasien,
+              totalHariIni: _pasienNow['data']['total'],
             ),
-            IntrinsicHeight(
-              child: TabBar(
-                isScrollable: true,
-                labelColor: accentColorDark,
-                indicatorColor: primaryColorDark,
-                unselectedLabelColor: textColor.withOpacity(0.2),
-                padding: const EdgeInsets.all(10),
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: primaryColorDark.withOpacity(0.2),
-                ),
-                unselectedLabelStyle: TextStyle(
-                  fontSize: 14,
-                  fontWeight: fontWeightNormal,
-                ),
-                labelStyle: TextStyle(
-                  fontSize: 14,
-                  fontWeight: fontWeightBold,
-                ),
-                tabs: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    child: const Tab(text: 'Rawat Inap'),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    child: const Tab(text: 'Rawat Jalan'),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    child: const Tab(text: 'Jadwal Operasi'),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: TabBarView(
+            body: List.of([
+              Row(
                 children: [
-                  CreatePasienList(
-                    pasien: filterPasienRawatInap(
-                      _pasienNow['data']['data'],
+                  const Spacer(),
+                  Container(
+                    height: 3,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.grey,
                     ),
                   ),
-                  CreatePasienList(
-                    pasien: filterPasienRawatJalan(
-                      _pasienNow['data']['data'],
-                    ),
-                  ),
-                  CreateJadwalOperasiList(
-                    pasien: _jadwalOperasi['data']['data'],
-                  ),
+                  const Spacer(),
                 ],
               ),
-            )
-          ],
-          fullyStretchable: false,
-          backgroundColor: Colors.white,
-          appBarColor: primaryColorDark,
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: dataPasien.length,
+                padding: const EdgeInsets.all(10),
+                itemBuilder: (context, index) {
+                  return createCardPasien(dataPasien[index]);
+                },
+              )
+            ], growable: true),
+            // body: Row(
+            //   children: [
+            //     const Spacer(),
+            //     Container(
+            //       height: 3,
+            //       width: 60,
+            //       decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(15.0),
+            //         color: Colors.grey,
+            //       ),
+            //     ),
+            //     const Spacer(),
+            //   ],
+            // ),
+            // IntrinsicHeight(
+            //   child: TabBar(
+            //     isScrollable: true,
+            //     labelColor: accentColor,
+            //     indicatorColor: primaryColor,
+            //     unselectedLabelColor: textColor.withOpacity(0.2),
+            //     padding: const EdgeInsets.all(10),
+            //     indicator: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(100),
+            //       color: primaryColor.withOpacity(0.2),
+            //     ),
+            //     unselectedLabelStyle: TextStyle(
+            //       fontSize: 14,
+            //       fontWeight: fontWeightNormal,
+            //     ),
+            //     labelStyle: TextStyle(
+            //       fontSize: 14,
+            //       fontWeight: fontWeightBold,
+            //     ),
+            //     tabs: [
+            //       Container(
+            //         padding: const EdgeInsets.symmetric(
+            //           horizontal: 10,
+            //         ),
+            //         child: const Tab(text: 'Rawat Inap'),
+            //       ),
+            //       Container(
+            //         padding: const EdgeInsets.symmetric(
+            //           horizontal: 10,
+            //         ),
+            //         child: const Tab(text: 'Rawat Jalan'),
+            //       ),
+            //       Container(
+            //         padding: const EdgeInsets.symmetric(
+            //           horizontal: 10,
+            //         ),
+            //         child: const Tab(text: 'Jadwal Operasi'),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // Container(
+            //   child: TabBarView(
+            //     children: [
+            //       CreatePasienList(
+            //         pasien: filterPasienRawat("Ranap"),
+            //         loadMore: loadMoreData,
+            //         title: "Rawat Inap",
+            //       ),
+            //       CreatePasienList(
+            //         pasien: filterPasienRawat("Ralan"),
+            //         loadMore: loadMoreData,
+            //         title: 'Rawat Jalan',
+            //       ),
+            //       CreateJadwalOperasiList(
+            //         pasien: _jadwalOperasi['data']['data'],
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            fullyStretchable: false,
+            backgroundColor: Colors.white,
+            appBarColor: primaryColor,
+          ),
         ),
       );
     }

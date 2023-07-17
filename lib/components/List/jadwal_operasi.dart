@@ -37,15 +37,15 @@ class _CreateJadwalOperasiListState extends State<CreateJadwalOperasiList> {
                       contentPadding: const EdgeInsets.all(10),
                       hintText: "Cari Pasien",
                       prefixIcon: const Icon(Icons.search),
-                      focusColor: accentColorDark,
-                      prefixIconColor: accentColorDark,
+                      focusColor: accentColor,
+                      prefixIconColor: accentColor,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: accentColorDark,
+                          color: accentColor,
                         ),
                       ),
                     ),
@@ -86,7 +86,7 @@ class _CreateJadwalOperasiListState extends State<CreateJadwalOperasiList> {
                                 height: 40,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  color: accentColorDark,
+                                  color: accentColor,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: const Center(
@@ -113,7 +113,7 @@ class _CreateJadwalOperasiListState extends State<CreateJadwalOperasiList> {
                                 height: 40,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  color: accentColorDark,
+                                  color: accentColor,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: const Center(
@@ -138,7 +138,7 @@ class _CreateJadwalOperasiListState extends State<CreateJadwalOperasiList> {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
-                    color: accentColorDark,
+                    color: accentColor,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Icon(
