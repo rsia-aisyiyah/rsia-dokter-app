@@ -11,6 +11,7 @@ import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/components/others/stats_home.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/screen/detail_pasien.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -178,7 +179,25 @@ class _HomePageState extends State<HomePage> {
                 itemCount: dataPasien.length,
                 padding: const EdgeInsets.all(10),
                 itemBuilder: (context, index) {
-                  return createCardPasien(dataPasien[index]);
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailPasien(
+                            noRawat: dataPasien[index]['no_rawat'],
+                            kategori: dataPasien[index]['penjab']['png_jawab']
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains("umum")
+                                ? "umum"
+                                : "bpjs",
+                          ),
+                        ),
+                      );
+                    },
+                    child: createCardPasien(dataPasien[index]),
+                  );
                 },
               )
             ], growable: true),

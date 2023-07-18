@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:rsiap_dokter/screen/login.dart';
 import 'package:rsiap_dokter/screen/index.dart';
@@ -8,9 +9,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api/request.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MainApp());
+  await initializeDateFormatting('id_ID', null)
+      .then((_) => runApp(const MainApp()));
 }
 
 class MainApp extends StatelessWidget {

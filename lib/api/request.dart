@@ -12,32 +12,32 @@ class Api {
     token = json.decode(jsonToken!);
   }
 
-  auth(data, apiURL) async {
-    var fullUrl = apiUrl + apiURL;
+  auth(data, pathUrl) async {
+    var fullUrl = apiUrl + pathUrl;
     return await http.post(Uri.parse(fullUrl),
         body: jsonEncode(data), headers: _setHeaders());
   }
 
-  postData(data, apiURL) async {
-    var fullUrl = apiUrl + apiURL;
-    await _getToken();
-    return await http.post(Uri.parse(fullUrl),
-        body: jsonEncode(data), headers: _setHeaders());
-  }
-
-  postRequest(apiURL) async {
-    var fullUrl = apiUrl + apiURL;
-    await _getToken();
-    return await http.post(Uri.parse(fullUrl), headers: _setHeaders());
-  }
-
-  getData(apiURL) async {
-    var fullUrl = apiUrl + apiURL;
+  getData(pathUrl) async {
+    var fullUrl = apiUrl + pathUrl;
     await _getToken();
     return await http.get(
       Uri.parse(fullUrl),
       headers: _setHeaders(),
     );
+  }
+
+  postRequest(pathUrl) async {
+    var fullUrl = apiUrl + pathUrl;
+    await _getToken();
+    return await http.post(Uri.parse(fullUrl), headers: _setHeaders());
+  }
+
+  postData(data, pathUrl) async {
+    var fullUrl = apiUrl + pathUrl;
+    await _getToken();
+    return await http.post(Uri.parse(fullUrl),
+        body: jsonEncode(data), headers: _setHeaders());
   }
 
   getDataUrl(String url) async {
