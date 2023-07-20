@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 import 'package:rsiap_dokter/api/request.dart';
-import 'package:rsiap_dokter/components/List/pasien.dart';
-import 'package:rsiap_dokter/components/List/jadwal_operasi.dart';
+// import 'package:rsiap_dokter/components/List/jadwal_operasi.dart';
 import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/components/others/stats_home.dart';
@@ -24,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true;
 
   // Data
-  var _jadwalOperasi = {};
+  // var _jadwalOperasi = {};
   var _pasienNow = {};
   var _dokter = {};
 
@@ -61,7 +60,7 @@ class _HomePageState extends State<HomePage> {
     List<Future> futures = [
       _getDokter(),
       _getPasienNow(),
-      _getJadwalOperasiNow(),
+      // _getJadwalOperasiNow(),
     ];
 
     await Future.wait(futures);
@@ -88,15 +87,15 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> _getJadwalOperasiNow() async {
-    var res = await Api().getData('/dokter/jadwal/operasi/2023/06');
-    if (res.statusCode == 200) {
-      var body = json.decode(res.body);
-      setState(() {
-        _jadwalOperasi = body;
-      });
-    }
-  }
+  // Future<void> _getJadwalOperasiNow() async {
+  //   var res = await Api().getData('/dokter/jadwal/operasi/2023/06');
+  //   if (res.statusCode == 200) {
+  //     var body = json.decode(res.body);
+  //     setState(() {
+  //       _jadwalOperasi = body;
+  //     });
+  //   }
+  // }
 
   // ---------------------- End Fetch Data
 

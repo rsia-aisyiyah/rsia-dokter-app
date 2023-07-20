@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/screen/home.dart';
 import 'package:rsiap_dokter/screen/menu.dart';
 import 'package:rsiap_dokter/screen/profile.dart';
-import 'package:rsiap_dokter/utils/msg.dart';
 
 // ==================== App Config ==================== //
 

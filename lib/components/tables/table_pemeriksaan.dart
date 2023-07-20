@@ -28,7 +28,7 @@ class TablePemeriksaan extends StatelessWidget {
     ];
 
     return Container(
-      color: backgroundColor,
+      color: Colors.white,
       padding: const EdgeInsets.symmetric(
         horizontal: 15,
         vertical: 20,
@@ -48,8 +48,8 @@ class TablePemeriksaan extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.5),
-                  blurRadius: 10,
+                  color: primaryColor.withOpacity(0.3),
+                  blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
               ],
@@ -98,8 +98,8 @@ class TablePemeriksaan extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.5),
-                  blurRadius: 10,
+                  color: primaryColor.withOpacity(0.3),
+                  blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
               ],
@@ -135,8 +135,8 @@ class TablePemeriksaan extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.5),
-                  blurRadius: 10,
+                  color: primaryColor.withOpacity(0.3),
+                  blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
               ],
@@ -172,8 +172,8 @@ class TablePemeriksaan extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.5),
-                  blurRadius: 10,
+                  color: primaryColor.withOpacity(0.3),
+                  blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
               ],
@@ -209,8 +209,8 @@ class TablePemeriksaan extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.5),
-                  blurRadius: 10,
+                  color: primaryColor.withOpacity(0.3),
+                  blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
               ],
@@ -246,8 +246,8 @@ class TablePemeriksaan extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.5),
-                  blurRadius: 10,
+                  color: primaryColor.withOpacity(0.3),
+                  blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
               ],
@@ -283,8 +283,8 @@ class TablePemeriksaan extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.5),
-                  blurRadius: 10,
+                  color: primaryColor.withOpacity(0.3),
+                  blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
               ],
@@ -320,8 +320,8 @@ class TablePemeriksaan extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.5),
-                  blurRadius: 10,
+                  color: primaryColor.withOpacity(0.3),
+                  blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
               ],
