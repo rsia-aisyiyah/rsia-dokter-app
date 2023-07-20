@@ -56,7 +56,7 @@ class StatsHomeWidget extends StatelessWidget {
             Text(
               dokter['data']['nm_dokter'],
               style: TextStyle(
-                fontSize: 30,
+                fontSize: 26,
                 fontWeight: FontWeight.bold,
                 color: textColor,
               ),
