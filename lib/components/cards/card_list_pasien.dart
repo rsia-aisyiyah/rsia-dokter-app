@@ -18,7 +18,7 @@ createCardPasien(pasien) {
               top: 30,
               left: 15,
               right: 15,
-              bottom: 33,
+              bottom: 15,
             ),
             width: double.infinity,
             decoration: BoxDecoration(
@@ -100,36 +100,6 @@ createCardPasien(pasien) {
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 7,
-                vertical: 5,
-              ),
-              decoration: BoxDecoration(
-                color:
-                    pasien['penjab']['png_jawab'].toString().toLowerCase() == "umum"
-                        ? warningColor
-                        : accentColor,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
-              ),
-              child: Text(
-                pasien['status_lanjut'].toString().toLowerCase() == "ralan"
-                    ? "RAWAT JALAN"
-                    : "RAWAT INAP",
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: textColorLight,
                 ),
               ),
             ),

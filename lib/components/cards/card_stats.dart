@@ -4,7 +4,7 @@ import 'package:rsiap_dokter/config/config.dart';
 cardStats(String title, String value, BuildContext context) {
   return Container(
     padding: const EdgeInsets.all(15),
-    height: MediaQuery.of(context).size.height * 0.125,
+    height: MediaQuery.of(context).size.height * 0.13,
     decoration: BoxDecoration(
       color: primaryColor,
       borderRadius: BorderRadius.circular(10),

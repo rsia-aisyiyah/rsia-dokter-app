@@ -133,7 +133,7 @@ class _DetailPasienState extends State<DetailPasien> {
   _buildPemeriksaanDetails(pasien) {
     if (pasien['status_lanjut'].toString().toLowerCase() == 'ralan') {
       return Padding(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.only(left: 15, right: 15, bottom:20),
         child: TableHasilPemeriksaan(
           pasien: pasien,
         ),
