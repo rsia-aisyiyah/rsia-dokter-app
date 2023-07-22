@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 import 'package:rsiap_dokter/api/request.dart';
+import 'package:rsiap_dokter/components/List/jadwal_operasi.dart';
 import 'package:rsiap_dokter/components/List/pasien_ralan.dart';
 import 'package:rsiap_dokter/components/List/pasien_ranap.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
@@ -85,12 +86,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   List tabsHome = [
-    {"label": "Rawat Inap", "icon": Icons.close, "widget": const ListPasienRanap()},
-    {"label": "Rawat Jalan", "icon": Icons.close, "widget": const ListPasienRalan()},
+    {
+      "label": "Rawat Inap",
+      "icon": Icons.close,
+      "widget": const ListPasienRanap()
+    },
+    {
+      "label": "Rawat Jalan",
+      "icon": Icons.close,
+      "widget": const ListPasienRalan()
+    },
     {
       "label": "Jadwal Operasi",
       "icon": Icons.close,
-      "widget": Text("Jadwal Operasi")
+      "widget": const ListJadwalOperasi()
     },
   ];
 
