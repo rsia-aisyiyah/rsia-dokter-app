@@ -4,7 +4,13 @@ import 'package:rsiap_dokter/config/config.dart';
 
 class TablePemeriksaan extends StatelessWidget {
   final pasien;
-  const TablePemeriksaan({super.key, required this.pasien});
+  final String? penjab;
+  final String? statusLanjut;
+  const TablePemeriksaan(
+      {super.key,
+      required this.pasien,
+      required this.penjab,
+      required this.statusLanjut});
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +34,10 @@ class TablePemeriksaan extends StatelessWidget {
     ];
 
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 20,
+      color: statusLanjut == 'ralan' ? Colors.transparent : Colors.white,
+      padding: EdgeInsets.symmetric(
+        horizontal: statusLanjut == 'ralan' ? 0 : 15,
+        vertical: statusLanjut == 'ralan' ? 10 : 15,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,12 +49,16 @@ class TablePemeriksaan extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: accentColor,
+                color: penjab!.toLowerCase() == 'umum'
+                    ? warningColor
+                    : accentColor,
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.3),
+                  color: penjab!.toLowerCase() == 'umum'
+                      ? warningColor.withOpacity(.3)
+                      : primaryColor.withOpacity(0.3),
                   blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
@@ -93,12 +103,16 @@ class TablePemeriksaan extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: accentColor,
+                color: penjab!.toLowerCase() == 'umum'
+                    ? warningColor
+                    : accentColor,
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.3),
+                  color: penjab!.toLowerCase() == 'umum'
+                      ? warningColor.withOpacity(.3)
+                      : primaryColor.withOpacity(0.3),
                   blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
@@ -130,12 +144,16 @@ class TablePemeriksaan extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: accentColor,
+                color: penjab!.toLowerCase() == 'umum'
+                    ? warningColor
+                    : accentColor,
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.3),
+                  color: penjab!.toLowerCase() == 'umum'
+                      ? warningColor.withOpacity(.3)
+                      : primaryColor.withOpacity(0.3),
                   blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
@@ -167,12 +185,16 @@ class TablePemeriksaan extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: accentColor,
+                color: penjab!.toLowerCase() == 'umum'
+                    ? warningColor
+                    : accentColor,
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.3),
+                  color: penjab!.toLowerCase() == 'umum'
+                      ? warningColor.withOpacity(.3)
+                      : primaryColor.withOpacity(0.3),
                   blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
@@ -204,12 +226,16 @@ class TablePemeriksaan extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: accentColor,
+                color: penjab!.toLowerCase() == 'umum'
+                    ? warningColor
+                    : accentColor,
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.3),
+                  color: penjab!.toLowerCase() == 'umum'
+                      ? warningColor.withOpacity(.3)
+                      : primaryColor.withOpacity(0.3),
                   blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
@@ -241,12 +267,16 @@ class TablePemeriksaan extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: accentColor,
+                color: penjab!.toLowerCase() == 'umum'
+                    ? warningColor
+                    : accentColor,
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.3),
+                  color: penjab!.toLowerCase() == 'umum'
+                      ? warningColor.withOpacity(.3)
+                      : primaryColor.withOpacity(0.3),
                   blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
@@ -278,12 +308,16 @@ class TablePemeriksaan extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: accentColor,
+                color: penjab!.toLowerCase() == 'umum'
+                    ? warningColor
+                    : accentColor,
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.3),
+                  color: penjab!.toLowerCase() == 'umum'
+                      ? warningColor.withOpacity(.3)
+                      : primaryColor.withOpacity(0.3),
                   blurRadius: 2,
                   offset: const Offset(3, 3),
                 )
@@ -315,12 +349,16 @@ class TablePemeriksaan extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: accentColor,
+                color: penjab!.toLowerCase() == 'umum'
+                    ? warningColor
+                    : accentColor,
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.3),
+                  color: penjab!.toLowerCase() == 'umum'
+                      ? warningColor.withOpacity(.3)
+                      : primaryColor.withOpacity(0.3),
                   blurRadius: 2,
                   offset: const Offset(3, 3),
                 )

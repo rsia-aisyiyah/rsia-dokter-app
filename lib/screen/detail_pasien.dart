@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
-import 'package:rsiap_dokter/components/tables/table_hasil_pemeriksaan.dart';
 import 'package:rsiap_dokter/components/tables/table_pemeriksaan.dart';
 
 import '../config/config.dart';
@@ -131,12 +130,19 @@ class _DetailPasienState extends State<DetailPasien> {
   }
 
   _buildPemeriksaanDetails(pasien) {
+    var penjab = pasien['penjab']['png_jawab'].toString().toLowerCase().contains("umum") ? "umum" : "bpjs";
+    var statusLanjut = pasien['status_lanjut'].toString().toLowerCase();
     if (pasien['status_lanjut'].toString().toLowerCase() == 'ralan') {
       return Padding(
         padding: const EdgeInsets.only(left: 15, right: 15, bottom:20),
-        child: TableHasilPemeriksaan(
-          pasien: pasien,
-        ),
+        // child: TableHasilPemeriksaan(
+        //   pasien: pasien,
+        // ),
+        child: TablePemeriksaan(
+          pasien: pasien['pemeriksaan'],
+          penjab: penjab,
+          statusLanjut: statusLanjut,
+        )
       );
     } else {
       if (pasien['pemeriksaan'].isNotEmpty) {
@@ -161,8 +167,8 @@ class _DetailPasienState extends State<DetailPasien> {
               child: ExpansionTile(
                 clipBehavior: Clip.hardEdge,
                 key: Key(index.toString()),
-                textColor: accentColor,
-                iconColor: accentColor,
+                textColor: penjab == 'umum' ? warningColor : accentColor,
+                iconColor: penjab == 'umum' ? warningColor : accentColor,
                 backgroundColor: Colors.white,
                 initiallyExpanded: index == selectedTile,
                 title: Row(
@@ -191,6 +197,8 @@ class _DetailPasienState extends State<DetailPasien> {
                 children: [
                   TablePemeriksaan(
                     pasien: pemeriksan[index],
+                    penjab: penjab,
+                    statusLanjut: statusLanjut,
                   ),
                 ],
               ),
@@ -228,6 +236,27 @@ class _DetailPasienState extends State<DetailPasien> {
               children: [
                 TextSpan(
                   text: pasien['no_rkm_medis'],
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: textColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 3),
+          RichText(
+            text: TextSpan(
+              text: "Status Lanjut : ",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: textColor,
+              ),
+              children: [
+                TextSpan(
+                  text: pasien['status_lanjut'].toString().toLowerCase() == 'ralan' ? 'Rawat Jalan' : 'Rawat Inap',
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
