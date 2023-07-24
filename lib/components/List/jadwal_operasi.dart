@@ -43,7 +43,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
   }
 
   Future fetchPasien() async {
-    var res = await Api().getData('/dokter/jadwal/operasi/2023/06');
+    var res = await Api().getData('/dokter/jadwal/operasi/now');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;
@@ -109,83 +109,517 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
         children: [
           ListView.builder(
             shrinkWrap: true,
+            padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
             physics: const NeverScrollableScrollPhysics(),
             itemCount: dataJadwal.length,
             itemBuilder: (context, i) {
-              return Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                      horizontal: 10,
-                    ),
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.grey.shade300),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 1,
-                          blurRadius: 3,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              var dataJdwl = dataJadwal[i];
+              return InkWell(
+                onTap: () {
+                  onListJadwalTap(context, dataJdwl);
+                },
+                child: Column(
+                  children: [
+                    Stack(
                       children: [
-                        Text(
-                          dataJadwal[i]['no_rawat'],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: _getPenjab(
+                                dataJdwl['reg_periksa']['penjab']['png_jawab'],
+                              ).contains('BPJS')
+                                  ? accentColor
+                                  : warningColor,
+                              width: 1.5,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: _getPenjab(
+                                  dataJdwl['reg_periksa']['penjab']
+                                      ['png_jawab'],
+                                ).contains('BPJS')
+                                    ? accentColor.withOpacity(.2)
+                                    : warningColor.withOpacity(.2),
+                                spreadRadius: 1,
+                                blurRadius: 3,
+                                offset: const Offset(2, 3),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                dataJdwl['reg_periksa']['pasien']['nm_pasien'],
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Flex(
+                                direction: Axis.horizontal,
+                                children: [
+                                  Text(
+                                    dataJdwl['no_rawat'],
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    "( RM. ${dataJdwl['reg_periksa']['no_rkm_medis']} )",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: fontWeightSemiBold),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 15),
+                              _tableOperasi(dataJdwl)
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 5),
-                        Flex(
-                          direction: Axis.horizontal,
-                          children: [
-                            Text(
-                              dataJadwal[i]['tanggal'],
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              dataJadwal[i]['jam_mulai'],
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
+                        _labelPenjab(dataJdwl),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                ],
+                    const SizedBox(height: 15),
+                  ],
+                ),
               );
             },
           ),
-          const SizedBox(
-            height: 10,
+          _loadmoreButton(),
+        ],
+      );
+    }
+  }
+
+  Future<dynamic> onListJadwalTap(BuildContext context, dataJdwl) {
+    return showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      showDragHandle: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.only(
+            right: 20,
+            left: 20,
+            bottom: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Table(
+            columnWidths: const {
+              0: FlexColumnWidth(1),
+              1: FlexColumnWidth(2),
+            },
+            border: TableBorder(
+              horizontalInside: BorderSide(
+                color: Colors.grey.shade300,
+                width: 1,
+              ),
+            ),
+            textBaseline: TextBaseline.alphabetic,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  loadMore();
-                },
-                child: const Text('Load More'),
+              TableRow(
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        "Pasien",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: fontWeightSemiBold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        dataJdwl['reg_periksa']['pasien']['nm_pasien'],
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        "No. Rawat",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: fontWeightSemiBold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        dataJdwl['no_rawat'],
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        "RM",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: fontWeightSemiBold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        dataJdwl['reg_periksa']['no_rkm_medis'],
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        "Diagnosa",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: fontWeightSemiBold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        dataJdwl['rsia_diagnosa_operasi']['diagnosa'],
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        "Jenis Operasi",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: fontWeightSemiBold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        dataJdwl['paket_operasi']['nm_perawatan'],
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        "Tanggal",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: fontWeightSemiBold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        dataJdwl['tanggal'],
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        "Jam",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: fontWeightSemiBold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        dataJdwl['jam_mulai'] + " - " + dataJdwl['jam_selesai'],
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        );
+      },
+    );
+  }
+
+  Table _tableOperasi(dataJdwl) {
+    return Table(
+      columnWidths: const {
+        0: FlexColumnWidth(1),
+        1: FlexColumnWidth(2),
+      },
+      border: TableBorder(
+        horizontalInside: BorderSide(
+          color: Colors.grey.shade300,
+          width: 1,
+        ),
+      ),
+      textBaseline: TextBaseline.alphabetic,
+      children: [
+        TableRow(
+          children: [
+            TableCell(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  "Diagnosa",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: fontWeightSemiBold,
+                  ),
+                ),
+              ),
+            ),
+            TableCell(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  dataJdwl['rsia_diagnosa_operasi']['diagnosa'],
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        TableRow(
+          children: [
+            TableCell(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  "Jenis Operasi",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: fontWeightSemiBold,
+                  ),
+                ),
+              ),
+            ),
+            TableCell(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  dataJdwl['paket_operasi']['nm_perawatan'],
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        TableRow(
+          children: [
+            TableCell(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  "Jam",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: fontWeightSemiBold,
+                  ),
+                ),
+              ),
+            ),
+            TableCell(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  dataJdwl['jam_mulai'] + " - " + dataJdwl['jam_selesai'],
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Positioned _labelPenjab(dataJdwl) {
+    return Positioned(
+      bottom: 0,
+      right: 0,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 7,
+          vertical: 5,
+        ),
+        decoration: BoxDecoration(
+          color: _getPenjab(
+            dataJdwl['reg_periksa']['penjab']['png_jawab'],
+          ).contains('BPJS')
+              ? accentColor
+              : warningColor,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+          ),
+        ),
+        child: Text(
+          _getPenjab(
+            dataJdwl['reg_periksa']['penjab']['png_jawab'],
+          ),
+          style: const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _loadmoreButton() {
+    if (nextPageUrl.isNotEmpty) {
+      return Container(
+        margin: const EdgeInsets.only(
+          left: 10,
+          right: 10,
+          bottom: 20,
+          top: 5,
+        ),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border.all(color: textColor, width: 1.5),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: btnLoading
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      color: textColor,
+                      strokeWidth: 2,
+                    ),
+                  ),
+                ),
+              )
+            : IconButton(
+                onPressed: () async {
+                  setState(() {
+                    btnLoading = true;
+                  });
+
+                  await loadMore();
+                  setState(() {
+                    btnLoading = false;
+                  });
+                },
+                icon: Icon(
+                  Icons.arrow_drop_down,
+                  color: textColor,
+                ),
+              ),
       );
+    } else {
+      return const SizedBox(width: 0, height: 0);
+    }
+  }
+
+  String _getPenjab(penjab) {
+    var plow = penjab.toString().toLowerCase();
+
+    if (plow.contains('/')) {
+      var p = "BPJS${plow.split('/').last.toUpperCase()}";
+      return p;
+    } else {
+      var p = plow.toUpperCase();
+      return p;
     }
   }
 }

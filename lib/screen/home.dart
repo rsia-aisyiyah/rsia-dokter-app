@@ -119,7 +119,9 @@ class _HomePageState extends State<HomePage> {
         child: DefaultTabController(
           length: tabsHome.length,
           child: DraggableHome(
-            title: const Text("Draggable Home"),
+            title: Text(
+              tabsHome[selectedTab]['label'] as String,
+            ),
             headerWidget: StatsHomeWidget(
               dokter: _dokter,
               pasienNow: dataPasien,

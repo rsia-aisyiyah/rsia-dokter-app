@@ -111,7 +111,7 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: dataPasien.length,
-            padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+            padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
@@ -137,22 +137,25 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
           if (nextPageUrl.isNotEmpty)
             Container(
               margin: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+              width: double.infinity,
               decoration: BoxDecoration(
-                border: Border.all(color: primaryColor, width: 1.5),
+                border: Border.all(color: textColor, width: 1.5),
                 borderRadius: BorderRadius.circular(5),
               ),
               child: btnLoading
-                  ? Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: primaryColor,
-                          strokeWidth: 2,
+                  ? Center(
+                    child: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: textColor,
+                            strokeWidth: 2,
+                          ),
                         ),
                       ),
-                    )
+                  )
                   : IconButton(
                       onPressed: () async {
                         setState(() {
@@ -166,7 +169,7 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
                       },
                       icon: Icon(
                         Icons.arrow_drop_down,
-                        color: primaryColor,
+                        color: textColor,
                       ),
                     ),
             ),

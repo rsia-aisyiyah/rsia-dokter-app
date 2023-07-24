@@ -14,12 +14,7 @@ createCardPasien(pasien) {
       Stack(
         children: [
           Container(
-            padding: const EdgeInsets.only(
-              top: 30,
-              left: 15,
-              right: 15,
-              bottom: 15,
-            ),
+            padding: const EdgeInsets.all(15),
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -77,7 +72,7 @@ createCardPasien(pasien) {
             ),
           ),
           Positioned(
-            top: 0,
+            bottom: 0,
             right: 0,
             child: Container(
               padding: const EdgeInsets.symmetric(
@@ -85,13 +80,13 @@ createCardPasien(pasien) {
                 vertical: 5,
               ),
               decoration: BoxDecoration(
-                color:
-                    pasien['penjab']['png_jawab'].toString().toLowerCase() == "umum"
-                        ? warningColor
-                        : accentColor,
+                color: pasien['penjab']['png_jawab'].toString().toLowerCase() ==
+                        "umum"
+                    ? warningColor
+                    : accentColor,
                 borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
+                  topLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
                 ),
               ),
               child: Text(
