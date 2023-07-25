@@ -5,6 +5,7 @@ createCardPasien(pasien) {
   var penjab = "";
   if (pasien['penjab']['png_jawab'].toString().contains('/')) {
     penjab = pasien['penjab']['png_jawab'].toString().split('/').last;
+    penjab = "BPJS$penjab";
   } else {
     penjab = pasien['penjab']['png_jawab'];
   }
@@ -20,14 +21,16 @@ createCardPasien(pasien) {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: penjab.toLowerCase().contains("umum")
-                    ? warningColor
-                    : accentColor,
+                color: penjab.toLowerCase().contains("bpjs")
+                    ? accentColor
+                    : warningColor,
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: primaryColor.withOpacity(.3),
+                  color: penjab.toLowerCase().contains("bpjs")
+                      ? accentColor.withOpacity(.3)
+                      : warningColor.withOpacity(.3),
                   blurRadius: 5,
                   offset: const Offset(3, 3),
                 ),
@@ -80,17 +83,16 @@ createCardPasien(pasien) {
                 vertical: 5,
               ),
               decoration: BoxDecoration(
-                color: pasien['penjab']['png_jawab'].toString().toLowerCase() ==
-                        "umum"
-                    ? warningColor
-                    : accentColor,
+                color: penjab.toLowerCase().contains("bpjs")
+                    ? accentColor
+                    : warningColor,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10),
                   bottomRight: Radius.circular(10),
                 ),
               ),
               child: Text(
-                penjab.toLowerCase().contains("umum") ? penjab : "BPJS$penjab",
+                penjab,
                 style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,

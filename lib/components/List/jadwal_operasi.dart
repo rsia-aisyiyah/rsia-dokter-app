@@ -43,7 +43,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
   }
 
   Future fetchPasien() async {
-    var res = await Api().getData('/dokter/jadwal/operasi/now');
+    var res = await Api().getData('/dokter/jadwal/operasi/2023/06');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;
@@ -51,25 +51,23 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
   }
 
   void _setData(value) {
-    if (mounted) {
-      if (value['data']['total'] != 0) {
-        setState(() {
-          dataJadwal = value['data']['data'] ?? [];
+    if (value['data']['total'] != 0) {
+      setState(() {
+        dataJadwal = value['data']['data'] ?? [];
 
-          nextPageUrl = value['data']['next_page_url'] ?? '';
-          prevPageUrl = value['data']['prev_page_url'] ?? '';
-          currentPage = value['data']['current_page'].toString();
-          lastPage = value['data']['last_page'].toString();
+        nextPageUrl = value['data']['next_page_url'] ?? '';
+        prevPageUrl = value['data']['prev_page_url'] ?? '';
+        currentPage = value['data']['current_page'].toString();
+        lastPage = value['data']['last_page'].toString();
 
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          isLoading = false;
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
 
-          dataJadwal = value['data']['data'] ?? [];
-        });
-      }
+        dataJadwal = value['data']['data'] ?? [];
+      });
     }
   }
 

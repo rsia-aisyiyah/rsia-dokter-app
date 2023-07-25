@@ -163,7 +163,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Subyektif",
+                  "Subject",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,
@@ -204,7 +204,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Obyektif",
+                  "Object",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,

@@ -68,7 +68,7 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
   }
 
   Future fetchPasien() async {
-    var res = await Api().getData('/dokter/pasien/ranap/now');
+    var res = await Api().getData('/dokter/pasien/ranap/2023/06');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;

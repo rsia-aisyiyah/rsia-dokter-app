@@ -3,6 +3,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/screen/home.dart';
 import 'package:rsiap_dokter/screen/menu.dart';
+import 'package:rsiap_dokter/screen/menu/pasien_list.dart';
 import 'package:rsiap_dokter/screen/profile.dart';
 
 // ==================== App Config ==================== //
@@ -19,8 +20,6 @@ const String appName = 'RSIAP Dokter';
 const String appVersion = '1.0.0';
 
 // =================== End App Config ================== //
-
-
 
 // =================== Color Config ==================== //
 
@@ -47,52 +46,33 @@ FontWeight fontWeightBold = FontWeight.w700;
 
 // ================== End Color Config=================== //
 
-
-
 // =================== Others Config ==================== //
 
 const int snackBarDuration = 2;
 
 // ================= End Others Config ================== //
 
-
-
 // ================ Menu Screen Content ================ //
 
 List<Map<String, Object>> menuScreenItems = [
   {
     'label': 'Pasien Rawat Jalan',
-    'widget': ""
+    'widget': PasienList(ralan: true),
+    'disabled': false
   },
   {
     'label': 'Pasien Rawat Inap',
-    'widget': ""
+    'widget': PasienList(ranap: true),
+    'disabled': false
   },
-  {
-    'label': 'Pasien Operasi',
-    'widget': ""
-  },
-  {
-    'label': 'Rekap Kunjungan Pasien',
-    'widget': ""
-  },
-  {
-    'label': 'Jasa Medis',
-    'widget': ""
-  },
-  {
-    'label': 'Cuti',
-    'widget': ""
-  },
-  {
-    'label': 'Undangan',
-    'widget': ""
-  }
+  {'label': 'Pasien Operasi', 'widget': "", 'disabled': false},
+  {'label': 'Rekap Kunjungan Pasien', 'widget': "", 'disabled': false},
+  {'label': 'Jasa Medis', 'widget': "", 'disabled': true},
+  {'label': 'Cuti', 'widget': "", 'disabled': true},
+  {'label': 'Undangan', 'widget': "", 'disabled': true}
 ];
 
 // ============== End Menu Screen Content ============== //
-
-
 
 // =============== Bottom Navigation Bar ================ //
 
@@ -115,8 +95,6 @@ const List<Map<String, Object>> navigationItems = [
 ];
 
 // ============= End Bottom Navigation Bar ============== //
-
-
 
 // ================ Function Random String ============== //
 String randomString(int length) {
