@@ -4,6 +4,7 @@ import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 
 class StatsHomeWidget extends StatelessWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final dokter, totalHariIni, pasienNow;
   const StatsHomeWidget({super.key, this.dokter, this.pasienNow, this.totalHariIni});
 
@@ -32,6 +33,7 @@ class StatsHomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: non_constant_identifier_names
     var STRExpired = monthBetween(DateTime.parse(
       dokter['data']['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
     ));

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/config/config.dart';
-import 'package:rsiap_dokter/screen/detail_pasien.dart';
+import 'package:rsiap_dokter/screen/detail/pasien.dart';
 
 class ListPasienRanap extends StatefulWidget {
   const ListPasienRanap({super.key});

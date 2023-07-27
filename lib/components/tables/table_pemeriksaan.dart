@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:rsiap_dokter/config/config.dart';
 
 class TablePemeriksaan extends StatelessWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final pasien;
   final String? penjab;
   final String? statusLanjut;

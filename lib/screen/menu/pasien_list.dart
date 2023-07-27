@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
+import 'package:rsiap_dokter/components/filter/bottom_sheet_filter.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/config.dart';
-import 'package:rsiap_dokter/screen/detail_pasien.dart';
-import 'package:rsiap_dokter/utils/msg.dart';
+import 'package:rsiap_dokter/screen/detail/pasien.dart';
 
 class PasienList extends StatefulWidget {
   final bool ralan;
@@ -24,9 +24,13 @@ class PasienList extends StatefulWidget {
 }
 
 class PasienListState extends State<PasienList> {
+  TextEditingController searchController = TextEditingController();
+  TextEditingController dateinput = TextEditingController();
+
   late String title;
   late String url;
 
+  // Pagination
   String nextPageUrl = '';
   String prevPageUrl = '';
   String currentPage = '';
@@ -34,9 +38,10 @@ class PasienListState extends State<PasienList> {
 
   List dataPasiens = [];
   bool isLoding = true;
+  bool isFilter = false;
 
   // filter
-  String kategori = "";
+  Map filterData = {};
 
   @override
   void initState() {
@@ -64,26 +69,39 @@ class PasienListState extends State<PasienList> {
   }
 
   _setData(value) {
-    if (mounted) {
-      if (value['data']['total'] != 0) {
-        setState(() {
-          dataPasiens = value['data']['data'] ?? [];
+    if (value['data']['total'] != 0) {
+      setState(() {
+        dataPasiens = value['data']['data'] ?? [];
 
-          nextPageUrl = value['data']['next_page_url'] ?? '';
-          prevPageUrl = value['data']['prev_page_url'] ?? '';
-          currentPage = value['data']['current_page'].toString();
-          lastPage = value['data']['last_page'].toString();
+        nextPageUrl = value['data']['next_page_url'] ?? '';
+        prevPageUrl = value['data']['prev_page_url'] ?? '';
+        currentPage = value['data']['current_page'].toString();
+        lastPage = value['data']['last_page'].toString();
 
-          isLoding = false;
-        });
-      } else {
-        setState(() {
-          isLoding = false;
-
-          isLoding = value['data']['data'] ?? [];
-        });
-      }
+        isLoding = false;
+      });
+    } else {
+      setState(() {
+        isLoding = false;
+        dataPasiens = [];
+      });
     }
+  }
+
+  _onClearCancel() {
+    setState(() {
+      isLoding = true;
+      isFilter = false;
+
+      dateinput.text = "";
+
+      filterData.clear();
+      searchController.clear();
+    });
+
+    fetchPasien().then((value) {
+      _setData(value);
+    });
   }
 
   Future fetchPasien() async {
@@ -97,19 +115,78 @@ class PasienListState extends State<PasienList> {
   // loadMore
   void _loadMore() async {
     if (nextPageUrl.isNotEmpty) {
-      var res = await Api().getDataUrl(nextPageUrl);
-      if (res.statusCode == 200) {
-        var body = json.decode(res.body);
-        setState(() {
-          dataPasiens.addAll(body['data']['data']);
+      if (isFilter) {
+        await Api().postFullUrl(filterData, nextPageUrl).then((value) {
+          var body = json.decode(value.body);
+          setState(() {
+            dataPasiens.addAll(body['data']['data']);
 
-          nextPageUrl = body['data']['next_page_url'] ?? '';
-          prevPageUrl = body['data']['prev_page_url'] ?? '';
-          currentPage = body['data']['current_page'].toString();
-          lastPage = body['data']['last_page'].toString();
+            nextPageUrl = body['data']['next_page_url'] ?? '';
+            prevPageUrl = body['data']['prev_page_url'] ?? '';
+            currentPage = body['data']['current_page'].toString();
+            lastPage = body['data']['last_page'].toString();
+          });
+        });
+      } else {
+        await Api().getFullUrl(nextPageUrl).then((value) {
+          var body = json.decode(value.body);
+          setState(() {
+            dataPasiens.addAll(body['data']['data']);
+
+            nextPageUrl = body['data']['next_page_url'] ?? '';
+            prevPageUrl = body['data']['prev_page_url'] ?? '';
+            currentPage = body['data']['current_page'].toString();
+            lastPage = body['data']['last_page'].toString();
+          });
         });
       }
     }
+  }
+
+  // _doSearch
+  void _doSearch() {
+    dataPasiens.clear();
+    filterData.clear();
+
+    if (searchController.text.isNotEmpty) {
+      setState(() {
+        isLoding = true;
+
+        isFilter = true;
+        filterData['status_lanjut'] = widget.ralan ? 'Ralan' : 'Ranap';
+        filterData['keywords'] = searchController.text.toString();
+      });
+
+      _fetchSearch(filterData).then((value) {
+        _setData(value);
+      });
+    }
+  }
+
+  Future _fetchSearch(data) async {
+    var res = await Api().postData(data, '/dokter/pasien/search');
+    if (res.statusCode == 200) {
+      var body = json.decode(res.body);
+      return body;
+    }
+  }
+
+  void doFilter() async {
+    setState(() {
+      isLoding = true;
+      isFilter = true;
+      filterData['status_lanjut'] = widget.ralan ? 'Ralan' : 'Ranap';
+    });
+
+    // search
+    if (searchController.text.isNotEmpty) {
+      filterData['keywords'] = searchController.text.toString();
+    }
+
+    // fetch
+    _fetchSearch(filterData).then((value) {
+      _setData(value);
+    });
   }
 
   @override
@@ -142,22 +219,37 @@ class PasienListState extends State<PasienList> {
           actions: [
             IconButton(
               onPressed: () {
-                _onSearchIconClicked(context);
-              },
-              icon: const Icon(
-                Icons.search,
-                color: Colors.white,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
                 _onFilterIconClicked(context);
               },
               icon: const Icon(
-                Icons.filter_alt,
+                Icons.filter_alt_outlined,
                 color: Colors.white,
               ),
             ),
+            if (isFilter)
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    isLoding = true;
+                    isFilter = false;
+
+                    dateinput.text = "";
+
+                    filterData.clear();
+                    searchController.clear();
+                  });
+
+                  fetchPasien().then((value) {
+                    _setData(value);
+                  });
+                },
+                icon: const Icon(
+                  Icons.clear,
+                  color: Colors.white,
+                ),
+              )
+            else
+              const SizedBox(),
           ],
         ),
         body: LazyLoadScrollView(
@@ -165,27 +257,42 @@ class PasienListState extends State<PasienList> {
           isLoading: isLoding,
           child: ListView.builder(
             padding: const EdgeInsets.all(10),
-            itemCount: dataPasiens.length,
+            itemCount: dataPasiens.isEmpty ? 1 : dataPasiens.length,
             itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailPasien(
-                        noRawat: dataPasiens[index]['no_rawat'],
-                        kategori: dataPasiens[index]['penjab']['png_jawab']
-                                .toString()
-                                .toLowerCase()
-                                .contains("umum")
-                            ? "umum"
-                            : "bpjs",
+              if (dataPasiens.isNotEmpty) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPasien(
+                          noRawat: dataPasiens[index]['no_rawat'],
+                          kategori: dataPasiens[index]['penjab']['png_jawab']
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains("umum")
+                              ? "umum"
+                              : "bpjs",
+                        ),
                       ),
-                    ),
-                  );
-                },
-                child: createCardPasien(dataPasiens[index]),
-              );
+                    );
+                  },
+                  child: createCardPasien(dataPasiens[index]),
+                );
+              } else {
+                return Container(
+                  height: MediaQuery.of(context).size.height / 1.5,
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Data tidak ditemukan",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: textColor.withOpacity(.5)),
+                  ),
+                );
+              }
             },
           ),
         ),
@@ -197,84 +304,19 @@ class PasienListState extends State<PasienList> {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Filter",
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.close,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Flex(
-                direction: Axis.horizontal,
-                children: [
-                  _capsuleFilter(context, "UMUM"),
-                  const SizedBox(width: 10),
-                  _capsuleFilter(context, "BPJS")
-                ],
-              )
-            ],
-          ),
+        return BottomSheetFilter(
+          dateinput: dateinput,
+          searchController: searchController,
+          isLoding: isLoding,
+          isFilter: isFilter,
+          fetchPasien: fetchPasien,
+          setData: _setData,
+          doFilter: doFilter,
+          onClearAndCancel: _onClearCancel,
+          filterData: filterData,
+          selectedCategory: filterData['penjab'] ?? '',
         );
       },
-    );
-  }
-
-  Widget _capsuleFilter(BuildContext context, String text) {
-    return Expanded(
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            kategori = text;
-          });
-          Navigator.pop(context);
-        },
-        child: Container(
-          padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            color: kategori == text ? accentColor.withOpacity(0.1) : Colors.grey[200],
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-              color: kategori == text ? accentColor : Colors.grey[500]!,
-              width: 1.5
-            ),
-          ),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: kategori == text ? accentColor : Colors.grey[500],
-              fontSize: 14,
-              fontWeight: fontWeightSemiBold,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  _onSearchIconClicked(BuildContext context) {
-    Msg.warning(
-      context,
-      "Fitur ini belum tersedia",
     );
   }
 }

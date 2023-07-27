@@ -9,10 +9,11 @@ import 'package:rsiap_dokter/screen/profile.dart';
 // ==================== App Config ==================== //
 
 const String baseUrl = 'https://sim.rsiaaisyiyah.com/rsiap-api';
+// const String baseUrl = 'http://192.168.100.220/rsiapi';
 const String apiUrl = '$baseUrl/api';
-String jwtSignature = randomString(32);
 
 // App Content Config
+// ignore: non_constant_identifier_names
 double STRExpMin = 6;
 
 // App Config
@@ -57,12 +58,12 @@ const int snackBarDuration = 2;
 List<Map<String, Object>> menuScreenItems = [
   {
     'label': 'Pasien Rawat Jalan',
-    'widget': PasienList(ralan: true),
+    'widget': const PasienList(ralan: true),
     'disabled': false
   },
   {
     'label': 'Pasien Rawat Inap',
-    'widget': PasienList(ranap: true),
+    'widget': const PasienList(ranap: true),
     'disabled': false
   },
   {'label': 'Pasien Operasi', 'widget': "", 'disabled': false},

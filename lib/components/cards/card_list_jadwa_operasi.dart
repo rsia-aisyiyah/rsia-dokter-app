@@ -3,8 +3,8 @@ import 'package:rsiap_dokter/config/config.dart';
 
 createCardJadwalOperasi(pasien) {
   return Container(
-    margin: EdgeInsets.only(bottom: 10),
-    padding: EdgeInsets.all(15),
+    margin: const EdgeInsets.only(bottom: 10),
+    padding: const EdgeInsets.all(15),
     decoration: BoxDecoration(
       color: textColorLight,
       borderRadius: BorderRadius.circular(10),
@@ -12,7 +12,7 @@ createCardJadwalOperasi(pasien) {
         BoxShadow(
           color: primaryColor.withOpacity(.3),
           blurRadius: 5,
-          offset: Offset(0, 3),
+          offset: const Offset(0, 3),
         ),
       ],
     ),
@@ -25,14 +25,14 @@ createCardJadwalOperasi(pasien) {
           children: [
             Text(
               pasien['no_rawat'],
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
               pasien['tanggal'],
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.normal,
               ),

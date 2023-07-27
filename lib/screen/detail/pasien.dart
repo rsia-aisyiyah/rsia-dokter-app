@@ -6,7 +6,7 @@ import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/components/tables/table_pemeriksaan.dart';
 
-import '../config/config.dart';
+import '../../config/config.dart';
 
 class DetailPasien extends StatefulWidget {
   final String noRawat;

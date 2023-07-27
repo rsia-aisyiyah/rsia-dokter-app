@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:draggable_home/draggable_home.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
@@ -104,7 +105,9 @@ class _HomePageState extends State<HomePage> {
   ];
 
   loadMore() {
-    print("Load More Home.dart");
+    if (kDebugMode) {
+      print("Load More Home.dart");
+    }
   }
 
   // ---------------------- End Tab Home

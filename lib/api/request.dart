@@ -4,6 +4,7 @@ import 'package:rsiap_dokter/config/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Api {
+  // ignore: prefer_typing_uninitialized_variables
   var token;
 
   _getToken() async {
@@ -36,8 +37,28 @@ class Api {
   postData(data, pathUrl) async {
     var fullUrl = apiUrl + pathUrl;
     await _getToken();
-    return await http.post(Uri.parse(fullUrl),
-        body: jsonEncode(data), headers: _setHeaders());
+    return await http.post(
+      Uri.parse(fullUrl),
+      body: jsonEncode(data),
+      headers: _setHeaders(),
+    );
+  }
+
+  getFullUrl(fullUrl) async {
+    await _getToken();
+    return await http.get(
+      Uri.parse(fullUrl),
+      headers: _setHeaders(),
+    );
+  }
+
+  postFullUrl(data, fullUrl) async {
+    await _getToken();
+    return await http.post(
+      Uri.parse(fullUrl),
+      body: jsonEncode(data),
+      headers: _setHeaders(),
+    );
   }
 
   getDataUrl(String url) async {
