@@ -264,7 +264,6 @@ class PasienListState extends State<PasienList> {
           enablePullUp: true,
           onRefresh: _onRefresh,
           onLoading: _loadMore,
-          
           header: WaterDropMaterialHeader(
             color: Colors.white,
             backgroundColor: accentColor,

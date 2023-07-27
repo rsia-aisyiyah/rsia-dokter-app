@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/screen/home.dart';
 import 'package:rsiap_dokter/screen/menu.dart';
 import 'package:rsiap_dokter/screen/menu/pasien_list.dart';
+import 'package:rsiap_dokter/screen/menu/pasien_operasi.dart';
 import 'package:rsiap_dokter/screen/profile.dart';
 
 // ==================== App Config ==================== //
@@ -66,7 +67,11 @@ List<Map<String, Object>> menuScreenItems = [
     'widget': const PasienList(ranap: true),
     'disabled': false
   },
-  {'label': 'Pasien Operasi', 'widget': "", 'disabled': true},
+  {
+    'label': 'Pasien Operasi',
+    'widget': const PasienOperasi(),
+    'disabled': false
+  },
   {'label': 'Rekap Kunjungan Pasien', 'widget': "", 'disabled': true},
   {'label': 'Jasa Medis', 'widget': "", 'disabled': true},
   {'label': 'Cuti', 'widget': "", 'disabled': true},
