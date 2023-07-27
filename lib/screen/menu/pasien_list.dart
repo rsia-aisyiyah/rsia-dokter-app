@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/components/filter/bottom_sheet_filter.dart';
@@ -26,6 +26,9 @@ class PasienList extends StatefulWidget {
 class PasienListState extends State<PasienList> {
   TextEditingController searchController = TextEditingController();
   TextEditingController dateinput = TextEditingController();
+  RefreshController _refreshController = RefreshController(
+    initialRefresh: false,
+  );
 
   late String title;
   late String url;
@@ -104,6 +107,23 @@ class PasienListState extends State<PasienList> {
     });
   }
 
+  _onRefresh() {
+    setState(() {
+      isFilter = false;
+
+      dateinput.text = "";
+
+      filterData.clear();
+      searchController.clear();
+    });
+
+    fetchPasien().then((value) {
+      _setData(value);
+
+      _refreshController.refreshCompleted();
+    });
+  }
+
   Future fetchPasien() async {
     var res = await Api().getData(url);
     if (res.statusCode == 200) {
@@ -118,28 +138,34 @@ class PasienListState extends State<PasienList> {
       if (isFilter) {
         await Api().postFullUrl(filterData, nextPageUrl).then((value) {
           var body = json.decode(value.body);
-          setState(() {
-            dataPasiens.addAll(body['data']['data']);
+          if (mounted) {
+            setState(() {
+              nextPageUrl = body['data']['next_page_url'] ?? '';
+              prevPageUrl = body['data']['prev_page_url'] ?? '';
+              currentPage = body['data']['current_page'].toString();
+              lastPage = body['data']['last_page'].toString();
 
-            nextPageUrl = body['data']['next_page_url'] ?? '';
-            prevPageUrl = body['data']['prev_page_url'] ?? '';
-            currentPage = body['data']['current_page'].toString();
-            lastPage = body['data']['last_page'].toString();
-          });
+              dataPasiens.addAll(body['data']['data']);
+            });
+          }
         });
       } else {
         await Api().getFullUrl(nextPageUrl).then((value) {
           var body = json.decode(value.body);
-          setState(() {
-            dataPasiens.addAll(body['data']['data']);
+          if (mounted) {
+            setState(() {
+              nextPageUrl = body['data']['next_page_url'] ?? '';
+              prevPageUrl = body['data']['prev_page_url'] ?? '';
+              currentPage = body['data']['current_page'].toString();
+              lastPage = body['data']['last_page'].toString();
 
-            nextPageUrl = body['data']['next_page_url'] ?? '';
-            prevPageUrl = body['data']['prev_page_url'] ?? '';
-            currentPage = body['data']['current_page'].toString();
-            lastPage = body['data']['last_page'].toString();
-          });
+              dataPasiens.addAll(body['data']['data']);
+            });
+          }
         });
       }
+
+      _refreshController.loadComplete();
     }
   }
 
@@ -232,9 +258,17 @@ class PasienListState extends State<PasienList> {
               const SizedBox(),
           ],
         ),
-        body: LazyLoadScrollView(
-          onEndOfPage: () => _loadMore(),
-          isLoading: isLoding,
+        body: SmartRefresher(
+          controller: _refreshController,
+          enablePullDown: true,
+          enablePullUp: true,
+          onRefresh: _onRefresh,
+          onLoading: _loadMore,
+          
+          header: WaterDropMaterialHeader(
+            color: Colors.white,
+            backgroundColor: accentColor,
+          ),
           child: ListView.builder(
             padding: const EdgeInsets.all(10),
             itemCount: dataPasiens.isEmpty ? 1 : dataPasiens.length,
@@ -267,9 +301,10 @@ class PasienListState extends State<PasienList> {
                     "Data tidak ditemukan",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: textColor.withOpacity(.5)),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: textColor.withOpacity(.5),
+                    ),
                   ),
                 );
               }
