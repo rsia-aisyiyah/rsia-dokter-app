@@ -216,6 +216,20 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                     initialDate: DateTime.now(),
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2100),
+                    builder: (BuildContext context, Widget? child) {
+                      return Theme(
+                        data: ThemeData.light().copyWith(
+                          colorScheme: ColorScheme.light(
+                            primary: accentColor,
+                            onPrimary: Colors.white,
+                            surface: accentColor,
+                            onSurface: textColor,
+                          ),
+                          dialogBackgroundColor: Colors.white,
+                        ),
+                        child: child!,
+                      );
+                    },
                   );
 
                   if (pickedDate != null) {

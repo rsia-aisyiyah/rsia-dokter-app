@@ -143,26 +143,6 @@ class PasienListState extends State<PasienList> {
     }
   }
 
-  // _doSearch
-  void _doSearch() {
-    dataPasiens.clear();
-    filterData.clear();
-
-    if (searchController.text.isNotEmpty) {
-      setState(() {
-        isLoding = true;
-
-        isFilter = true;
-        filterData['status_lanjut'] = widget.ralan ? 'Ralan' : 'Ranap';
-        filterData['keywords'] = searchController.text.toString();
-      });
-
-      _fetchSearch(filterData).then((value) {
-        _setData(value);
-      });
-    }
-  }
-
   Future _fetchSearch(data) async {
     var res = await Api().postData(data, '/dokter/pasien/search');
     if (res.statusCode == 200) {

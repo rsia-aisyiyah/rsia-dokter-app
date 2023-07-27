@@ -66,8 +66,8 @@ List<Map<String, Object>> menuScreenItems = [
     'widget': const PasienList(ranap: true),
     'disabled': false
   },
-  {'label': 'Pasien Operasi', 'widget': "", 'disabled': false},
-  {'label': 'Rekap Kunjungan Pasien', 'widget': "", 'disabled': false},
+  {'label': 'Pasien Operasi', 'widget': "", 'disabled': true},
+  {'label': 'Rekap Kunjungan Pasien', 'widget': "", 'disabled': true},
   {'label': 'Jasa Medis', 'widget': "", 'disabled': true},
   {'label': 'Cuti', 'widget': "", 'disabled': true},
   {'label': 'Undangan', 'widget': "", 'disabled': true}
