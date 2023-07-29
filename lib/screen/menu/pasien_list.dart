@@ -83,11 +83,22 @@ class PasienListState extends State<PasienList> {
 
         isLoding = false;
       });
+
+      if (nextPageUrl.isEmpty) {
+        _refreshController.loadNoData();
+      }
     } else {
       setState(() {
         isLoding = false;
         dataPasiens = [];
+
+        nextPageUrl = '';
+        prevPageUrl = '';
+        currentPage = value['data']['current_page'].toString();
+        lastPage = value['data']['last_page'].toString();
       });
+
+      _refreshController.resetNoData();
     }
   }
 
@@ -166,6 +177,8 @@ class PasienListState extends State<PasienList> {
       }
 
       _refreshController.loadComplete();
+    } else {
+      _refreshController.loadNoData();
     }
   }
 
@@ -188,6 +201,8 @@ class PasienListState extends State<PasienList> {
     if (searchController.text.isNotEmpty) {
       filterData['keywords'] = searchController.text.toString();
     }
+
+    print(filterData);
 
     // fetch
     _fetchSearch(filterData).then((value) {
@@ -261,7 +276,7 @@ class PasienListState extends State<PasienList> {
         body: SmartRefresher(
           controller: _refreshController,
           enablePullDown: true,
-          enablePullUp: true,
+          enablePullUp: nextPageUrl.isNotEmpty,
           onRefresh: _onRefresh,
           onLoading: _loadMore,
           header: WaterDropMaterialHeader(
@@ -294,14 +309,14 @@ class PasienListState extends State<PasienList> {
                 );
               } else {
                 return Container(
-                  height: MediaQuery.of(context).size.height / 1.5,
+                  height: MediaQuery.of(context).size.height / 1.2,
                   alignment: Alignment.center,
                   child: Text(
                     "Data tidak ditemukan",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
                       color: textColor.withOpacity(.5),
                     ),
                   ),

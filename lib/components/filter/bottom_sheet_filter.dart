@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 
 //ignore: must_be_immutable
 class BottomSheetFilter extends StatefulWidget {
@@ -211,35 +212,38 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                 ),
                 readOnly: true,
                 onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
+                  var res = await showCalendarDatePicker2Dialog(
                     context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                    builder: (BuildContext context, Widget? child) {
-                      return Theme(
-                        data: ThemeData.light().copyWith(
-                          colorScheme: ColorScheme.light(
-                            primary: accentColor,
-                            onPrimary: Colors.white,
-                            surface: accentColor,
-                            onSurface: textColor,
-                          ),
-                          dialogBackgroundColor: Colors.white,
-                        ),
-                        child: child!,
-                      );
-                    },
+                    useSafeArea: true,
+                    dialogSize: const Size(325, 400),
+                    borderRadius: BorderRadius.circular(15),
+                    config: CalendarDatePicker2WithActionButtonsConfig(
+                      centerAlignModePicker: true,
+                      customModePickerIcon: const SizedBox(),
+                      selectedDayTextStyle: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      selectedDayHighlightColor: accentColor,
+                      calendarType: CalendarDatePicker2Type.range,
+                    ),
                   );
 
-                  if (pickedDate != null) {
-                    String formattedDate = DateFormat('yyyy-MM-dd').format(
-                      pickedDate,
+                  if (res != null) {
+                    String startDate = DateFormat('yyyy-MM-dd').format(
+                      res.first!,
+                    );
+
+                    String endDate = DateFormat('yyyy-MM-dd').format(
+                      res.last!,
                     );
 
                     setState(() {
-                      widget.dateinput.text = formattedDate;
-                      widget.filterData['tgl_registrasi'] = formattedDate;
+                      widget.dateinput.text = "$startDate - $endDate";
+                      widget.filterData['tgl_registrasi'] = {
+                        "start": startDate,
+                        "end": endDate
+                      };
                     });
                   }
                 },

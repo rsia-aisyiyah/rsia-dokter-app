@@ -5,6 +5,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/screen/detail/operasi.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
 
 class PasienOperasi extends StatefulWidget {
@@ -49,7 +50,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
   }
 
   Future fetchPasien() async {
-    var res = await Api().getData('/dokter/jadwal/operasi/2023/06');
+    var res = await Api().getData('/dokter/operasi');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;
@@ -101,7 +102,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
       if (mounted) {
         _setData(value);
       }
-      
+
       _refreshController.refreshCompleted();
     });
   }
@@ -114,9 +115,9 @@ class _PasienOperasiState extends State<PasienOperasi> {
       return Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             "Pasien Operasi",
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -162,10 +163,22 @@ class _PasienOperasiState extends State<PasienOperasi> {
             padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
             itemCount: dataJadwal.length,
             itemBuilder: (context, i) {
-              var dataJdwl = dataJadwal[i];
+              var dataOperasi = dataJadwal[i];
               return InkWell(
                 onTap: () {
-                  onListJadwalTap(context, dataJdwl);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OperasiDetail(
+                          noRawat: dataOperasi['no_rawat'],
+                          pasien: dataOperasi['pasien'],
+                          penjab: _getPenjab(
+                            dataOperasi['penjab']['png_jawab'],
+                          ),
+                          rm: dataOperasi['no_rkm_medis'],
+                          statusLanjut: dataOperasi['status_lanjut'],
+                        ),
+                      ));
                 },
                 child: Column(
                   children: [
@@ -173,7 +186,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            vertical: 15,
+                            vertical: 10,
                             horizontal: 10,
                           ),
                           decoration: BoxDecoration(
@@ -181,7 +194,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                               color: _getPenjab(
-                                dataJdwl['reg_periksa']['penjab']['png_jawab'],
+                                dataOperasi['penjab']['png_jawab'],
                               ).contains('BPJS')
                                   ? accentColor
                                   : warningColor,
@@ -190,8 +203,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
                             boxShadow: [
                               BoxShadow(
                                 color: _getPenjab(
-                                  dataJdwl['reg_periksa']['penjab']
-                                      ['png_jawab'],
+                                  dataOperasi['penjab']['png_jawab'],
                                 ).contains('BPJS')
                                     ? accentColor.withOpacity(.2)
                                     : warningColor.withOpacity(.2),
@@ -205,37 +217,18 @@ class _PasienOperasiState extends State<PasienOperasi> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                dataJdwl['reg_periksa']['pasien']['nm_pasien'],
+                                dataOperasi['pasien']['nm_pasien'],
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                 ),
                               ),
-                              const SizedBox(height: 5),
-                              Flex(
-                                direction: Axis.horizontal,
-                                children: [
-                                  Text(
-                                    dataJdwl['no_rawat'],
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    "( RM. ${dataJdwl['reg_periksa']['no_rkm_medis']} )",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: fontWeightSemiBold),
-                                  ),
-                                ],
-                              ),
                               const SizedBox(height: 15),
-                              _tableOperasi(dataJdwl)
+                              _tableOperasi(dataOperasi)
                             ],
                           ),
                         ),
-                        _labelPenjab(dataJdwl),
+                        _labelPenjab(dataOperasi),
                       ],
                     ),
                     const SizedBox(height: 15),
@@ -261,18 +254,15 @@ class _PasienOperasiState extends State<PasienOperasi> {
     }
   }
 
-  Positioned _labelPenjab(dataJdwl) {
+  Positioned _labelPenjab(dataOperasi) {
     return Positioned(
       bottom: 0,
       right: 0,
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 7,
-          vertical: 5,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
         decoration: BoxDecoration(
           color: _getPenjab(
-            dataJdwl['reg_periksa']['penjab']['png_jawab'],
+            dataOperasi['penjab']['png_jawab'],
           ).contains('BPJS')
               ? accentColor
               : warningColor,
@@ -283,7 +273,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
         ),
         child: Text(
           _getPenjab(
-            dataJdwl['reg_periksa']['penjab']['png_jawab'],
+            dataOperasi['penjab']['png_jawab'],
           ),
           style: const TextStyle(
             fontSize: 11,
@@ -295,7 +285,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
     );
   }
 
-  Table _tableOperasi(dataJdwl) {
+  Table _tableOperasi(dataOperasi) {
     return Table(
       columnWidths: const {
         0: FlexColumnWidth(1),
@@ -313,9 +303,9 @@ class _PasienOperasiState extends State<PasienOperasi> {
           children: [
             TableCell(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Text(
-                  "Diagnosa",
+                  "No. Rawat",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: fontWeightSemiBold,
@@ -325,9 +315,9 @@ class _PasienOperasiState extends State<PasienOperasi> {
             ),
             TableCell(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Text(
-                  dataJdwl['rsia_diagnosa_operasi']['diagnosa'],
+                  dataOperasi['no_rawat'],
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -340,9 +330,9 @@ class _PasienOperasiState extends State<PasienOperasi> {
           children: [
             TableCell(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Text(
-                  "Jenis Operasi",
+                  "RM",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: fontWeightSemiBold,
@@ -352,36 +342,9 @@ class _PasienOperasiState extends State<PasienOperasi> {
             ),
             TableCell(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Text(
-                  dataJdwl['paket_operasi']['nm_perawatan'],
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        TableRow(
-          children: [
-            TableCell(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Text(
-                  "Jam",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: fontWeightSemiBold,
-                  ),
-                ),
-              ),
-            ),
-            TableCell(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Text(
-                  dataJdwl['jam_mulai'] + " - " + dataJdwl['jam_selesai'],
+                  dataOperasi['no_rkm_medis'],
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -394,10 +357,11 @@ class _PasienOperasiState extends State<PasienOperasi> {
     );
   }
 
-  Future<dynamic> onListJadwalTap(BuildContext context, dataJdwl) {
+  Future<dynamic> onListJadwalTap(BuildContext context, dataOperasi) {
+    // TODO : Height Modal Bottom Sheet sesuaikan dengan isi dari kontennya
     return showModalBottomSheet(
       context: context,
-      enableDrag: true,
+      enableDrag: false,
       showDragHandle: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -412,209 +376,347 @@ class _PasienOperasiState extends State<PasienOperasi> {
             left: 20,
             bottom: 20,
           ),
-          child: Table(
-            columnWidths: const {
-              0: FlexColumnWidth(1),
-              1: FlexColumnWidth(2),
-            },
-            border: TableBorder(
-              horizontalInside: BorderSide(
-                color: Colors.grey.shade300,
-                width: 1,
+          child: SingleChildScrollView(
+            child: Table(
+              columnWidths: const {
+                0: FlexColumnWidth(1),
+                1: FlexColumnWidth(2),
+              },
+              border: TableBorder(
+                horizontalInside: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 1,
+                ),
               ),
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          "Pasien",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: fontWeightSemiBold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          dataOperasi['pasien']['nm_pasien'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          "No. Rawat",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: fontWeightSemiBold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          dataOperasi['no_rawat'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          "RM",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: fontWeightSemiBold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          dataOperasi['no_rkm_medis'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          "Kategori Pasien",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: fontWeightSemiBold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          dataOperasi['penjab']['png_jawab'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          "Perawatan",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: fontWeightSemiBold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          dataOperasi['operasi']['paket_operasi']
+                              ['nm_perawatan'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          "Mulai",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: fontWeightSemiBold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          dataOperasi['operasi']['laporan_operasi']['tanggal'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          "Selesai",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: fontWeightSemiBold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          dataOperasi['operasi']['laporan_operasi']
+                              ['selesaioperasi'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          "Diagnosa Sebelum Operasi",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: fontWeightSemiBold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          dataOperasi['operasi']['laporan_operasi']
+                              ['diagnosa_preop'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          "Diagnosa Setelah Operasi",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: fontWeightSemiBold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          dataOperasi['operasi']['laporan_operasi']
+                              ['diagnosa_postop'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          "Permintaan PA",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: fontWeightSemiBold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          dataOperasi['operasi']['laporan_operasi']
+                              ['permintaan_pa'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          "Laporan Operasi",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: fontWeightSemiBold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Text(
+                          dataOperasi['operasi']['laporan_operasi']
+                              ['laporan_operasi'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              TableRow(
-                children: [
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        "Pasien",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: fontWeightSemiBold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        dataJdwl['reg_periksa']['pasien']['nm_pasien'],
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        "No. Rawat",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: fontWeightSemiBold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        dataJdwl['no_rawat'],
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        "RM",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: fontWeightSemiBold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        dataJdwl['reg_periksa']['no_rkm_medis'],
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        "Diagnosa",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: fontWeightSemiBold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        dataJdwl['rsia_diagnosa_operasi']['diagnosa'],
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        "Jenis Operasi",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: fontWeightSemiBold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        dataJdwl['paket_operasi']['nm_perawatan'],
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        "Tanggal",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: fontWeightSemiBold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        dataJdwl['tanggal'],
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        "Jam",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: fontWeightSemiBold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        dataJdwl['jam_mulai'] + " - " + dataJdwl['jam_selesai'],
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
           ),
         );
       },

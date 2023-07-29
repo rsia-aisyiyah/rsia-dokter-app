@@ -1,9 +1,7 @@
 import 'dart:convert';
 
 import 'package:draggable_home/draggable_home.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/List/jadwal_operasi.dart';
@@ -103,13 +101,6 @@ class _HomePageState extends State<HomePage> {
       "widget": const ListJadwalOperasi()
     },
   ];
-
-  loadMore() {
-    if (kDebugMode) {
-      print("Load More Home.dart");
-    }
-  }
-
   // ---------------------- End Tab Home
 
   @override
@@ -117,55 +108,52 @@ class _HomePageState extends State<HomePage> {
     if (isLoading) {
       return loadingku(primaryColor);
     } else {
-      return LazyLoadScrollView(
-        onEndOfPage: () => loadMore(),
-        child: DefaultTabController(
-          length: tabsHome.length,
-          child: DraggableHome(
-            title: Text(
-              tabsHome[selectedTab]['label'] as String,
-            ),
-            headerWidget: StatsHomeWidget(
-              dokter: _dokter,
-              pasienNow: dataPasien,
-              totalHariIni: _pasienNow['data']['total'],
-            ),
-            body: [
-              Row(
-                children: [
-                  const Spacer(),
-                  Container(
-                    height: 3,
-                    width: 60,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
-                      color: Colors.grey,
-                    ),
+      return DefaultTabController(
+        length: tabsHome.length,
+        child: DraggableHome(
+          title: Text(
+            tabsHome[selectedTab]['label'] as String,
+          ),
+          headerWidget: StatsHomeWidget(
+            dokter: _dokter,
+            pasienNow: dataPasien,
+            totalHariIni: _pasienNow['data']['total'],
+          ),
+          body: [
+            Row(
+              children: [
+                const Spacer(),
+                Container(
+                  height: 3,
+                  width: 60,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    color: Colors.grey,
                   ),
-                  const Spacer(),
-                ],
-              ),
-              tabsHome[selectedTab]['widget'] as Widget,
-            ],
-            fullyStretchable: false,
-            backgroundColor: Colors.white,
-            appBarColor: accentColor,
-            bottomNavigationBar: Container(
-              color: accentColor,
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: TabBar(
-                onTap: _changeSelectedNavBar,
-                labelColor: textColorLight,
-                indicatorColor: Colors.transparent,
-                unselectedLabelColor: textColor.withOpacity(.5),
-                tabs: tabsHome.map(
-                  (e) {
-                    return Tab(
-                      child: Text(e['label'] as String),
-                    );
-                  },
-                ).toList(),
-              ),
+                ),
+                const Spacer(),
+              ],
+            ),
+            tabsHome[selectedTab]['widget'] as Widget,
+          ],
+          fullyStretchable: false,
+          backgroundColor: Colors.white,
+          appBarColor: accentColor,
+          bottomNavigationBar: Container(
+            color: accentColor,
+            padding: const EdgeInsets.symmetric(vertical: 2),
+            child: TabBar(
+              onTap: _changeSelectedNavBar,
+              labelColor: textColorLight,
+              indicatorColor: Colors.transparent,
+              unselectedLabelColor: textColor.withOpacity(.5),
+              tabs: tabsHome.map(
+                (e) {
+                  return Tab(
+                    child: Text(e['label'] as String),
+                  );
+                },
+              ).toList(),
             ),
           ),
         ),
