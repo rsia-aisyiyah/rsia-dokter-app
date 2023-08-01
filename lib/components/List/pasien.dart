@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 
 class CreatePasienList extends StatefulWidget {
   final List pasien;
@@ -38,10 +39,11 @@ class _CreatePasienListState extends State<CreatePasienList> {
         if (pasien.isEmpty) {
           return Container(
             padding: EdgeInsets.symmetric(
-                vertical: MediaQuery.of(context).size.height / 5),
+              vertical: MediaQuery.of(context).size.height / 5,
+            ),
             child: Center(
               child: Text(
-                "Tidak ada data",
+                noDataAvailableMsg,
                 style: TextStyle(
                   fontSize: 16,
                   color: textColor.withOpacity(0.5),
@@ -87,7 +89,7 @@ class _CreatePasienListState extends State<CreatePasienList> {
                 createCardPasien(pasien[index])
               ],
             );
-          } 
+          }
 
           // if last index
           if (index == pasien.length - 1) {
@@ -113,7 +115,6 @@ class _CreatePasienListState extends State<CreatePasienList> {
               ],
             );
           }
-
 
           return createCardPasien(pasien[index]);
         }

@@ -5,6 +5,7 @@ import 'package:rsiap_dokter/screen/home.dart';
 import 'package:rsiap_dokter/screen/menu.dart';
 import 'package:rsiap_dokter/screen/menu/pasien_list.dart';
 import 'package:rsiap_dokter/screen/menu/pasien_operasi.dart';
+import 'package:rsiap_dokter/screen/menu/rekap_kunjungan.dart';
 import 'package:rsiap_dokter/screen/profile.dart';
 
 // ==================== App Config ==================== //
@@ -72,7 +73,11 @@ List<Map<String, Object>> menuScreenItems = [
     'widget': const PasienOperasi(),
     'disabled': false
   },
-  {'label': 'Rekap Kunjungan Pasien', 'widget': "", 'disabled': true},
+  {
+    'label': 'Rekap Kunjungan Pasien',
+    'widget': const RekapKunjunganPasien(),
+    'disabled': false
+  },
   {'label': 'Jasa Medis', 'widget': "", 'disabled': true},
   {'label': 'Cuti', 'widget': "", 'disabled': true},
   {'label': 'Undangan', 'widget': "", 'disabled': true}
