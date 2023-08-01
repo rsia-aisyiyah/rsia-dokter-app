@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 
 //ignore: must_be_immutable
 class BottomSheetFilter extends StatefulWidget {
@@ -19,6 +20,7 @@ class BottomSheetFilter extends StatefulWidget {
   Map filterData;
 
   String selectedCategory;
+  String tglFilterKey;
 
   BottomSheetFilter({
     super.key,
@@ -32,6 +34,7 @@ class BottomSheetFilter extends StatefulWidget {
     required this.filterData,
     required this.selectedCategory,
     required this.onClearAndCancel,
+    required this.tglFilterKey,
   });
 
   @override
@@ -110,9 +113,9 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      const Text(
-                        "Filter Pasien",
-                        style: TextStyle(
+                      Text(
+                        filterPasienText,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                         ),
@@ -132,9 +135,9 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                 ],
               ),
               const SizedBox(height: 10),
-              const Text(
-                "Cari Pasien",
-                style: TextStyle(
+              Text(
+                searchPasienText,
+                style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
@@ -143,7 +146,7 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
               TextField(
                 controller: widget.searchController,
                 decoration: InputDecoration(
-                  hintText: "Masukan keywords . . .",
+                  hintText: searchKeywordText,
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 10,
                     horizontal: 15,
@@ -170,9 +173,9 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                 textInputAction: TextInputAction.done,
               ),
               const SizedBox(height: 15),
-              const Text(
-                "Tanggal Registrasi",
-                style: TextStyle(
+              Text(
+                labelSelectDate,
+                style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
@@ -181,7 +184,7 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
               TextField(
                 controller: widget.dateinput,
                 decoration: InputDecoration(
-                  hintText: "Pilih Tanggal",
+                  hintText: labelSelectDate,
                   suffixIcon: Icon(
                     Icons.calendar_today,
                     color: widget.dateinput.text.isNotEmpty
@@ -240,7 +243,7 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
 
                     setState(() {
                       widget.dateinput.text = "$startDate - $endDate";
-                      widget.filterData['tgl_registrasi'] = {
+                      widget.filterData[widget.tglFilterKey] = {
                         "start": startDate,
                         "end": endDate
                       };
@@ -249,9 +252,9 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                 },
               ),
               const SizedBox(height: 15),
-              const Text(
-                "Kategori Pasien",
-                style: TextStyle(
+              Text(
+                labelSelectkategori,
+                style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
@@ -302,7 +305,7 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                       widget.onClearAndCancel();
                       Navigator.pop(context);
                     },
-                    child: const Text("Cancle & Clear"),
+                    child: Text(resetAndCloseText),
                   ),
                 ),
               ),
@@ -323,7 +326,7 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                       widget.doFilter();
                       Navigator.pop(context);
                     },
-                    child: const Text("Apply"),
+                    child: Text(submitText),
                   ),
                 ),
               ),

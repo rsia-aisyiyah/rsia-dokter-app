@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 
 createCardPasien(pasien) {
   var penjab = "";
@@ -49,7 +50,7 @@ createCardPasien(pasien) {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  "RM : ${pasien['no_rkm_medis']}",
+                  "$ikNoRkmMedis : ${pasien['no_rkm_medis']}",
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -57,7 +58,7 @@ createCardPasien(pasien) {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  "No. Rawat : ${pasien['no_rawat']}",
+                  "$ikNoRawat : ${pasien['no_rawat']}",
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,

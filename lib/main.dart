@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 
 import 'package:rsiap_dokter/screen/login.dart';
 import 'package:rsiap_dokter/screen/index.dart';
@@ -60,7 +61,7 @@ class _CheckAuthState extends State<CheckAuth> {
             }
           } else {
             if (mounted) {
-              Msg.error(context, 'Sesi anda telah berakhir');
+              Msg.error(context, sessionExpiredMsg);
               setState(() {
                 isAuth = false;
               });

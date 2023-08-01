@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 
 class ListJadwalOperasi extends StatefulWidget {
   const ListJadwalOperasi({super.key});
@@ -172,7 +173,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                                   ),
                                   const SizedBox(width: 5),
                                   Text(
-                                    "( RM. ${dataJdwl['reg_periksa']['no_rkm_medis']} )",
+                                    "( $ikNoRm. ${dataJdwl['reg_periksa']['no_rkm_medis']} )",
                                     style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: fontWeightSemiBold),
@@ -236,7 +237,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        "Pasien",
+                        ikPasien,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: fontWeightSemiBold,
@@ -263,7 +264,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        "No. Rawat",
+                        ikNoRawat,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: fontWeightSemiBold,
@@ -290,7 +291,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        "RM",
+                        ikNoRm,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: fontWeightSemiBold,
@@ -317,7 +318,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        "Diagnosa",
+                        ikDiagnosa,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: fontWeightSemiBold,
@@ -344,7 +345,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        "Jenis Operasi",
+                        ikJenisOperasi,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: fontWeightSemiBold,
@@ -371,7 +372,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        "Tanggal",
+                        labelTanggal,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: fontWeightSemiBold,
@@ -398,7 +399,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        "Jam",
+                        labelJam,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: fontWeightSemiBold,
@@ -446,7 +447,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Text(
-                  "Diagnosa",
+                  ikDiagnosa,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: fontWeightSemiBold,
@@ -473,7 +474,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Text(
-                  "Jenis Operasi",
+                  ikJenisOperasi,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: fontWeightSemiBold,
@@ -500,7 +501,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Text(
-                  "Jam",
+                  labelJam,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: fontWeightSemiBold,

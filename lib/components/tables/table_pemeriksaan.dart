@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 
 class TablePemeriksaan extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -123,7 +124,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Kesadaran",
+                  ikKesadaran,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,
@@ -164,7 +165,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Subject",
+                  ikSubjektif,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,
@@ -205,7 +206,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Object",
+                  ikObjektif,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,
@@ -246,7 +247,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Assesment",
+                  ikAssesment,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,
@@ -287,7 +288,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Plan",
+                  ikPlanning,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,
@@ -328,7 +329,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Instruksi",
+                  ikInstruksi,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,
@@ -369,7 +370,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Evaluasi",
+                  ikEvaluasi,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,

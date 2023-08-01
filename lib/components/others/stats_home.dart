@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/components/cards/card_stats.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 
 class StatsHomeWidget extends StatelessWidget {
@@ -81,7 +82,7 @@ class StatsHomeWidget extends StatelessWidget {
               child: STRExpired <= STRExpMin
                   ? RichText(
                       text: TextSpan(
-                        text: "STR akan habis dalam ",
+                        text: strExpiredIn,
                         style: TextStyle(
                           fontSize: 14,
                           color: textColor,
@@ -96,7 +97,7 @@ class StatsHomeWidget extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: ". Segera perpanjang !",
+                            text: ". $strRenewText",
                             style: TextStyle(
                               fontSize: 14,
                               color: textColor,
@@ -133,7 +134,7 @@ class StatsHomeWidget extends StatelessWidget {
                 children: [
                   Expanded(
                     child: cardStats(
-                      "Hari Ini",
+                      todayText,
                       totalHariIni.toString(),
                       context,
                     ),
@@ -141,7 +142,7 @@ class StatsHomeWidget extends StatelessWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: cardStats(
-                      "Rawat Inap",
+                      rawatInapText,
                       filterPasienRawat("ranap").length.toString(),
                       context,
                     ),
@@ -149,7 +150,7 @@ class StatsHomeWidget extends StatelessWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: cardStats(
-                      "Rawat Jalan",
+                      rawatJalanText,
                       filterPasienRawat("ralan").length.toString(),
                       context,
                     ),

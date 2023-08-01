@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/index.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,8 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
   bool _secureText = true;
   var username = '';
-  var password = '';  
-  
+  var password = '';
+
   final _formKey = GlobalKey<FormState>();
 
   showHide() {
@@ -34,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     if (username.isEmpty) {
-      Msg.error(context, 'Username tidak boleh kosong');
+      Msg.error(context, usernameEmpty);
       setState(() {
         _isLoading = false;
       });
@@ -42,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     if (password.isEmpty) {
-      Msg.error(context, 'Password tidak boleh kosong');
+      Msg.error(context, passwordEmpty);
       setState(() {
         _isLoading = false;
       });
@@ -74,10 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
           });
         }
       } else {
-        Msg.error(
-          context,
-          'Username atau password salah, atau terdapat kesalahan pada sistem',
-        );
+        Msg.error(context, wrongCredentials);
         setState(() {
           _isLoading = false;
         });
@@ -141,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             maxLines: 1,
                             initialValue: '1.101.1112',
                             decoration: InputDecoration(
-                              hintText: "Username",
+                              hintText: labelUsername  ,
                               contentPadding: const EdgeInsets.all(10),
                               border: InputBorder.none,
                               hintStyle: TextStyle(color: textColor),
@@ -175,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(color: textColor),
                             initialValue: 'dokter123',
                             decoration: InputDecoration(
-                              hintText: "Password",
+                              hintText: labelPassword,
                               border: InputBorder.none,
                               contentPadding: const EdgeInsets.all(10),
                               hintStyle: TextStyle(color: textColor),
@@ -197,13 +195,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Center(
                                   child: GestureDetector(
                                     onTap: () {
-                                      Msg.info(
-                                        context,
-                                        'Silahkan hubungi tim IT untuk reset password',
-                                      );
+                                      Msg.info(context, forgotPasswordMsg);
                                     },
                                     child: Text(
-                                      "Forgot Password?",
+                                      forgotText,
                                       style: TextStyle(color: textColor),
                                     ),
                                   ),
@@ -229,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             child: Text(
-                              _isLoading ? 'Processing...' : 'Login',
+                              _isLoading ? processingText : loginText,
                               style: TextStyle(
                                 color: textColorLight,
                                 fontSize: 18,
@@ -251,8 +246,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ? null
           : Padding(
               padding: const EdgeInsets.only(bottom: 15, top: 5),
-              child: Text(
-                "IT RSIA Aisyiyah Pekajangan",
+              child: Text(credit,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: textColor.withOpacity(0.6)),
               ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/login.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (body['success']) {
       SharedPreferences.getInstance().then((prefs) {
         prefs.remove('token');
-        Msg.success(context, 'Logout success');
+        Msg.success(context, logoutSuccessMsg);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -69,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Selamat Datang,",
+                            welcomeText,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: fontWeightNormal,
@@ -125,7 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ),
                                 child: Text(
-                                  'Log Out',
+                                  logoutText,
                                   style: TextStyle(
                                     color: textColor,
                                     fontSize: 18,
@@ -143,11 +144,11 @@ class _ProfilePageState extends State<ProfilePage> {
               } else {
                 return Container(
                   padding: const EdgeInsets.all(20),
-                  child: const Column(
+                  child: Column(
                     children: [
                       Text(
-                        'Gagal mengambil data',
-                        style: TextStyle(
+                        failedToFetchDataMsg,
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
