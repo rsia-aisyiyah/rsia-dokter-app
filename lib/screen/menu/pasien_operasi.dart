@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rsiap_dokter/api/request.dart';
+import 'package:rsiap_dokter/components/filter/bottom_sheet_filter.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/screen/detail/operasi.dart';
-import 'package:rsiap_dokter/utils/msg.dart';
 
 class PasienOperasi extends StatefulWidget {
   const PasienOperasi({super.key});
@@ -22,9 +22,15 @@ class _PasienOperasiState extends State<PasienOperasi> {
   String lastPage = '';
 
   List dataJadwal = [];
-
   bool isLoading = true;
+  bool isFilter = false;
 
+  // filter
+  Map filterData = {};
+
+  TextEditingController searchController = TextEditingController();
+  TextEditingController dateinput = TextEditingController();
+  // ignore: prefer_final_fields
   RefreshController _refreshController = RefreshController(
     initialRefresh: false,
   );
@@ -34,7 +40,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
     super.initState();
     fetchPasien().then((value) {
       if (mounted) {
-        _setData(value);
+        _setData(value, false);
       }
     });
   }
@@ -44,7 +50,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
     super.didChangeDependencies();
     fetchPasien().then((value) {
       if (mounted) {
-        _setData(value);
+        _setData(value, false);
       }
     });
   }
@@ -57,54 +63,106 @@ class _PasienOperasiState extends State<PasienOperasi> {
     }
   }
 
-  void _setData(value) {
-    if (value['data']['total'] != 0) {
-      setState(() {
-        dataJadwal = value['data']['data'] ?? [];
-
-        nextPageUrl = value['data']['next_page_url'] ?? '';
-        prevPageUrl = value['data']['prev_page_url'] ?? '';
-        currentPage = value['data']['current_page'].toString();
-        lastPage = value['data']['last_page'].toString();
-
-        isLoading = false;
-      });
-    } else {
-      setState(() {
-        isLoading = false;
-
-        dataJadwal = value['data']['data'] ?? [];
-      });
+  Future _fetchFilter(data) async {
+    var res = await Api().postData(data, '/dokter/operasi/filter');
+    if (res.statusCode == 200) {
+      var body = json.decode(res.body);
+      return body;
     }
   }
 
   Future<void> _loadMore() async {
     if (nextPageUrl.isNotEmpty) {
-      var res = await Api().getDataUrl(nextPageUrl);
-      if (res.statusCode == 200) {
-        var body = json.decode(res.body);
-        setState(() {
-          dataJadwal.addAll(body['data']['data']);
-
-          nextPageUrl = body['data']['next_page_url'] ?? '';
-          prevPageUrl = body['data']['prev_page_url'] ?? '';
-          currentPage = body['data']['current_page'].toString();
-          lastPage = body['data']['last_page'].toString();
+      if (isFilter) {
+        await Api().postFullUrl(filterData, nextPageUrl).then((value) {
+          var body = json.decode(value.body);
+          _setData(body, true);
         });
-      }
-    }
 
-    _refreshController.loadComplete();
+        _refreshController.loadComplete();
+      } else {
+        var res = await Api().getDataUrl(nextPageUrl);
+        if (res.statusCode == 200) {
+          var body = json.decode(res.body);
+          _setData(body, true);
+        }
+
+        _refreshController.loadComplete();
+      }
+    } else {
+      _refreshController.loadNoData();
+    }
   }
 
   void _onRefresh() async {
     await fetchPasien().then((value) {
-      if (mounted) {
-        _setData(value);
-      }
+      setState(() {
+        isFilter = false;
+        if (mounted) {
+          _setData(value, false);
+        }
+      });
 
       _refreshController.refreshCompleted();
     });
+  }
+
+  void doFilter() async {
+    setState(() {
+      isLoading = true;
+      isFilter = true;
+    });
+
+    // search
+    if (searchController.text.isNotEmpty) {
+      filterData['keywords'] = searchController.text.toString();
+    }
+
+    _fetchFilter(filterData).then((value) {
+      _setData(value, false);
+    });
+  }
+
+  _onClearCancel() {
+    setState(() {
+      isLoading = true;
+      isFilter = false;
+
+      dateinput.text = "";
+
+      filterData.clear();
+      searchController.clear();
+    });
+
+    fetchPasien().then((value) {
+      _setData(value, false);
+    });
+  }
+
+  void _setData(value, bool append) {
+    if (mounted) {
+      if (value['data']['total'] > 0) {
+        setState(() {
+          if (append) {
+            dataJadwal.addAll(value['data']['data']);
+          } else {
+            dataJadwal = value['data']['data'];
+          }
+
+          nextPageUrl = value['data']['next_page_url'] ?? '';
+          prevPageUrl = value['data']['prev_page_url'] ?? '';
+          currentPage = value['data']['current_page'].toString();
+          lastPage = value['data']['last_page'].toString();
+
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+          dataJadwal = value['data']['data'] ?? [];
+        });
+      }
+    }
   }
 
   @override
@@ -137,16 +195,37 @@ class _PasienOperasiState extends State<PasienOperasi> {
           actions: [
             IconButton(
               onPressed: () {
-                Msg.warning(
-                  context,
-                  "Fitur ini belum tersedia",
-                );
+                _onFilterIconClicked(context);
               },
               icon: const Icon(
                 Icons.filter_alt_outlined,
                 color: Colors.white,
               ),
             ),
+            if (isFilter)
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    isLoading = true;
+                    isFilter = false;
+
+                    dateinput.text = "";
+
+                    filterData.clear();
+                    searchController.clear();
+                  });
+
+                  fetchPasien().then((value) {
+                    _setData(value, false);
+                  });
+                },
+                icon: const Icon(
+                  Icons.clear,
+                  color: Colors.white,
+                ),
+              )
+            else
+              const SizedBox(),
           ],
         ),
         body: SmartRefresher(
@@ -167,18 +246,19 @@ class _PasienOperasiState extends State<PasienOperasi> {
               return InkWell(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OperasiDetail(
-                          noRawat: dataOperasi['no_rawat'],
-                          pasien: dataOperasi['pasien'],
-                          penjab: _getPenjab(
-                            dataOperasi['penjab']['png_jawab'],
-                          ),
-                          rm: dataOperasi['no_rkm_medis'],
-                          statusLanjut: dataOperasi['status_lanjut'],
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OperasiDetail(
+                        noRawat: dataOperasi['no_rawat'],
+                        pasien: dataOperasi['pasien'],
+                        penjab: _getPenjab(
+                          dataOperasi['penjab']['png_jawab'],
                         ),
-                      ));
+                        rm: dataOperasi['no_rkm_medis'],
+                        statusLanjut: dataOperasi['status_lanjut'],
+                      ),
+                    ),
+                  );
                 },
                 child: Column(
                   children: [
@@ -357,367 +437,22 @@ class _PasienOperasiState extends State<PasienOperasi> {
     );
   }
 
-  Future<dynamic> onListJadwalTap(BuildContext context, dataOperasi) {
-    // TODO : Height Modal Bottom Sheet sesuaikan dengan isi dari kontennya
+  Future<dynamic> _onFilterIconClicked(BuildContext context) {
     return showModalBottomSheet(
       context: context,
-      enableDrag: false,
-      showDragHandle: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-      ),
       builder: (context) {
-        return Container(
-          padding: const EdgeInsets.only(
-            right: 20,
-            left: 20,
-            bottom: 20,
-          ),
-          child: SingleChildScrollView(
-            child: Table(
-              columnWidths: const {
-                0: FlexColumnWidth(1),
-                1: FlexColumnWidth(2),
-              },
-              border: TableBorder(
-                horizontalInside: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 1,
-                ),
-              ),
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          "Pasien",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: fontWeightSemiBold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          dataOperasi['pasien']['nm_pasien'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          "No. Rawat",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: fontWeightSemiBold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          dataOperasi['no_rawat'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          "RM",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: fontWeightSemiBold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          dataOperasi['no_rkm_medis'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          "Kategori Pasien",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: fontWeightSemiBold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          dataOperasi['penjab']['png_jawab'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          "Perawatan",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: fontWeightSemiBold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          dataOperasi['operasi']['paket_operasi']
-                              ['nm_perawatan'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          "Mulai",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: fontWeightSemiBold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          dataOperasi['operasi']['laporan_operasi']['tanggal'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          "Selesai",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: fontWeightSemiBold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          dataOperasi['operasi']['laporan_operasi']
-                              ['selesaioperasi'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          "Diagnosa Sebelum Operasi",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: fontWeightSemiBold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          dataOperasi['operasi']['laporan_operasi']
-                              ['diagnosa_preop'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          "Diagnosa Setelah Operasi",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: fontWeightSemiBold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          dataOperasi['operasi']['laporan_operasi']
-                              ['diagnosa_postop'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          "Permintaan PA",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: fontWeightSemiBold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          dataOperasi['operasi']['laporan_operasi']
-                              ['permintaan_pa'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          "Laporan Operasi",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: fontWeightSemiBold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Text(
-                          dataOperasi['operasi']['laporan_operasi']
-                              ['laporan_operasi'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+        return BottomSheetFilter(
+          dateinput: dateinput,
+          searchController: searchController,
+          isLoding: isLoading,
+          isFilter: isFilter,
+          fetchPasien: fetchPasien,
+          setData: _setData,
+          doFilter: doFilter,
+          onClearAndCancel: _onClearCancel,
+          filterData: filterData,
+          selectedCategory: filterData['penjab'] ?? '',
+          tglFilterKey: "tgl_operasi",
         );
       },
     );

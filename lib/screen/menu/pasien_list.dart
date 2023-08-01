@@ -201,10 +201,7 @@ class PasienListState extends State<PasienList> {
     if (searchController.text.isNotEmpty) {
       filterData['keywords'] = searchController.text.toString();
     }
-
-    print(filterData);
-
-    // fetch
+    
     _fetchSearch(filterData).then((value) {
       _setData(value);
     });
@@ -344,6 +341,7 @@ class PasienListState extends State<PasienList> {
           onClearAndCancel: _onClearCancel,
           filterData: filterData,
           selectedCategory: filterData['penjab'] ?? '',
+          tglFilterKey: "tgl_registrasi",
         );
       },
     );
