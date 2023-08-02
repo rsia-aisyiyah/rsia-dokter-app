@@ -6,6 +6,7 @@ import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/login.dart';
+import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -46,6 +47,13 @@ class _ProfilePageState extends State<ProfilePage> {
     return body;
   }
 
+  double monthBetween(DateTime endDate) {
+    var now = DateTime.now();
+    var difference = endDate.difference(now).inDays;
+    var month = difference / 30;
+    return month;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,31 +65,37 @@ class _ProfilePageState extends State<ProfilePage> {
             if (snapshot.hasData) {
               var data = json.decode(json.encode(snapshot.data));
               if (data['success']) {
+                var STRExpired = monthBetween(DateTime.parse(
+                  data['data']['pegawai']['kualifikasi_staff']
+                      ['tanggal_akhir_str'],
+                ));
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: MediaQuery.of(context).size.height * 0.04,
+                      padding: EdgeInsets.only(
+                        top: 20,
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            welcomeText,
+                            Helper.greeting(),
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 17,
                               fontWeight: fontWeightNormal,
                               color: textColor,
                             ),
                           ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 5),
                           Text(
                             data['data']['nm_dokter'],
                             style: TextStyle(
-                              fontSize: 30,
+                              fontSize: 25,
                               fontWeight: FontWeight.bold,
                               color: textColor,
                             ),
@@ -98,6 +112,71 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                     ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 20, right: 20),
+                      padding: STRExpired <= STRExpMin
+                          ? const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 5,
+                            )
+                          : const EdgeInsets.all(0),
+                      width: double.infinity,
+                      decoration: STRExpired <= STRExpMin
+                          ? BoxDecoration(
+                              color: Colors.yellow[700],
+                              borderRadius: BorderRadius.circular(5),
+                            )
+                          : null,
+                      child: STRExpired <= STRExpMin
+                          ? RichText(
+                              text: TextSpan(
+                                text: strExpiredIn,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: textColor,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        " ${STRExpired.toStringAsFixed(1)} Bulan",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: textColor,
+                                      fontWeight: fontWeightSemiBold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: ". $strRenewText",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: textColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : RichText(
+                              text: TextSpan(
+                                text: "SIP : ",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: textColor,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: data['data']['pegawai']
+                                        ['kualifikasi_staff']['nomor_sip'],
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: textColor,
+                                      fontWeight: fontWeightSemiBold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                    ),
+                    SizedBox(height: STRExpired <= STRExpMin ? 10 : 15),
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(

@@ -30,6 +30,7 @@ class _DetailPasienState extends State<DetailPasien> {
   TooltipBehavior suhuTubuhTooltipBehavior = TooltipBehavior(enable: true);
   TooltipBehavior nadiTooltipBehavior = TooltipBehavior(enable: true);
   TooltipBehavior spo2TooltipBehavior = TooltipBehavior(enable: true);
+  TooltipBehavior respirasiTooltipBehavior = TooltipBehavior(enable: true);
   List<_ChartData>? chartData;
   bool chartIsLoaded = false;
 
@@ -183,8 +184,11 @@ class _DetailPasienState extends State<DetailPasien> {
         yValueMapper: (_ChartData data, _) => data.value,
         width: 2,
         name: name,
+        dataLabelSettings: const DataLabelSettings(
+          isVisible: true,
+          labelAlignment: ChartDataLabelAlignment.top,
+        ),
         markerSettings: const MarkerSettings(isVisible: true),
-        // random datacolor
         color: dataColor[Random().nextInt(dataColor.length)],
       ),
     ];
@@ -285,7 +289,7 @@ class _DetailPasienState extends State<DetailPasien> {
             const SizedBox(height: 10),
             _buildChart('nadi', nadiTooltipBehavior),
             const SizedBox(height: 10),
-            _buildChart('respirasi', spo2TooltipBehavior),
+            _buildChart('respirasi', respirasiTooltipBehavior),
             const SizedBox(height: 10),
             _buildChart('spo2', spo2TooltipBehavior),
             const SizedBox(height: 20),

@@ -8,6 +8,7 @@ import 'package:rsiap_dokter/components/filter/bottom_sheet_filter.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/screen/detail/pasien.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PasienList extends StatefulWidget {
   final bool ralan;
@@ -24,6 +25,8 @@ class PasienList extends StatefulWidget {
 }
 
 class PasienListState extends State<PasienList> {
+  SharedPreferences? pref;
+
   TextEditingController searchController = TextEditingController();
   TextEditingController dateinput = TextEditingController();
   RefreshController _refreshController = RefreshController(
@@ -136,7 +139,17 @@ class PasienListState extends State<PasienList> {
   }
 
   Future fetchPasien() async {
-    var res = await Api().getData(url);
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var spesialis = localStorage.getString('spesialis');
+    var strUrl = "";
+    
+    if (spesialis!.toLowerCase().contains('umum')) {
+      strUrl = '/dokter/pasien/ranap/all';
+    } else {
+      strUrl = url;
+    }
+
+    var res = await Api().getData(strUrl);
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;

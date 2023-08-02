@@ -41,7 +41,7 @@ class StatsHomeWidget extends StatelessWidget {
 
     return Container(
       color: backgroundColor,
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 5),
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -55,17 +55,17 @@ class StatsHomeWidget extends StatelessWidget {
                 color: textColor,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 5),
             Text(
               dokter['data']['nm_dokter'],
               style: TextStyle(
-                fontSize: 30,
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
                 color: textColor,
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 10),
               padding: STRExpired <= STRExpMin
                   ? const EdgeInsets.symmetric(
                       horizontal: 10,
@@ -89,7 +89,7 @@ class StatsHomeWidget extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: "${STRExpired.toStringAsFixed(1)} Bulan",
+                            text: " ${STRExpired.toStringAsFixed(1)} Bulan",
                             style: TextStyle(
                               fontSize: 14,
                               color: textColor,

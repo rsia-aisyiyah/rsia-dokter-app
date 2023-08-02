@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
@@ -59,8 +60,14 @@ class _LoginScreenState extends State<LoginScreen> {
       if (res.statusCode == 200) {
         var body = jsonDecode(res.body);
         if (body['success']) {
+          String token = body['access_token'];
+          Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+
           SharedPreferences.getInstance().then((prefs) {
             prefs.setString('token', json.encode(body['access_token']));
+            prefs.setString('kd_sps', json.encode(decodedToken['sps']));
+            prefs.setString('spesialis', json.encode(decodedToken['spss']));
+
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(

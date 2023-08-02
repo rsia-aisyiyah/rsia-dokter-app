@@ -5,6 +5,7 @@ import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/screen/detail/pasien.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ListPasienRanap extends StatefulWidget {
   const ListPasienRanap({super.key});
@@ -14,6 +15,8 @@ class ListPasienRanap extends StatefulWidget {
 }
 
 class _ListPasienRanapState extends State<ListPasienRanap> {
+  SharedPreferences? pref;
+
   String nextPageUrl = '';
   String prevPageUrl = '';
   String currentPage = '';
@@ -23,6 +26,9 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
 
   bool isLoading = true;
   bool btnLoading = false;
+
+  String? spesialis;
+  String? kd_sps;
 
   @override
   void initState() {
@@ -68,7 +74,17 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
   }
 
   Future fetchPasien() async {
-    var res = await Api().getData('/dokter/pasien/ranap/2023/06');
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var spesialis = localStorage.getString('spesialis');
+    var strUrl = "";
+
+    if (!spesialis!.toLowerCase().contains('umum')) {
+      strUrl = '/dokter/pasien/ranap/2023/06';
+    } else {
+      strUrl = '/dokter/pasien/ranap/all';
+    }
+
+    var res = await Api().getData(strUrl);
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;

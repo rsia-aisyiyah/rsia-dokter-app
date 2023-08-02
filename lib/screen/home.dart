@@ -22,8 +22,6 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true;
   int selectedTab = 0;
 
-  // Data
-  // var _jadwalOperasi = {};
   var _pasienNow = {};
   var _dokter = {};
 
