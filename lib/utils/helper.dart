@@ -1,3 +1,5 @@
+import 'package:rsiap_dokter/config/strings.dart';
+
 class Helper {
   static String getAssetName(String name) {
     return 'assets/images/$name';
@@ -8,17 +10,17 @@ class Helper {
 
     // pagi
     if (hour < 12) {
-      return 'Selamat Pagi';
+      return morningGreeting;
     }
     // siang
     if (hour < 16) {
-      return 'Selamat Siang';
+      return afternoonGreeting;
     }
     // sore
     if (hour < 19) {
-      return 'Selamat Sore';
+      return eveningGreeting;
     }
     // malam
-    return 'Selamat Malam';
+    return nightGreeting;
   }
 }

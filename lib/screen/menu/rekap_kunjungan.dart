@@ -87,9 +87,9 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
       return Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(
-          title: const Text(
-            "Pasien Operasi",
-            style: TextStyle(
+          title: Text(
+            rekapKunjunganTitle,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -333,8 +333,8 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
       ),
       child: dataMetrics.isNotEmpty
           ? metricsWidgets()
-          : const Text(
-              "Data tidak ditemukan",
+          : Text(
+              belumAdaPasien,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
@@ -392,7 +392,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "Total Pasien",
+                        totalPasienText,
                         style: TextStyle(
                           color: textColor,
                           fontSize: 14,
@@ -428,7 +428,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              "UMUM",
+                              umumText,
                               style: TextStyle(
                                 color: textColorLight,
                                 fontSize: 14,
@@ -462,7 +462,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              "BPJS",
+                              bpjsText,
                               style: TextStyle(
                                 color: textColorLight,
                                 fontSize: 14,
@@ -495,13 +495,13 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
   String _getTitle(key) {
     switch (key.toString().toLowerCase()) {
       case 'ralan':
-        return 'Pasien Rawat Jalan';
+        return rawatJalanText;
       case 'ranap':
-        return 'Pasien Rawat Inap';
+        return rawatInapText;
       case 'operasi':
-        return 'Pasien Operasi';
+        return pasienOperasiTitle;
       default:
-        return 'Pasien';
+        return pasienText;
     }
   }
 

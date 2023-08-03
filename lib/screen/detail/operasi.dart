@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 
 class OperasiDetail extends StatefulWidget {
   final Map pasien;
@@ -132,7 +133,7 @@ class OperasiDetailState extends State<OperasiDetail> {
           const SizedBox(height: 8),
           RichText(
             text: TextSpan(
-              text: "RM : ",
+              text: "$ikNoRm : ",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -153,7 +154,7 @@ class OperasiDetailState extends State<OperasiDetail> {
           const SizedBox(height: 3),
           RichText(
             text: TextSpan(
-              text: "Kategori : ",
+              text: "$ikCategory : ",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -174,7 +175,7 @@ class OperasiDetailState extends State<OperasiDetail> {
           const SizedBox(height: 3),
           RichText(
             text: TextSpan(
-              text: "No. Rawat : ",
+              text: "$ikNoRawat : ",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -268,7 +269,7 @@ class OperasiDetailState extends State<OperasiDetail> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   child: Text(
-                    "Waktu Mulai",
+                    ikStartTime,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: fontWeightSemiBold,
@@ -297,7 +298,7 @@ class OperasiDetailState extends State<OperasiDetail> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   child: Text(
-                    "Waktu Selesai",
+                    ikEndTime,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: fontWeightSemiBold,
@@ -326,7 +327,7 @@ class OperasiDetailState extends State<OperasiDetail> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   child: Text(
-                    "Pembiayaan",
+                    ikPayment,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: fontWeightSemiBold,
@@ -355,7 +356,7 @@ class OperasiDetailState extends State<OperasiDetail> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   child: Text(
-                    "Permintaan PA",
+                    ikPARequests,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: fontWeightSemiBold,
@@ -384,7 +385,7 @@ class OperasiDetailState extends State<OperasiDetail> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   child: Text(
-                    "Diagnosa Pre Operasi",
+                    ikDiagnosisPreOp,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: fontWeightSemiBold,
@@ -413,7 +414,7 @@ class OperasiDetailState extends State<OperasiDetail> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   child: Text(
-                    "Diagnosa Post Operasi",
+                    ikDiagnosisPostOp,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: fontWeightSemiBold,
@@ -442,7 +443,7 @@ class OperasiDetailState extends State<OperasiDetail> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   child: Text(
-                    "Laporan Operasi",
+                    ikOpReport,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: fontWeightSemiBold,

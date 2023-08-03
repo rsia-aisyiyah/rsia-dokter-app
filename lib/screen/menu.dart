@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
 
 class MenuPage extends StatefulWidget {
@@ -38,13 +39,13 @@ class _MenuPageState extends State<MenuPage> {
                   if (menuScreenItems[index]['disabled'] == true) {
                     Msg.warning(
                       context,
-                      "Fitur ini belum tersedia",
+                      featureNotAvailableMsg,
                     );
                   } else {
                     if (menuScreenItems[index]['widget'] == "") {
                       Msg.warning(
                         context,
-                        "Fitur ini belum tersedia",
+                        featureNotAvailableMsg,
                       );
                     } else {
                       Navigator.push(

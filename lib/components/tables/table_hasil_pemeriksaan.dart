@@ -55,7 +55,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                hasilPemeriksaan,
+                checkUpResult,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: fontWeightSemiBold,
@@ -118,7 +118,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                ikKesadaran,
+                ikAwareness,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: fontWeightSemiBold,
@@ -155,7 +155,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                ikSubjektif,
+                ikSubjective,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: fontWeightSemiBold,
@@ -192,7 +192,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                ikObjektif,
+                ikObjective,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: fontWeightSemiBold,
@@ -303,7 +303,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                ikInstruksi,
+                ikInstruction,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: fontWeightSemiBold,
@@ -340,7 +340,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                ikEvaluasi,
+                ikEvaluation,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: fontWeightSemiBold,

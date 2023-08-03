@@ -7,6 +7,7 @@ import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/components/filter/bottom_sheet_filter.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/detail/pasien.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -322,7 +323,7 @@ class PasienListState extends State<PasienList> {
                   height: MediaQuery.of(context).size.height / 1.2,
                   alignment: Alignment.center,
                   child: Text(
-                    "Data tidak ditemukan",
+                    belumAdaPasien,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
@@ -342,6 +343,7 @@ class PasienListState extends State<PasienList> {
   Future<dynamic> _onFilterIconClicked(BuildContext context) {
     return showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (context) {
         return BottomSheetFilter(
           dateinput: dateinput,

@@ -6,6 +6,7 @@ import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/filter/bottom_sheet_filter.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/detail/operasi.dart';
 
 class PasienOperasi extends StatefulWidget {
@@ -173,8 +174,8 @@ class _PasienOperasiState extends State<PasienOperasi> {
       return Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(
-          title: const Text(
-            "Pasien Operasi",
+          title: Text(
+            pasienOperasiTitle,
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -385,7 +386,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Text(
-                  "No. Rawat",
+                  ikNoRawat,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: fontWeightSemiBold,
@@ -412,7 +413,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Text(
-                  "RM",
+                  ikNoRm,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: fontWeightSemiBold,
@@ -440,6 +441,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
   Future<dynamic> _onFilterIconClicked(BuildContext context) {
     return showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (context) {
         return BottomSheetFilter(
           dateinput: dateinput,

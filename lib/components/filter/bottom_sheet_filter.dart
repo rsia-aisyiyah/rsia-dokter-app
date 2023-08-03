@@ -92,47 +92,51 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // icon filter
-                      Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: accentColor.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(5),
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(top: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // icon filter
+                        Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: accentColor.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Icon(
+                            Icons.filter_alt,
+                            color: accentColor,
+                            size: 20,
+                          ),
                         ),
-                        child: Icon(
-                          Icons.filter_alt,
-                          color: accentColor,
-                          size: 20,
+                        const SizedBox(width: 10),
+                        Text(
+                          filterPasienText,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        filterPasienText,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.close,
-                      color: textColor,
-                      size: 20,
+                      ],
                     ),
-                  ),
-                ],
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.close,
+                        color: textColor,
+                        size: 20,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 10),
               Text(

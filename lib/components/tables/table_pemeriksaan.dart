@@ -124,7 +124,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  ikKesadaran,
+                  ikAwareness,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,
@@ -165,7 +165,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  ikSubjektif,
+                  ikSubjective,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,
@@ -206,7 +206,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  ikObjektif,
+                  ikObjective,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,
@@ -329,7 +329,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  ikInstruksi,
+                  ikInstruction,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,
@@ -370,7 +370,7 @@ class TablePemeriksaan extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  ikEvaluasi,
+                  ikEvaluation,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,

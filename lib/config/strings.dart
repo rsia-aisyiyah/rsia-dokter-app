@@ -13,11 +13,11 @@ String afternoonGreeting                  = "Good Afternoon";
 String eveningGreeting                    = "Good Evening";
 String nightGreeting                      = "Good Night";
 
-String labelJam                           = "Jam";
-String labelNama                          = "Nama";
-String labelTanggal                       = "Tanggal";
-String labelUsername                       = "Username";
-String labelPassword                       = "Password";
+String labelTime                          = "Jam";
+String labelName                          = "Nama";
+String labelDates                         = "Tanggal";
+String labelUsername                      = "Username";
+String labelPassword                      = "Password";
 String labelSelectDate                    = "Select Date";
 String labelSelectkategori                = "Select Kategori";
 
@@ -41,6 +41,7 @@ String noInternetMsg                      = "No internet connection";
 String noDataAvailableMsg                 = "No data available";
 String failedToFetchDataMsg               = "Failed to fetch data";
 String sessionExpiredMsg                  = "Your session has expired, please login again";
+String featureNotAvailableMsg             = "Feature not available yet";
 
 String filterText                         = "Filter";
 String resetText                          = "Reset";
@@ -58,31 +59,57 @@ String passwordEmpty                      = "Password cannot be empty";
 String wrongCredentials                   = "Username or password is wrong, please try again";
 
 String forgotPasswordMsg                  = "Please contact your administrator to reset your password";
+String pasienBelumPemeriksa               = "Patient has not been examined";
+String belumAdaPasien                     = "There are no patients yet";
 
+String titlePasienDetail                  = "Detail Pasien";
+String titleOpDetail                      = "Detail Operasi";
+
+String graphSectionText                   = "Grafik";
+String graphSectionText2                  = "Grafik";
+String historySectionText                 = "Riwayat Pemeriksaan";
+String totalPasienText                    = "Total Pasien";
 
 // =================================== Istilah Kesehatan
-String ikNama                              = "Nama";
-String ikAlamat                            = "Alamat";
-String ikNoRm                              = "No. RM";
-String ikPasien                            = "Pasien";
-String ikDiagnosa                          = "Diagnosa";
-String ikNoRawat                           = "No. Rawat";
-String ikJenisOperasi                      = "Jenis Operasi";
-String ikTglLahir                          = "Tanggal Lahir";
-String ikJk                                = "Jenis Kelamin";
-String ikNoRkmMedis                        = "No. Rkm Medis";
-String ikKesadaran                          = "Awareness";
-String ikSubjektif                         = "Subjective";
-String ikObjektif                          = "Objective";
-String ikAssesment                         = "Assesment";
-String ikPlanning                          = "Planning";
-String ikInstruksi                         = "Instruction";
-String ikEvaluasi                          = "Evaluation";
-String ikTglPeriksa                        = "Tanggal Periksa";
+String ikName                             = "Nama";
+String ikAddress                          = "Alamat";
+String ikNoRm                             = "No. RM";
+String ikSttsLanjutUsia                   = "Status Lanjut";
+String ikPasien                           = "Pasien";
+String ikDiagnosis                        = "Diagnosa";
+String ikCategory                         = "Kategori";
+String ikNoRawat                          = "No. Rawat";
+String ikStartTime                        = "Waktu Mulai";
+String ikEndTime                          = "Waktu Selesai";
+String ikJenisOperasi                     = "Jenis Operasi";
+String ikBirthDate                        = "Tanggal Lahir";
+String ikJk                               = "Jenis Kelamin";
+String ikNoRkmMedis                       = "No. Rkm Medis";
+String ikPARequests                       = "Permintaan PA";
+String ikDiagnosisPreOp                   = "Diagnosa Pre Operasi";
+String ikDiagnosisPostOp                  = "Diagnosa Post Operasi";
+String ikOpReport                         = "Laporan Operasi";
+String ikAwareness                        = "Awareness";
+String ikSubjective                       = "Subjective";
+String ikObjective                        = "Objective";
+String ikAssesment                        = "Assesment";
+String ikPlanning                         = "Planning";
+String ikInstruction                      = "Instruction";
+String ikEvaluation                       = "Evaluation";
+String ikPayment                          = "Payments";
+String ikTglPeriksa                       = "Tanggal Periksa";
 
-String hasilPemeriksaan                    = "Check up result";
+String umumText                           = "UMUM";
+String bpjsText                           = "BPJS";
+
+String checkUpResult                      = "Check up result";
 String rawatInapText                      = "Rawat Inap";
 String rawatJalanText                     = "Rawat Jalan";
+String jadwalOperasiText                  = "Jadwal Operasi";
+String pasienOperasiTitle                 = "Pasien Operasi";
+String rekapKunjunganTitle                = "Rekap Kunjungan";
+
+String pasienText                         = "Pasien";
 
 // =================================== Data Key
 // data key in json to get data from api

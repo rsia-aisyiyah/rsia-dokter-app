@@ -7,6 +7,7 @@ import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/components/tables/table_pemeriksaan.dart';
 import 'package:rsiap_dokter/config/colors.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/ext/string_capitalize.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -80,7 +81,7 @@ class _DetailPasienState extends State<DetailPasien> {
               backgroundColor: bgColor,
               appBar: AppBar(
                 backgroundColor: appBarColor,
-                title: const Text('Detail Pasien'),
+                title: Text(titlePasienDetail),
                 leading: IconButton(
                   onPressed: () {
                     Navigator.maybePop(context);
@@ -139,7 +140,7 @@ class _DetailPasienState extends State<DetailPasien> {
             ),
             child: SfCartesianChart(
               title: ChartTitle(
-                text: 'Grafik ${nameTitle.capitalize()}',
+                text: '$graphSectionText ${nameTitle.capitalize()}',
               ),
               legend: const Legend(
                 isVisible: true,
@@ -212,7 +213,7 @@ class _DetailPasienState extends State<DetailPasien> {
         ),
       ),
       child: Text(
-        'Pasien belum melakukan pemeriksaan',
+        pasienBelumPemeriksa,
         style: TextStyle(
           color: widget.kategori == 'umum' ? Colors.orange[700] : accentColor,
           fontSize: 14,
@@ -238,7 +239,7 @@ class _DetailPasienState extends State<DetailPasien> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Text(
-                  'History Pemeriksaan',
+                  historySectionText,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: fontWeightSemiBold,
@@ -270,7 +271,7 @@ class _DetailPasienState extends State<DetailPasien> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Text(
-                'Grafik Pemeriksaan',
+                graphSectionText2,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: fontWeightSemiBold,
@@ -296,7 +297,7 @@ class _DetailPasienState extends State<DetailPasien> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Text(
-                'History Pemeriksaan',
+                historySectionText,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: fontWeightSemiBold,
@@ -400,7 +401,7 @@ class _DetailPasienState extends State<DetailPasien> {
           const SizedBox(height: 8),
           RichText(
             text: TextSpan(
-              text: "RM : ",
+              text: "$ikNoRm : ",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -421,7 +422,7 @@ class _DetailPasienState extends State<DetailPasien> {
           const SizedBox(height: 3),
           RichText(
             text: TextSpan(
-              text: "Status Lanjut : ",
+              text: "$ikSttsLanjutUsia : ",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -445,7 +446,7 @@ class _DetailPasienState extends State<DetailPasien> {
           const SizedBox(height: 3),
           RichText(
             text: TextSpan(
-              text: "No. Rawat : ",
+              text: "$ikNoRawat : ",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,

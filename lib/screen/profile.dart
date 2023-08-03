@@ -100,15 +100,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               color: textColor,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            data['data']['no_ijn_praktek'],
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: fontWeightNormal,
-                              color: textColor,
-                            ),
-                          ),
                         ],
                       ),
                     ),

@@ -10,6 +10,7 @@ import 'package:rsiap_dokter/components/List/pasien_ranap.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/components/others/stats_home.dart';
 import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/strings.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -84,17 +85,17 @@ class _HomePageState extends State<HomePage> {
 
   List tabsHome = [
     {
-      "label": "Rawat Inap",
+      "label": rawatInapText,
       "icon": Icons.close,
       "widget": const ListPasienRanap()
     },
     {
-      "label": "Rawat Jalan",
+      "label": rawatJalanText,
       "icon": Icons.close,
       "widget": const ListPasienRalan()
     },
     {
-      "label": "Jadwal Operasi",
+      "label": jadwalOperasiText,
       "icon": Icons.close,
       "widget": const ListJadwalOperasi()
     },

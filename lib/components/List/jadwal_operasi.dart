@@ -318,7 +318,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        ikDiagnosa,
+                        ikDiagnosis,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: fontWeightSemiBold,
@@ -372,7 +372,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        labelTanggal,
+                        labelDates,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: fontWeightSemiBold,
@@ -399,7 +399,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        labelJam,
+                        labelTime,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: fontWeightSemiBold,
@@ -447,7 +447,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Text(
-                  ikDiagnosa,
+                  ikDiagnosis,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: fontWeightSemiBold,
@@ -501,7 +501,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Text(
-                  labelJam,
+                  labelTime,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: fontWeightSemiBold,
