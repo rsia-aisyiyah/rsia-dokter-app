@@ -11,6 +11,7 @@ class BottomSheetFilter extends StatefulWidget {
 
   bool isLoding;
   bool isFilter;
+  bool isRanap;
 
   Function fetchPasien;
   Function setData;
@@ -28,6 +29,7 @@ class BottomSheetFilter extends StatefulWidget {
     required this.searchController,
     required this.isLoding,
     required this.isFilter,
+    this.isRanap = false,
     required this.fetchPasien,
     required this.setData,
     required this.doFilter,
@@ -53,12 +55,12 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
         child: Container(
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
-            color: widget.filterData['penjab'] == value
+            color: widget.filterData[key] == value
                 ? accentColor.withOpacity(0.2)
                 : Colors.grey[200],
             borderRadius: BorderRadius.circular(5),
             border: Border.all(
-              color: widget.filterData['penjab'] == value
+              color: widget.filterData[key] == value
                   ? accentColor
                   : Colors.grey[500]!,
               width: 1.5,
@@ -68,7 +70,7 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: widget.filterData['penjab'] == value
+              color: widget.filterData[key] == value
                   ? accentColor
                   : Colors.grey[500]!,
               fontSize: 14,
@@ -256,6 +258,39 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                 },
               ),
               const SizedBox(height: 15),
+              widget.isRanap
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Tanggal Sebagai",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Flex(
+                          direction: Axis.horizontal,
+                          children: [
+                            _customCapsuleFilter(
+                              "Tanggal Masuk",
+                              'dateby',
+                              'masuk',
+                            ),
+                            const SizedBox(width: 10),
+                            _customCapsuleFilter(
+                              "Tanggal Pulang",
+                              'dateby',
+                              'pulang',
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                      ],
+                    )
+                  : Container(),
               Text(
                 labelSelectkategori,
                 style: const TextStyle(

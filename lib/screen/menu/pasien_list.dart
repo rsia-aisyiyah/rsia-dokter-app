@@ -55,6 +55,8 @@ class PasienListState extends State<PasienList> {
     super.initState();
     _initialSet();
 
+    widget.ranap ? filterData['dateby'] = 'masuk' : null;
+
     fetchPasien().then((value) {
       if (mounted) {
         _setData(value);
@@ -143,7 +145,7 @@ class PasienListState extends State<PasienList> {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var spesialis = localStorage.getString('spesialis');
     var strUrl = "";
-    
+
     if (spesialis!.toLowerCase().contains('umum')) {
       strUrl = '/dokter/pasien/ranap/all';
     } else {
@@ -215,7 +217,7 @@ class PasienListState extends State<PasienList> {
     if (searchController.text.isNotEmpty) {
       filterData['keywords'] = searchController.text.toString();
     }
-    
+
     _fetchSearch(filterData).then((value) {
       _setData(value);
     });
@@ -315,7 +317,8 @@ class PasienListState extends State<PasienList> {
                             MaterialPageRoute(
                               builder: (context) => DetailPasien(
                                 noRawat: dataPasiens[index]['no_rawat'],
-                                kategori: dataPasiens[index]['penjab']['png_jawab']
+                                kategori: dataPasiens[index]['penjab']
+                                            ['png_jawab']
                                         .toString()
                                         .toLowerCase()
                                         .contains("umum")
@@ -362,10 +365,7 @@ class PasienListState extends State<PasienList> {
           bottom: 0,
         ),
         padding: EdgeInsets.all(15),
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: accentColor.withOpacity(0.3),
           borderRadius: BorderRadius.circular(10),
@@ -380,13 +380,15 @@ class PasienListState extends State<PasienList> {
               ),
             ),
             const SizedBox(height: 8),
-            filterData.containsKey('penjab') ? Text(
-              "Kategori ${filterData['penjab']}",
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ) : const SizedBox(),
+            filterData.containsKey('penjab')
+                ? Text(
+                    "Kategori ${filterData['penjab']}",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )
+                : const SizedBox(),
             const SizedBox(height: 5),
             Text(
               "Periode ${filterData['tgl_registrasi']['start']} s/d ${filterData['tgl_registrasi']['end']}",
@@ -413,6 +415,7 @@ class PasienListState extends State<PasienList> {
           searchController: searchController,
           isLoding: isLoding,
           isFilter: isFilter,
+          isRanap: widget.ranap,
           fetchPasien: fetchPasien,
           setData: _setData,
           doFilter: doFilter,
