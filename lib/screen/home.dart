@@ -100,6 +100,7 @@ class _HomePageState extends State<HomePage> {
       "widget": const ListJadwalOperasi()
     },
   ];
+
   // ---------------------- End Tab Home
 
   @override
@@ -149,7 +150,13 @@ class _HomePageState extends State<HomePage> {
               tabs: tabsHome.map(
                 (e) {
                   return Tab(
-                    child: Text(e['label'] as String),
+                    child: Center(
+                      child: Text(
+                        e['label'] as String,
+                        style: const TextStyle(fontSize: 12),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   );
                 },
               ).toList(),

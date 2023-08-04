@@ -1,8 +1,38 @@
+import 'package:intl/intl.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 
 class Helper {
   static String getAssetName(String name) {
     return 'assets/images/$name';
+  }
+
+  static String getPenjab(String penjab) {
+    return penjab.toLowerCase().contains("umum") ? "umum" : "bpjs";
+  }
+
+  static String getRealPenjab(penjab) {
+    var plow = penjab.toString().toLowerCase();
+
+    if (plow.contains('/')) {
+      var p = "BPJS${plow.split('/').last.toUpperCase()}";
+      return p;
+    } else {
+      var p = plow.toUpperCase();
+      return p;
+    }
+  }
+
+  static String realStatusLanjut(String status) {
+    return status.toLowerCase().contains("ralan")
+        ? "Rawat Jalan"
+        : "Rawat Inap";
+  }
+
+  static String formatDate(String date) {
+    return DateFormat(
+      'EEEE, dd MMMM yyyy',
+      'id_ID',
+    ).format(DateTime.parse(date));
   }
 
   static String greeting() {

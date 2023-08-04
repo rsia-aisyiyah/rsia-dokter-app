@@ -332,10 +332,18 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
         backgroundColor: accentColor,
       ),
       child: dataMetrics.isNotEmpty
-          ? metricsWidgets()
+          ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              metricsTitleWidget(),
+              metricsWidgets(),
+            ],
+          )
           : Text(
               belumAdaPasien,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -344,8 +352,52 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
     );
   }
 
+  Widget metricsTitleWidget() {
+    if (filterData.containsKey('tgl_registrasi')) {
+      String startDate = filterData['tgl_registrasi']['start'];
+      String endDate = filterData['tgl_registrasi']['end'];
+
+      return Container(
+        margin: const EdgeInsets.only(
+          left: 10,
+          right: 10,
+          top: 10,
+          bottom: 0,
+        ),
+        padding: EdgeInsets.all(15),
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: accentColor.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          children: [
+            Text(
+              "Rekap Kunjungan Pasien",
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              "Periode ${filterData['tgl_registrasi']['start']} s/d ${filterData['tgl_registrasi']['end']}",
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
   Widget metricsWidgets() {
     return SingleChildScrollView(
+      padding: const EdgeInsets.only(bottom: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,

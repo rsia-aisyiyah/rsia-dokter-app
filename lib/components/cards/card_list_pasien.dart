@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/table.dart';
 
 createCardPasien(pasien) {
   var penjab = "";
@@ -49,29 +50,14 @@ createCardPasien(pasien) {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  "$ikNoRkmMedis : ${pasien['no_rkm_medis']}",
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  "$ikNoRawat : ${pasien['no_rawat']}",
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  pasien['poliklinik']['nm_poli'],
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                GenTable(data: {
+                  ikNoRm: pasien['no_rkm_medis'],
+                  ikNoRawat: pasien['no_rawat'],
+                  if (pasien['kamar_inap'] == null)
+                    poliklinikText: pasien['poliklinik']['nm_poli']
+                  else
+                    kamarInalText: pasien['kamar_inap']['kamar']['bangsal']['nm_bangsal'],
+                }),
               ],
             ),
           ),

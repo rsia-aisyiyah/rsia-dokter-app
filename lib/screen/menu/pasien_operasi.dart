@@ -176,7 +176,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
         appBar: AppBar(
           title: Text(
             pasienOperasiTitle,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -239,90 +239,180 @@ class _PasienOperasiState extends State<PasienOperasi> {
             color: Colors.white,
             backgroundColor: accentColor,
           ),
-          child: ListView.builder(
-            padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
-            itemCount: dataJadwal.length,
-            itemBuilder: (context, i) {
-              var dataOperasi = dataJadwal[i];
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OperasiDetail(
-                        noRawat: dataOperasi['no_rawat'],
-                        pasien: dataOperasi['pasien'],
-                        penjab: _getPenjab(
-                          dataOperasi['penjab']['png_jawab'],
-                        ),
-                        rm: dataOperasi['no_rkm_medis'],
-                        statusLanjut: dataOperasi['status_lanjut'],
-                      ),
-                    ),
-                  );
-                },
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: _getPenjab(
-                                dataOperasi['penjab']['png_jawab'],
-                              ).contains('BPJS')
-                                  ? accentColor
-                                  : warningColor,
-                              width: 1.5,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: _getPenjab(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                _filterTitle(),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
+                  itemCount: dataJadwal.isEmpty ? 1 : dataJadwal.length,
+                  itemBuilder: (context, i) {
+                    if (dataJadwal.isEmpty) {
+                      return _pasienKosong();
+                    } else {
+                      var dataOperasi = dataJadwal[i];
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OperasiDetail(
+                                noRawat: dataOperasi['no_rawat'],
+                                pasien: dataOperasi['pasien'],
+                                penjab: _getPenjab(
                                   dataOperasi['penjab']['png_jawab'],
-                                ).contains('BPJS')
-                                    ? accentColor.withOpacity(.2)
-                                    : warningColor.withOpacity(.2),
-                                spreadRadius: 1,
-                                blurRadius: 3,
-                                offset: const Offset(2, 3),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                dataOperasi['pasien']['nm_pasien'],
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
                                 ),
+                                rm: dataOperasi['no_rkm_medis'],
+                                statusLanjut: dataOperasi['status_lanjut'],
                               ),
-                              const SizedBox(height: 15),
-                              _tableOperasi(dataOperasi)
-                            ],
-                          ),
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            Stack(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 10,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: _getPenjab(
+                                        dataOperasi['penjab']['png_jawab'],
+                                      ).contains('BPJS')
+                                          ? accentColor
+                                          : warningColor,
+                                      width: 1.5,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: _getPenjab(
+                                          dataOperasi['penjab']['png_jawab'],
+                                        ).contains('BPJS')
+                                            ? accentColor.withOpacity(.2)
+                                            : warningColor.withOpacity(.2),
+                                        spreadRadius: 1,
+                                        blurRadius: 3,
+                                        offset: const Offset(2, 3),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        dataOperasi['pasien']['nm_pasien'],
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 15),
+                                      _tableOperasi(dataOperasi)
+                                    ],
+                                  ),
+                                ),
+                                _labelPenjab(dataOperasi),
+                              ],
+                            ),
+                            const SizedBox(height: 15),
+                          ],
                         ),
-                        _labelPenjab(dataOperasi),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                  ],
+                      );
+                    }
+                  },
                 ),
-              );
-            },
+              ],
+            ),
           ),
         ),
       );
     }
   }
 
+  Widget _filterTitle() {
+    if (filterData.containsKey('tgl_operasi')) {
+      return Container(
+        margin: const EdgeInsets.only(
+          left: 10,
+          right: 10,
+          top: 10,
+          bottom: 0,
+        ),
+        padding: EdgeInsets.all(15),
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        decoration: BoxDecoration(
+          color: accentColor.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          children: [
+            Text(
+              "Pasien Operasi",
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            filterData.containsKey('penjab') ? Text(
+              "Kategori ${filterData['penjab']}",
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ) : const SizedBox(),
+            const SizedBox(height: 5),
+            Text(
+              "Periode ${filterData['tgl_operasi']['start']} s/d ${filterData['tgl_operasi']['end']}",
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget _pasienKosong() {
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height * 0.1,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          width: 1.3,
+          color: accentColor,
+        ),
+      ),
+      child: Text(
+        belumAdaPasien,
+        style: TextStyle(
+          color: accentColor,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+  
   String _getPenjab(penjab) {
     var plow = penjab.toString().toLowerCase();
 

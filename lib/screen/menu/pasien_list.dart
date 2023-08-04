@@ -294,49 +294,112 @@ class PasienListState extends State<PasienList> {
             color: Colors.white,
             backgroundColor: accentColor,
           ),
-          child: ListView.builder(
-            padding: const EdgeInsets.all(10),
-            itemCount: dataPasiens.isEmpty ? 1 : dataPasiens.length,
-            itemBuilder: (context, index) {
-              if (dataPasiens.isNotEmpty) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailPasien(
-                          noRawat: dataPasiens[index]['no_rawat'],
-                          kategori: dataPasiens[index]['penjab']['png_jawab']
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains("umum")
-                              ? "umum"
-                              : "bpjs",
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                _filterTitle(),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  padding: const EdgeInsets.all(10),
+                  itemCount: dataPasiens.isEmpty ? 1 : dataPasiens.length,
+                  itemBuilder: (context, index) {
+                    if (dataPasiens.isNotEmpty) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailPasien(
+                                noRawat: dataPasiens[index]['no_rawat'],
+                                kategori: dataPasiens[index]['penjab']['png_jawab']
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains("umum")
+                                    ? "umum"
+                                    : "bpjs",
+                              ),
+                            ),
+                          );
+                        },
+                        child: createCardPasien(dataPasiens[index]),
+                      );
+                    } else {
+                      return Container(
+                        height: MediaQuery.of(context).size.height / 1.5,
+                        alignment: Alignment.center,
+                        child: Text(
+                          belumAdaPasien,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: textColor.withOpacity(.5),
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   },
-                  child: createCardPasien(dataPasiens[index]),
-                );
-              } else {
-                return Container(
-                  height: MediaQuery.of(context).size.height / 1.2,
-                  alignment: Alignment.center,
-                  child: Text(
-                    belumAdaPasien,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: textColor.withOpacity(.5),
-                    ),
-                  ),
-                );
-              }
-            },
+                ),
+              ],
+            ),
           ),
         ),
       );
+    }
+  }
+
+  Widget _filterTitle() {
+    if (filterData.containsKey('tgl_registrasi')) {
+      return Container(
+        margin: const EdgeInsets.only(
+          left: 10,
+          right: 10,
+          top: 10,
+          bottom: 0,
+        ),
+        padding: EdgeInsets.all(15),
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        decoration: BoxDecoration(
+          color: accentColor.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          children: [
+            Text(
+              "Pasien Operasi",
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            filterData.containsKey('penjab') ? Text(
+              "Kategori ${filterData['penjab']}",
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ) : const SizedBox(),
+            const SizedBox(height: 5),
+            Text(
+              "Periode ${filterData['tgl_registrasi']['start']} s/d ${filterData['tgl_registrasi']['end']}",
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Container();
     }
   }
 

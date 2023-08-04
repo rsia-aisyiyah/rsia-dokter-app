@@ -66,7 +66,7 @@ String titlePasienDetail                  = "Detail Pasien";
 String titleOpDetail                      = "Detail Operasi";
 
 String graphSectionText                   = "Grafik";
-String graphSectionText2                  = "Grafik";
+String graphSectionText2                  = "Grafik Pemeriksaan";
 String historySectionText                 = "Riwayat Pemeriksaan";
 String totalPasienText                    = "Total Pasien";
 
@@ -74,7 +74,7 @@ String totalPasienText                    = "Total Pasien";
 String ikName                             = "Nama";
 String ikAddress                          = "Alamat";
 String ikNoRm                             = "No. RM";
-String ikSttsLanjutUsia                   = "Status Lanjut";
+String ikSttsLanjut                       = "Status Lanjut";
 String ikPasien                           = "Pasien";
 String ikDiagnosis                        = "Diagnosa";
 String ikCategory                         = "Kategori";
@@ -102,6 +102,8 @@ String ikTglPeriksa                       = "Tanggal Periksa";
 String umumText                           = "UMUM";
 String bpjsText                           = "BPJS";
 
+String kamarInalText                      = "Kamar Inap";
+String poliklinikText                     = "Poliklinik";
 String checkUpResult                      = "Check up result";
 String rawatInapText                      = "Rawat Inap";
 String rawatJalanText                     = "Rawat Jalan";

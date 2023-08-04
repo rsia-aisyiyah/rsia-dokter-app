@@ -5,6 +5,7 @@ import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/table.dart';
 
 class OperasiDetail extends StatefulWidget {
   final Map pasien;
@@ -126,7 +127,7 @@ class OperasiDetailState extends State<OperasiDetail> {
           Text(
             pasien['nm_pasien'],
             style: const TextStyle(
-              fontSize: 30,
+              fontSize: 25,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -199,7 +200,6 @@ class OperasiDetailState extends State<OperasiDetail> {
   }
 
   _operasiDetails(response) {
-    // return list of response
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -249,224 +249,15 @@ class OperasiDetailState extends State<OperasiDetail> {
         left: 20,
         bottom: 20,
       ),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(1),
-          1: FlexColumnWidth(2),
-        },
-        border: TableBorder(
-          horizontalInside: BorderSide(
-            color: Colors.grey.shade300,
-            width: 1,
-          ),
-        ),
-        textBaseline: TextBaseline.alphabetic,
-        children: [
-          TableRow(
-            children: [
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    ikStartTime,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: fontWeightSemiBold,
-                    ),
-                  ),
-                ),
-              ),
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    data['laporan_operasi']['tanggal'],
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          TableRow(
-            children: [
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    ikEndTime,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: fontWeightSemiBold,
-                    ),
-                  ),
-                ),
-              ),
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    data['laporan_operasi']['selesaioperasi'],
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          TableRow(
-            children: [
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    ikPayment,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: fontWeightSemiBold,
-                    ),
-                  ),
-                ),
-              ),
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    widget.penjab,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          TableRow(
-            children: [
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    ikPARequests,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: fontWeightSemiBold,
-                    ),
-                  ),
-                ),
-              ),
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    data['laporan_operasi']['permintaan_pa'],
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          TableRow(
-            children: [
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    ikDiagnosisPreOp,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: fontWeightSemiBold,
-                    ),
-                  ),
-                ),
-              ),
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    data['laporan_operasi']['diagnosa_preop'],
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          TableRow(
-            children: [
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    ikDiagnosisPostOp,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: fontWeightSemiBold,
-                    ),
-                  ),
-                ),
-              ),
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    data['laporan_operasi']['diagnosa_postop'],
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          TableRow(
-            children: [
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    ikOpReport,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: fontWeightSemiBold,
-                    ),
-                  ),
-                ),
-              ),
-              TableCell(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  child: Text(
-                    data['laporan_operasi']['laporan_operasi'],
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+      child: GenTable(data: {
+        ikStartTime: data['laporan_operasi']['tanggal'],
+        ikEndTime: data['laporan_operasi']['selesaioperasi'],
+        ikPayment: widget.penjab,
+        ikPARequests: data['laporan_operasi']['permintaan_pa'],
+        ikDiagnosisPreOp: data['laporan_operasi']['diagnosa_preop'],
+        ikDiagnosisPostOp: data['laporan_operasi']['diagnosa_postop'],
+        ikOpReport: data['laporan_operasi']['laporan_operasi'],
+      }),
     );
   }
 }

@@ -2,14 +2,19 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:rsiap_dokter/config/colors.dart';
+import 'package:rsiap_dokter/ext/string_capitalize.dart';
+import 'package:rsiap_dokter/utils/box_message.dart';
+import 'package:rsiap_dokter/utils/helper.dart';
+import 'package:rsiap_dokter/utils/section_title.dart';
+import 'package:rsiap_dokter/utils/table.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:sticky_headers/sticky_headers.dart';
+
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/components/tables/table_pemeriksaan.dart';
-import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
-import 'package:rsiap_dokter/ext/string_capitalize.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../config/config.dart';
 
@@ -74,9 +79,19 @@ class _DetailPasienState extends State<DetailPasien> {
         } else {
           var data = json.decode(json.encode(snapshot.data));
           if (!data['success']) {
-            return _pemeriksaanNull(context);
+            return Center(
+              child: Text(
+                data['message'],
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            );
           } else {
             var pasien = data['data'];
+            var pemeriksaan = pasien['pemeriksaan'];
             return Scaffold(
               backgroundColor: bgColor,
               appBar: AppBar(
@@ -90,23 +105,190 @@ class _DetailPasienState extends State<DetailPasien> {
                 ),
               ),
               body: SafeArea(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _pasienDetails(pasien),
-                      pasien['pemeriksaan'] == null
-                          ? _pemeriksaanNull(context)
-                          : _buildPemeriksaanDetails(pasien),
-                    ],
-                  ),
-                ),
+                child: pasien['status_lanjut'].toLowerCase().contains("ranap")
+                    ? _ranapDetails(pemeriksaan, pasien)
+                    : _ralanDetails(pemeriksaan, pasien),
               ),
             );
           }
         }
       },
+    );
+  }
+
+  Widget _ralanDetails(pemeriksaan, pasien) {
+    if (pemeriksaan == null) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: BoxMessage(
+          body: pasienBelumPemeriksa,
+        ),
+      );
+    } else {
+      var statusLanjut = pasien['status_lanjut'].toLowerCase();
+      var penjab = Helper.getPenjab(
+        pasien['penjab']['png_jawab'],
+      );
+
+      return SingleChildScrollView(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _pasienDetails(pasien),
+            const SizedBox(height: 20),
+            SectionTitle(title: historySectionText),
+            TablePemeriksaan(
+              pasien: pemeriksaan,
+              penjab: penjab,
+              statusLanjut: statusLanjut,
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  ListView _ranapDetails(pemeriksaan, pasien) {
+    return ListView.builder(
+      itemCount: pemeriksaan.length == 0 ? 1 : pemeriksaan.length,
+      itemBuilder: (context, index) {
+        var statusLanjut = pasien['status_lanjut'].toLowerCase();
+        var penjab = Helper.getPenjab(
+          pasien['penjab']['png_jawab'],
+        );
+
+        if (pemeriksaan.length <= 0) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: BoxMessage(
+              body: pasienBelumPemeriksa,
+            ),
+          );
+        } else {
+          final tglPerawatan = Helper.formatDate(
+            pemeriksaan[index]['tgl_perawatan'],
+          );
+
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              index == 0
+                  ? Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: _pasienDetails(pasien),
+                    )
+                  : const SizedBox(),
+              index == 0
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 15),
+                      child: Column(
+                        children: [
+                          SectionTitle(title: graphSectionText2),
+                          const SizedBox(height: 10),
+                          _chartList(),
+                        ],
+                      ),
+                    )
+                  : const SizedBox(),
+              _pemeriksaanPasien(
+                tglPerawatan,
+                pemeriksaan,
+                index,
+                penjab,
+                statusLanjut,
+              ),
+            ],
+          );
+        }
+      },
+    );
+  }
+
+  StickyHeader _pemeriksaanPasien(
+    String tglPerawatan,
+    pemeriksaan,
+    int index,
+    String penjab,
+    statusLanjut,
+  ) {
+    return StickyHeader(
+      header: Container(
+        height: 50.0,
+        color: penjab.toLowerCase() == 'umum'
+            ? Colors.orange.shade200
+            : accentColor,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        alignment: Alignment.centerLeft,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              tglPerawatan,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(pemeriksaan[index]['jam_rawat'])
+          ],
+        ),
+      ),
+      content: Container(
+        padding: const EdgeInsets.only(bottom: 15),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: TablePemeriksaan(
+          pasien: pemeriksaan[index],
+          penjab: penjab,
+          statusLanjut: statusLanjut,
+        ),
+      ),
+    );
+  }
+
+  Widget _pasienDetails(pasien) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          pasien['pasien']['nm_pasien'],
+          style: const TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8),
+        GenTable(data: {
+          ikNoRawat: pasien['no_rawat'],
+          ikNoRm: pasien['no_rkm_medis'],
+          ikSttsLanjut: Helper.realStatusLanjut(pasien['status_lanjut']),
+          poliklinikText: pasien['poliklinik']['nm_poli'],
+        }),
+      ],
+    );
+  }
+
+  Widget _chartList() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        _buildChart('suhu_tubuh', suhuTubuhTooltipBehavior),
+        const SizedBox(height: 10),
+        _buildChart('nadi', nadiTooltipBehavior),
+        const SizedBox(height: 10),
+        _buildChart('respirasi', respirasiTooltipBehavior),
+        const SizedBox(height: 10),
+        _buildChart('spo2', spo2TooltipBehavior),
+        const SizedBox(height: 20),
+      ],
     );
   }
 
@@ -131,9 +313,8 @@ class _DetailPasienState extends State<DetailPasien> {
           }
 
           return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 15),
             padding: const EdgeInsets.only(top: 8, right: 8),
-            height: 200,
+            height: 250,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
@@ -194,292 +375,11 @@ class _DetailPasienState extends State<DetailPasien> {
       ),
     ];
   }
-
-  Container _pemeriksaanNull(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.1,
-      padding: const EdgeInsets.all(15),
-      alignment: Alignment.center,
-      margin: const EdgeInsets.symmetric(
-        horizontal: 15,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          width: 1.3,
-          color: widget.kategori == 'umum' ? Colors.orange : accentColor,
-        ),
-      ),
-      child: Text(
-        pasienBelumPemeriksa,
-        style: TextStyle(
-          color: widget.kategori == 'umum' ? Colors.orange[700] : accentColor,
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-
-  _buildPemeriksaanDetails(pasien) {
-    var penjab =
-        pasien['penjab']['png_jawab'].toString().toLowerCase().contains("umum")
-            ? "umum"
-            : "bpjs";
-    var statusLanjut = pasien['status_lanjut'].toString().toLowerCase();
-    if (pasien['status_lanjut'].toString().toLowerCase() == 'ralan') {
-      return Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  historySectionText,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: fontWeightSemiBold,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Container(
-                  height: 1,
-                  color: textColor,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                ),
-              ),
-              TablePemeriksaan(
-                pasien: pasien['pemeriksaan'],
-                penjab: penjab,
-                statusLanjut: statusLanjut,
-              ),
-            ],
-          ));
-    } else {
-      if (pasien['pemeriksaan'].isNotEmpty) {
-        var pemeriksan = pasien['pemeriksaan'];
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Text(
-                graphSectionText2,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: fontWeightSemiBold,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Container(
-                height: 1,
-                color: textColor,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-              ),
-            ),
-            _buildChart('suhu_tubuh', suhuTubuhTooltipBehavior),
-            const SizedBox(height: 10),
-            _buildChart('nadi', nadiTooltipBehavior),
-            const SizedBox(height: 10),
-            _buildChart('respirasi', respirasiTooltipBehavior),
-            const SizedBox(height: 10),
-            _buildChart('spo2', spo2TooltipBehavior),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Text(
-                historySectionText,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: fontWeightSemiBold,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Container(
-                height: 1,
-                color: textColor,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-              ),
-            ),
-            _historyPemeriksaan(pemeriksan, penjab, statusLanjut),
-          ],
-        );
-      } else {
-        return _pemeriksaanNull(context);
-      }
-    }
-  }
-
-  Widget _historyPemeriksaan(pemeriksan, String penjab, String statusLanjut) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: pemeriksan.length,
-      itemBuilder: (context, index) {
-        int selectedTile = -1;
-        final tglPerawatan = DateFormat(
-          "EEEE, d MMMM yyyy",
-          'id_ID',
-        ).format(DateTime.parse(pemeriksan[index]['tgl_perawatan']));
-        return Container(
-          margin: const EdgeInsets.symmetric(
-            horizontal: 15,
-            vertical: 5,
-          ),
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: ExpansionTile(
-            clipBehavior: Clip.hardEdge,
-            key: Key(index.toString()),
-            textColor: penjab == 'umum' ? warningColor : accentColor,
-            iconColor: penjab == 'umum' ? warningColor : accentColor,
-            backgroundColor: Colors.white,
-            initiallyExpanded: index == selectedTile,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  tglPerawatan,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(pemeriksan[index]['jam_rawat'])
-              ],
-            ),
-            onExpansionChanged: ((newState) {
-              if (newState) {
-                setState(() {
-                  selectedTile = index;
-                });
-              } else {
-                setState(() {
-                  selectedTile = -1;
-                });
-              }
-            }),
-            children: [
-              TablePemeriksaan(
-                pasien: pemeriksan[index],
-                penjab: penjab,
-                statusLanjut: statusLanjut,
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _pasienDetails(pasien) {
-    return Padding(
-      padding: const EdgeInsets.all(15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            pasien['pasien']['nm_pasien'],
-            style: const TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          RichText(
-            text: TextSpan(
-              text: "$ikNoRm : ",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: textColor,
-              ),
-              children: [
-                TextSpan(
-                  text: pasien['no_rkm_medis'],
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: textColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 3),
-          RichText(
-            text: TextSpan(
-              text: "$ikSttsLanjutUsia : ",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: textColor,
-              ),
-              children: [
-                TextSpan(
-                  text: pasien['status_lanjut'].toString().toLowerCase() ==
-                          'ralan'
-                      ? 'Rawat Jalan'
-                      : 'Rawat Inap',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: textColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 3),
-          RichText(
-            text: TextSpan(
-              text: "$ikNoRawat : ",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: textColor,
-              ),
-              children: [
-                TextSpan(
-                  text: pasien['no_rawat'],
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: textColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 3),
-          Text(
-            pasien['poliklinik']['nm_poli'],
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _ChartData {
   _ChartData(this.tanggal, this.value);
+
   final String tanggal;
   final double value;
 }
