@@ -6,24 +6,8 @@ import 'package:rsiap_dokter/utils/helper.dart';
 
 class StatsHomeWidget extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
-  final dokter, totalHariIni, pasienNow;
-  const StatsHomeWidget({super.key, this.dokter, this.pasienNow, this.totalHariIni});
-
-  // filter pasien rawat inap
-  List filterPasienRawat(String status) {
-    if (status.isNotEmpty) {
-      List pasienFiltered = [];
-      for (var i = 0; i < pasienNow.length; i++) {
-        if (pasienNow[i]['status_lanjut'].toString().toLowerCase() ==
-            status.toLowerCase()) {
-          pasienFiltered.add(pasienNow[i]);
-        }
-      }
-      return pasienFiltered;
-    }
-
-    return pasienNow;
-  }
+  final dokter, metrics;
+  const StatsHomeWidget({super.key, this.dokter, this.metrics});
 
   double monthBetween(DateTime endDate) {
     var now = DateTime.now();
@@ -134,16 +118,8 @@ class StatsHomeWidget extends StatelessWidget {
                 children: [
                   Expanded(
                     child: cardStats(
-                      todayText,
-                      totalHariIni.toString(),
-                      context,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: cardStats(
                       rawatInapText,
-                      filterPasienRawat("ranap").length.toString(),
+                      metrics['pasien_ranap'].toString(),
                       context,
                     ),
                   ),
@@ -151,7 +127,15 @@ class StatsHomeWidget extends StatelessWidget {
                   Expanded(
                     child: cardStats(
                       rawatJalanText,
-                      filterPasienRawat("ralan").length.toString(),
+                      metrics['pasien_ralan'].toString(),
+                      context,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: cardStats(
+                      jadwalOperasiText,
+                      metrics['jadwal_operasi'].toString(),
                       context,
                     ),
                   ),

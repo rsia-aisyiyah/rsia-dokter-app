@@ -28,6 +28,8 @@ class _HomePageState extends State<HomePage> {
 
   List dataPasien = [];
 
+  Map metrics = {};
+
   @override
   void initState() {
     super.initState();
@@ -45,7 +47,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> fetchAllData() async {
     List<Future> futures = [
       _getDokter(),
-      _getPasienNow(),
+      _getMetricsToday(),
       // _getJadwalOperasiNow(),
     ];
 
@@ -62,13 +64,14 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> _getPasienNow() async {
-    var res = await Api().getData('/dokter/pasien/now');
+  Future<void> _getMetricsToday() async {
+    var res = await Api().getData('/dokter/pasien/metric/now');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       setState(() {
-        _pasienNow = body;
-        dataPasien = body['data']['data'];
+        // _pasienNow = body;
+        // dataPasien = body['data']['data'];
+        metrics = body['data'];
       });
     }
   }
@@ -116,8 +119,9 @@ class _HomePageState extends State<HomePage> {
           ),
           headerWidget: StatsHomeWidget(
             dokter: _dokter,
-            pasienNow: dataPasien,
-            totalHariIni: _pasienNow['data']['total'],
+            metrics: metrics,
+            // pasienNow: dataPasien,
+            // totalHariIni: _pasienNow['data']['total'],
           ),
           body: [
             Row(
