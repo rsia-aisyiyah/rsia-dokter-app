@@ -110,6 +110,7 @@ String rawatJalanText                     = "Rawat Jalan";
 String jadwalOperasiText                  = "Jadwal Operasi";
 String pasienOperasiTitle                 = "Pasien Operasi";
 String rekapKunjunganTitle                = "Rekap Kunjungan";
+String statusPulangText                   = "Status Pulang";
 
 String pasienText                         = "Pasien";
 

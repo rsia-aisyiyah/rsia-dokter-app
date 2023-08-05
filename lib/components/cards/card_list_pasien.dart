@@ -57,6 +57,9 @@ createCardPasien(pasien) {
                     poliklinikText: pasien['poliklinik']['nm_poli']
                   else
                     kamarInalText: pasien['kamar_inap']['kamar']['bangsal']['nm_bangsal'],
+
+                  if (pasien['kamar_inap'] != null) 
+                    "Status Pulang": pasien['kamar_inap']['stts_pulang'],
                 }),
               ],
             ),

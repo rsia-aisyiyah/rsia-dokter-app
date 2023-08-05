@@ -119,9 +119,17 @@ class _DetailPasienState extends State<DetailPasien> {
   Widget _ralanDetails(pemeriksaan, pasien) {
     if (pemeriksaan == null) {
       return Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: BoxMessage(
-          body: pasienBelumPemeriksa,
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          children: [
+            _pasienDetails(pasien),
+            const SizedBox(height: 20),
+            SectionTitle(title: historySectionText),
+            const SizedBox(height: 10),
+            BoxMessage(
+              body: pasienBelumPemeriksa,
+            ),
+          ],
         ),
       );
     } else {
@@ -161,11 +169,16 @@ class _DetailPasienState extends State<DetailPasien> {
         );
 
         if (pemeriksaan.length <= 0) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: BoxMessage(
-              body: pasienBelumPemeriksa,
-            ),
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: _pasienDetails(pasien),
+              ),
+              BoxMessage(
+                body: pasienBelumPemeriksa,
+              ),
+            ],
           );
         } else {
           final tglPerawatan = Helper.formatDate(
@@ -186,7 +199,9 @@ class _DetailPasienState extends State<DetailPasien> {
               index == 0
                   ? Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 15),
+                        vertical: 5,
+                        horizontal: 15,
+                      ),
                       child: Column(
                         children: [
                           SectionTitle(title: graphSectionText2),
@@ -269,6 +284,9 @@ class _DetailPasienState extends State<DetailPasien> {
           ikNoRm: pasien['no_rkm_medis'],
           ikSttsLanjut: Helper.realStatusLanjut(pasien['status_lanjut']),
           poliklinikText: pasien['poliklinik']['nm_poli'],
+          if (pasien['status_lanjut'].toLowerCase().contains("ranap"))
+            if (pasien['kamar_inap'] != null)
+              statusPulangText: pasien['kamar_inap']['stts_pulang'],
         }),
       ],
     );

@@ -66,7 +66,6 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
       } else {
         setState(() {
           isLoading = false;
-
           dataPasien = value['data']['data'] ?? [];
         });
       }

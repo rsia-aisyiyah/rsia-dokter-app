@@ -21,9 +21,6 @@ class BoxMessage extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.1,
       padding: const EdgeInsets.all(15),
-      margin: const EdgeInsets.symmetric(
-        horizontal: 15,
-      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: backgroundColour,
