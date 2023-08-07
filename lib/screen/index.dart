@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/config.dart';
 
 class IndexScreen extends StatefulWidget {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:rsiap_dokter/config/config.dart';
 import 'package:intl/intl.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
+import 'package:rsiap_dokter/utils/helper.dart';
 
 class TableHasilPemeriksaan extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -37,10 +39,10 @@ class TableHasilPemeriksaan extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: bgWhite,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: pasien['penjab']['png_jawab'].toString().toLowerCase().contains("umum") ? warningColor : accentColor,
+              color: Helper.penjabColor(pasien['penjab']['png_jawab']),
               width: 1.2,
             ),
             boxShadow: [
@@ -58,7 +60,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
                 checkUpResult,
                 style: TextStyle(
                   fontSize: 20,
-                  fontWeight: fontWeightSemiBold,
+                  fontWeight: fontSemiBold,
                 ),
               ),
               const SizedBox(height: 10),
@@ -73,7 +75,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
                             item['label'],
                             style: TextStyle(
                               fontSize: 16,
-                              fontWeight: fontWeightSemiBold,
+                              fontWeight: fontSemiBold,
                             ),
                           ),
                         ),
@@ -100,10 +102,10 @@ class TableHasilPemeriksaan extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: bgWhite,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: pasien['penjab']['png_jawab'].toString().toLowerCase().contains("umum") ? warningColor : accentColor,
+              color: Helper.penjabColor(pasien['penjab']['png_jawab']),
               width: 1.2,
             ),
             boxShadow: [
@@ -121,7 +123,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
                 ikAwareness,
                 style: TextStyle(
                   fontSize: 20,
-                  fontWeight: fontWeightSemiBold,
+                  fontWeight: fontSemiBold,
                 ),
               ),
               const SizedBox(height: 10),
@@ -137,10 +139,10 @@ class TableHasilPemeriksaan extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: bgWhite,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: pasien['penjab']['png_jawab'].toString().toLowerCase().contains("umum") ? warningColor : accentColor,
+              color: Helper.penjabColor(pasien['penjab']['png_jawab']),
               width: 1.2,
             ),
             boxShadow: [
@@ -158,7 +160,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
                 ikSubjective,
                 style: TextStyle(
                   fontSize: 20,
-                  fontWeight: fontWeightSemiBold,
+                  fontWeight: fontSemiBold,
                 ),
               ),
               const SizedBox(height: 10),
@@ -174,10 +176,10 @@ class TableHasilPemeriksaan extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: bgWhite,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: pasien['penjab']['png_jawab'].toString().toLowerCase().contains("umum") ? warningColor : accentColor,
+              color: Helper.penjabColor(pasien['penjab']['png_jawab']),
               width: 1.2,
             ),
             boxShadow: [
@@ -195,7 +197,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
                 ikObjective,
                 style: TextStyle(
                   fontSize: 20,
-                  fontWeight: fontWeightSemiBold,
+                  fontWeight: fontSemiBold,
                 ),
               ),
               const SizedBox(height: 10),
@@ -211,10 +213,10 @@ class TableHasilPemeriksaan extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: bgWhite,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: pasien['penjab']['png_jawab'].toString().toLowerCase().contains("umum") ? warningColor : accentColor,
+              color: Helper.penjabColor(pasien['penjab']['png_jawab']),
               width: 1.2,
             ),
             boxShadow: [
@@ -232,7 +234,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
                 ikAssesment,
                 style: TextStyle(
                   fontSize: 20,
-                  fontWeight: fontWeightSemiBold,
+                  fontWeight: fontSemiBold,
                 ),
               ),
               const SizedBox(height: 10),
@@ -248,10 +250,10 @@ class TableHasilPemeriksaan extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: bgWhite,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: pasien['penjab']['png_jawab'].toString().toLowerCase().contains("umum") ? warningColor : accentColor,
+              color: Helper.penjabColor(pasien['penjab']['png_jawab']),
               width: 1.2,
             ),
             boxShadow: [
@@ -269,7 +271,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
                 ikPlanning,
                 style: TextStyle(
                   fontSize: 20,
-                  fontWeight: fontWeightSemiBold,
+                  fontWeight: fontSemiBold,
                 ),
               ),
               const SizedBox(height: 10),
@@ -285,10 +287,10 @@ class TableHasilPemeriksaan extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: bgWhite,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: pasien['penjab']['png_jawab'].toString().toLowerCase().contains("umum") ? warningColor : accentColor,
+              color: Helper.penjabColor(pasien['penjab']['png_jawab']),
               width: 1.2,
             ),
             boxShadow: [
@@ -306,7 +308,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
                 ikInstruction,
                 style: TextStyle(
                   fontSize: 20,
-                  fontWeight: fontWeightSemiBold,
+                  fontWeight: fontSemiBold,
                 ),
               ),
               const SizedBox(height: 10),
@@ -322,10 +324,10 @@ class TableHasilPemeriksaan extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: bgWhite,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: pasien['penjab']['png_jawab'].toString().toLowerCase().contains("umum") ? warningColor : accentColor,
+              color: Helper.penjabColor(pasien['penjab']['png_jawab']),
               width: 1.2,
             ),
             boxShadow: [
@@ -343,7 +345,7 @@ class TableHasilPemeriksaan extends StatelessWidget {
                 ikEvaluation,
                 style: TextStyle(
                   fontSize: 20,
-                  fontWeight: fontWeightSemiBold,
+                  fontWeight: fontSemiBold,
                 ),
               ),
               const SizedBox(height: 10),

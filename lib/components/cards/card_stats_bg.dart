@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 
 cardStatsBg(String title, String value, BuildContext context) {
   return Container(
     decoration: BoxDecoration(
-      color: Colors.white,
+      color: bgColor,
       borderRadius: BorderRadius.circular(10),
     ),
     child: Stack(
@@ -32,7 +33,7 @@ cardStatsBg(String title, String value, BuildContext context) {
                 title,
                 style: TextStyle(
                   fontSize: 14,
-                  fontWeight: fontWeightNormal,
+                  fontWeight: fontNormal,
                   color: textColor,
                 ),
               ),
@@ -41,7 +42,7 @@ cardStatsBg(String title, String value, BuildContext context) {
                 value,
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: fontWeightSemiBold,
+                  fontWeight: fontSemiBold,
                   color: textColor,
                 ),
               ),

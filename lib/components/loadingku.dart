@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 
-loadingku(Color color) {
+loadingku() {
   return Scaffold(
-    backgroundColor: backgroundColor,
+    backgroundColor: bgColor,
     body: SafeArea(
       child: Center(
         child: CircularProgressIndicator(

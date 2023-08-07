@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 
 cardStats(String title, String value, BuildContext context) {
   return Container(
@@ -17,8 +18,8 @@ cardStats(String title, String value, BuildContext context) {
           title,
           style: TextStyle(
             fontSize: 16,
-            fontWeight: fontWeightNormal,
-            color: textColorLight,
+            fontWeight: fontNormal,
+            color: textWhite,
           ),
         ),
         const Spacer(),
@@ -26,8 +27,8 @@ cardStats(String title, String value, BuildContext context) {
           value,
           style: TextStyle(
             fontSize: 22,
-            fontWeight: fontWeightSemiBold,
-            color: textColorLight,
+            fontWeight: fontSemiBold,
+            color: textWhite,
           ),
         ),
       ],

@@ -6,12 +6,13 @@ import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
 
 class RekapKunjunganPasien extends StatefulWidget {
-  const RekapKunjunganPasien({super.key});
+   const RekapKunjunganPasien({super.key});
 
   @override
   State<RekapKunjunganPasien> createState() => _RekapKunjunganPasienState();
@@ -82,28 +83,28 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return loadingku(primaryColor);
+      return loadingku();
     } else {
       return Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: bgColor,
         appBar: AppBar(
           title: Text(
             rekapKunjunganTitle,
-            style: const TextStyle(
-              color: Colors.white,
+            style:  TextStyle(
+              color: textWhite,
               fontSize: 18,
-              fontWeight: FontWeight.w600,
+              fontWeight: fontSemiBold,
             ),
           ),
-          backgroundColor: accentColor,
+          backgroundColor: primaryColor,
           elevation: 0,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: const Icon(
+            icon:  Icon(
               Icons.arrow_back_ios,
-              color: Colors.white,
+              color: textWhite,
             ),
           ),
           actions: [
@@ -117,7 +118,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
               },
               icon: Icon(
                 isFilter ? Icons.filter_alt_off_rounded : Icons.filter_alt,
-                color: Colors.white,
+                color: textWhite,
               ),
             ),
           ],
@@ -132,7 +133,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
       context: context,
       builder: (context) {
         return Container(
-          padding: const EdgeInsets.all(15),
+          padding:  const EdgeInsets.all(15),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -150,23 +151,23 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                         children: [
                           // icon filter
                           Container(
-                            padding: const EdgeInsets.all(5),
+                            padding:  const EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                              color: accentColor.withOpacity(0.2),
+                              color: primaryColor.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Icon(
                               Icons.filter_alt,
-                              color: accentColor,
+                              color: primaryColor,
                               size: 20,
                             ),
                           ),
-                          const SizedBox(width: 10),
+                           const SizedBox(width: 10),
                           Text(
                             filterPasienText,
-                            style: const TextStyle(
+                            style:  TextStyle(
                               fontSize: 18,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: fontSemiBold,
                             ),
                           ),
                         ],
@@ -183,15 +184,15 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                   const SizedBox(height: 10),
                   Text(
                     labelSelectDate,
-                    style: const TextStyle(
+                    style:  TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: fontSemiBold,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                   const SizedBox(height: 10),
                   TextField(
                     controller: dateinput,
                     decoration: InputDecoration(
@@ -199,29 +200,29 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                       suffixIcon: Icon(
                         Icons.calendar_today,
                         color: dateinput.text.isNotEmpty
-                            ? accentColor
+                            ? primaryColor
                             : Colors.grey,
                       ),
-                      contentPadding: const EdgeInsets.symmetric(
+                      contentPadding:  const EdgeInsets.symmetric(
                         vertical: 10,
                         horizontal: 15,
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: accentColor, width: 2),
+                        borderSide: BorderSide(color: primaryColor, width: 2),
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
+                             const BorderRadius.all(Radius.circular(10)),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide:
                             BorderSide(color: Colors.grey[400]!, width: 2),
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
+                             const BorderRadius.all(Radius.circular(10)),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
                           color: dateinput.text.isNotEmpty
-                              ? accentColor
+                              ? primaryColor
                               : Colors.grey[400]!,
                           width: 2,
                         ),
@@ -232,16 +233,16 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                       var res = await showCalendarDatePicker2Dialog(
                         context: context,
                         useSafeArea: true,
-                        dialogSize: const Size(325, 400),
+                        dialogSize:  const Size(325, 400),
                         borderRadius: BorderRadius.circular(15),
                         config: CalendarDatePicker2WithActionButtonsConfig(
                           centerAlignModePicker: true,
-                          customModePickerIcon: const SizedBox(),
-                          selectedDayTextStyle: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
+                          customModePickerIcon:  const SizedBox(),
+                          selectedDayTextStyle:  TextStyle(
+                            color: textWhite,
+                            fontWeight: fontBold,
                           ),
-                          selectedDayHighlightColor: accentColor,
+                          selectedDayHighlightColor: primaryColor,
                           calendarType: CalendarDatePicker2Type.range,
                         ),
                       );
@@ -267,7 +268,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                   ),
                 ],
               ),
-              const Spacer(),
+               const Spacer(),
               Flex(
                 direction: Axis.horizontal,
                 children: [
@@ -281,7 +282,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          padding:  const EdgeInsets.symmetric(vertical: 15),
                         ),
                         onPressed: () {
                           _onClearAndCancel();
@@ -291,18 +292,18 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                   const SizedBox(width: 10),
                   Expanded(
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: textColorLight,
-                          backgroundColor: accentColor,
+                          foregroundColor: textWhite,
+                          backgroundColor: primaryColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          padding:  const EdgeInsets.symmetric(vertical: 15),
                         ),
                         onPressed: () {
                           _doFilter();
@@ -328,8 +329,8 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
       enablePullUp: false,
       onRefresh: _onRefresh,
       header: WaterDropMaterialHeader(
-        color: Colors.white,
-        backgroundColor: accentColor,
+        color: bgWhite,
+        backgroundColor: primaryColor,
       ),
       child: dataMetrics.isNotEmpty
           ? Column(
@@ -343,10 +344,10 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
           )
           : Text(
               belumAdaPasien,
-              style: const TextStyle(
-                color: Colors.white,
+              style:  TextStyle(
+                color: textWhite,
                 fontSize: 18,
-                fontWeight: FontWeight.w600,
+                fontWeight: fontSemiBold,
               ),
             ),
     );
@@ -354,37 +355,34 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
 
   Widget metricsTitleWidget() {
     if (filterData.containsKey('tgl_registrasi')) {
-      String startDate = filterData['tgl_registrasi']['start'];
-      String endDate = filterData['tgl_registrasi']['end'];
-
       return Container(
-        margin: const EdgeInsets.only(
+        margin:  const EdgeInsets.only(
           left: 10,
           right: 10,
           top: 10,
           bottom: 0,
         ),
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          color: accentColor.withOpacity(0.3),
+          color: primaryColor.withOpacity(0.3),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           children: [
             Text(
               "Rekap Kunjungan Pasien",
-              style: const TextStyle(
+              style:  TextStyle(
                 fontSize: 18,
-                fontWeight: FontWeight.w600,
+                fontWeight: fontSemiBold,
               ),
             ),
-            const SizedBox(height: 5),
+             const SizedBox(height: 5),
             Text(
               "Periode ${filterData['tgl_registrasi']['start']} s/d ${filterData['tgl_registrasi']['end']}",
-              style: const TextStyle(
+              style:  TextStyle(
                 fontSize: 14,
-                fontWeight: FontWeight.w600,
+                fontWeight: fontSemiBold,
               ),
             ),
           ],
@@ -397,23 +395,23 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
 
   Widget metricsWidgets() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding:  const EdgeInsets.only(bottom: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: dataMetrics.entries.map((e) {
           return Container(
-            margin: const EdgeInsets.only(
+            margin:  const EdgeInsets.only(
               left: 10,
               right: 10,
               top: 10,
               bottom: 0,
             ),
             width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.all(15),
+            padding:  const EdgeInsets.all(15),
             decoration: BoxDecoration(
-              color: accentColor.withOpacity(0.3),
+              color: primaryColor.withOpacity(0.3),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
@@ -422,20 +420,20 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(bottom: 10),
+                  margin:  const EdgeInsets.only(bottom: 10),
                   child: Text(
                     _getTitle(e.key),
                     style: TextStyle(
                       color: textColor,
                       fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: fontSemiBold,
                     ),
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  padding:  const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: textWhite,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Column(
@@ -448,28 +446,28 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                         style: TextStyle(
                           color: textColor,
                           fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: fontSemiBold,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                       const SizedBox(height: 6),
                       Text(
                         e.value['TOTAL'].toString(),
                         style: TextStyle(
                           color: textColor,
                           fontSize: 20,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: fontSemiBold,
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
+                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.all(10),
+                        padding:  const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: warningColor.withOpacity(.8),
                           borderRadius: BorderRadius.circular(10),
@@ -482,28 +480,28 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                             Text(
                               umumText,
                               style: TextStyle(
-                                color: textColorLight,
+                                color: textWhite,
                                 fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: fontSemiBold,
                               ),
                             ),
-                            const SizedBox(height: 6),
+                             const SizedBox(height: 6),
                             Text(
                               e.value['UMUM'].toString(),
                               style: TextStyle(
-                                color: textColorLight,
+                                color: textWhite,
                                 fontSize: 20,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: fontSemiBold,
                               ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                     const SizedBox(width: 10),
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.all(10),
+                        padding:  const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: successColor.withOpacity(.8),
                           borderRadius: BorderRadius.circular(10),
@@ -516,18 +514,18 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                             Text(
                               bpjsText,
                               style: TextStyle(
-                                color: textColorLight,
+                                color: textWhite,
                                 fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: fontSemiBold,
                               ),
                             ),
-                            const SizedBox(height: 6),
+                             const SizedBox(height: 6),
                             Text(
                               e.value['BPJS'].toString(),
                               style: TextStyle(
-                                color: textColorLight,
+                                color: textWhite,
                                 fontSize: 20,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: fontSemiBold,
                               ),
                             ),
                           ],

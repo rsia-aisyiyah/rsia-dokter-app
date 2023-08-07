@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 
+// ignore: must_be_immutable
 class GenTable extends StatelessWidget {
   Map data;
 
@@ -28,22 +29,19 @@ class GenTable extends StatelessWidget {
           children: [
             TableCell(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 5,
-                  horizontal: 5,
-                ),
+                padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Text(
                   e.key,
                   style: TextStyle(
                     fontSize: 14,
-                    fontWeight: fontWeightSemiBold,
+                    fontWeight: fontSemiBold,
                   ),
                 ),
               ),
             ),
             TableCell(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Text(
                   e.value,
                   style: const TextStyle(

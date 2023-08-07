@@ -16,8 +16,6 @@ import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/components/tables/table_pemeriksaan.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 
-import '../../config/config.dart';
-
 class DetailPasien extends StatefulWidget {
   final String noRawat;
   final String kategori;
@@ -66,16 +64,11 @@ class _DetailPasienState extends State<DetailPasien> {
 
   @override
   Widget build(BuildContext context) {
-    Color? bgColor =
-        widget.kategori == 'umum' ? Colors.orange[100] : backgroundColor;
-    Color? appBarColor =
-        widget.kategori == 'umum' ? Colors.orange.shade400 : accentColor;
-
     return FutureBuilder(
       future: fetchPasien(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return loadingku(primaryColor);
+          return loadingku();
         } else {
           var data = json.decode(json.encode(snapshot.data));
           if (!data['success']) {
@@ -93,9 +86,9 @@ class _DetailPasienState extends State<DetailPasien> {
             var pasien = data['data'];
             var pemeriksaan = pasien['pemeriksaan'];
             return Scaffold(
-              backgroundColor: bgColor,
+              backgroundColor: bgWhite,
               appBar: AppBar(
-                backgroundColor: appBarColor,
+                backgroundColor: Helper.penjabColor(widget.kategori),
                 title: Text(titlePasienDetail),
                 leading: IconButton(
                   onPressed: () {
@@ -169,16 +162,19 @@ class _DetailPasienState extends State<DetailPasien> {
         );
 
         if (pemeriksaan.length <= 0) {
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: _pasienDetails(pasien),
-              ),
-              BoxMessage(
-                body: pasienBelumPemeriksa,
-              ),
-            ],
+          return Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              children: [
+                _pasienDetails(pasien),
+                const SizedBox(height: 20),
+                SectionTitle(title: historySectionText),
+                const SizedBox(height: 10),
+                BoxMessage(
+                  body: pasienBelumPemeriksa,
+                ),
+              ],
+            ),
           );
         } else {
           final tglPerawatan = Helper.formatDate(
@@ -255,8 +251,8 @@ class _DetailPasienState extends State<DetailPasien> {
       ),
       content: Container(
         padding: const EdgeInsets.only(bottom: 15),
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: bgWhite,
         ),
         child: TablePemeriksaan(
           pasien: pemeriksaan[index],
@@ -268,27 +264,45 @@ class _DetailPasienState extends State<DetailPasien> {
   }
 
   Widget _pasienDetails(pasien) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          pasien['pasien']['nm_pasien'],
-          style: const TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-          ),
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: bgWhite,
+        borderRadius: BorderRadius.circular(15),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Helper.penjabOpacityColor(widget.kategori),
+        //     offset: const Offset(0, 3),
+        //     blurRadius: 5,
+        //   ),
+        // ],
+        border: Border.all(
+          color: Helper.penjabColor(widget.kategori),
+          width: 1.2,
         ),
-        const SizedBox(height: 8),
-        GenTable(data: {
-          ikNoRawat: pasien['no_rawat'],
-          ikNoRm: pasien['no_rkm_medis'],
-          ikSttsLanjut: Helper.realStatusLanjut(pasien['status_lanjut']),
-          poliklinikText: pasien['poliklinik']['nm_poli'],
-          if (pasien['status_lanjut'].toLowerCase().contains("ranap"))
-            if (pasien['kamar_inap'] != null)
-              statusPulangText: pasien['kamar_inap']['stts_pulang'],
-        }),
-      ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            pasien['pasien']['nm_pasien'],
+            style: const TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          GenTable(data: {
+            ikNoRawat: pasien['no_rawat'],
+            ikNoRm: pasien['no_rkm_medis'],
+            ikSttsLanjut: Helper.realStatusLanjut(pasien['status_lanjut']),
+            poliklinikText: pasien['poliklinik']['nm_poli'],
+            if (pasien['status_lanjut'].toLowerCase().contains("ranap"))
+              if (pasien['kamar_inap'] != null)
+                statusPulangText: pasien['kamar_inap']['stts_pulang'],
+          }),
+        ],
+      ),
     );
   }
 
@@ -334,7 +348,7 @@ class _DetailPasienState extends State<DetailPasien> {
             padding: const EdgeInsets.only(top: 8, right: 8),
             height: 250,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: bgWhite,
               borderRadius: BorderRadius.circular(10),
             ),
             child: SfCartesianChart(

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/config.dart';
 
 class Msg {
   static show(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message, style: TextStyle(color: textColorLight)),
+        content: Text(message, style: TextStyle(color: textWhite)),
         duration: const Duration(seconds: snackBarDuration),
         backgroundColor: primaryColor,
       ),
@@ -15,7 +16,7 @@ class Msg {
   static success(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message, style: TextStyle(color: textColorLight)),
+        content: Text(message, style: TextStyle(color: textWhite)),
         duration: const Duration(seconds: snackBarDuration),
         backgroundColor: successColor,
       ),
@@ -25,7 +26,7 @@ class Msg {
   static info(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message, style: TextStyle(color: textColorLight)),
+        content: Text(message, style: TextStyle(color: textWhite)),
         duration: const Duration(seconds: snackBarDuration),
         backgroundColor: infoColor,
       ),
@@ -35,7 +36,7 @@ class Msg {
   static warning(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message, style: TextStyle(color: textColorLight)),
+        content: Text(message, style: TextStyle(color: textWhite)),
         duration: const Duration(seconds: snackBarDuration),
         backgroundColor: warningColor,
       ),
@@ -45,7 +46,7 @@ class Msg {
   static error(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message, style: TextStyle(color: textColorLight)),
+        content: Text(message, style: TextStyle(color: textWhite)),
         duration: const Duration(seconds: snackBarDuration),
         backgroundColor: errorColor,
       ),

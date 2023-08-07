@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
+import 'package:rsiap_dokter/utils/helper.dart';
 
 class TablePemeriksaan extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -36,7 +38,7 @@ class TablePemeriksaan extends StatelessWidget {
     ];
 
     return Container(
-      color: statusLanjut == 'ralan' ? Colors.transparent : Colors.white,
+      color: statusLanjut == 'ralan' ? Colors.transparent : bgWhite,
       padding: EdgeInsets.symmetric(
         horizontal: statusLanjut == 'ralan' ? 0 : 15,
         vertical: statusLanjut == 'ralan' ? 10 : 15,
@@ -48,23 +50,19 @@ class TablePemeriksaan extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: bgWhite,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: penjab!.toLowerCase() == 'umum'
-                    ? warningColor
-                    : accentColor,
+                color: Helper.penjabColor(penjab!),
                 width: 1.2,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: penjab!.toLowerCase() == 'umum'
-                      ? warningColor.withOpacity(.3)
-                      : primaryColor.withOpacity(0.3),
-                  blurRadius: 2,
-                  offset: const Offset(3, 3),
-                )
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Helper.penjabOpacityColor(penjab!),
+              //     blurRadius: 2,
+              //     offset: const Offset(3, 3),
+              //   )
+              // ],
             ),
             child: Table(
               children: tableContent.map((item) {
@@ -77,7 +75,7 @@ class TablePemeriksaan extends StatelessWidget {
                           item['label'],
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: fontWeightSemiBold,
+                            fontWeight: fontSemiBold,
                           ),
                         ),
                       ),
@@ -102,23 +100,19 @@ class TablePemeriksaan extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: bgWhite,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: penjab!.toLowerCase() == 'umum'
-                    ? warningColor
-                    : accentColor,
+                color: Helper.penjabColor(penjab!),
                 width: 1.2,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: penjab!.toLowerCase() == 'umum'
-                      ? warningColor.withOpacity(.3)
-                      : primaryColor.withOpacity(0.3),
-                  blurRadius: 2,
-                  offset: const Offset(3, 3),
-                )
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Helper.penjabOpacityColor(penjab!),
+              //     blurRadius: 2,
+              //     offset: const Offset(3, 3),
+              //   )
+              // ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,7 +121,7 @@ class TablePemeriksaan extends StatelessWidget {
                   ikAwareness,
                   style: TextStyle(
                     fontSize: 20,
-                    fontWeight: fontWeightSemiBold,
+                    fontWeight: fontSemiBold,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -143,23 +137,19 @@ class TablePemeriksaan extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: bgWhite,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: penjab!.toLowerCase() == 'umum'
-                    ? warningColor
-                    : accentColor,
+                color: Helper.penjabColor(penjab!),
                 width: 1.2,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: penjab!.toLowerCase() == 'umum'
-                      ? warningColor.withOpacity(.3)
-                      : primaryColor.withOpacity(0.3),
-                  blurRadius: 2,
-                  offset: const Offset(3, 3),
-                )
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Helper.penjabOpacityColor(penjab!),
+              //     blurRadius: 2,
+              //     offset: const Offset(3, 3),
+              //   )
+              // ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +158,7 @@ class TablePemeriksaan extends StatelessWidget {
                   ikSubjective,
                   style: TextStyle(
                     fontSize: 20,
-                    fontWeight: fontWeightSemiBold,
+                    fontWeight: fontSemiBold,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -184,23 +174,19 @@ class TablePemeriksaan extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: bgWhite,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: penjab!.toLowerCase() == 'umum'
-                    ? warningColor
-                    : accentColor,
+                color: Helper.penjabColor(penjab!),
                 width: 1.2,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: penjab!.toLowerCase() == 'umum'
-                      ? warningColor.withOpacity(.3)
-                      : primaryColor.withOpacity(0.3),
-                  blurRadius: 2,
-                  offset: const Offset(3, 3),
-                )
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Helper.penjabOpacityColor(penjab!),
+              //     blurRadius: 2,
+              //     offset: const Offset(3, 3),
+              //   )
+              // ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,7 +195,7 @@ class TablePemeriksaan extends StatelessWidget {
                   ikObjective,
                   style: TextStyle(
                     fontSize: 20,
-                    fontWeight: fontWeightSemiBold,
+                    fontWeight: fontSemiBold,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -225,23 +211,19 @@ class TablePemeriksaan extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: bgWhite,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: penjab!.toLowerCase() == 'umum'
-                    ? warningColor
-                    : accentColor,
+                color: Helper.penjabColor(penjab!),
                 width: 1.2,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: penjab!.toLowerCase() == 'umum'
-                      ? warningColor.withOpacity(.3)
-                      : primaryColor.withOpacity(0.3),
-                  blurRadius: 2,
-                  offset: const Offset(3, 3),
-                )
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Helper.penjabOpacityColor(penjab!),
+              //     blurRadius: 2,
+              //     offset: const Offset(3, 3),
+              //   )
+              // ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,7 +232,7 @@ class TablePemeriksaan extends StatelessWidget {
                   ikAssesment,
                   style: TextStyle(
                     fontSize: 20,
-                    fontWeight: fontWeightSemiBold,
+                    fontWeight: fontSemiBold,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -266,23 +248,19 @@ class TablePemeriksaan extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: bgWhite,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: penjab!.toLowerCase() == 'umum'
-                    ? warningColor
-                    : accentColor,
+                color: Helper.penjabColor(penjab!),
                 width: 1.2,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: penjab!.toLowerCase() == 'umum'
-                      ? warningColor.withOpacity(.3)
-                      : primaryColor.withOpacity(0.3),
-                  blurRadius: 2,
-                  offset: const Offset(3, 3),
-                )
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Helper.penjabOpacityColor(penjab!),
+              //     blurRadius: 2,
+              //     offset: const Offset(3, 3),
+              //   )
+              // ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -291,7 +269,7 @@ class TablePemeriksaan extends StatelessWidget {
                   ikPlanning,
                   style: TextStyle(
                     fontSize: 20,
-                    fontWeight: fontWeightSemiBold,
+                    fontWeight: fontSemiBold,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -307,23 +285,19 @@ class TablePemeriksaan extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: bgWhite,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: penjab!.toLowerCase() == 'umum'
-                    ? warningColor
-                    : accentColor,
+                color: Helper.penjabColor(penjab!),
                 width: 1.2,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: penjab!.toLowerCase() == 'umum'
-                      ? warningColor.withOpacity(.3)
-                      : primaryColor.withOpacity(0.3),
-                  blurRadius: 2,
-                  offset: const Offset(3, 3),
-                )
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Helper.penjabOpacityColor(penjab!),
+              //     blurRadius: 2,
+              //     offset: const Offset(3, 3),
+              //   )
+              // ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -332,7 +306,7 @@ class TablePemeriksaan extends StatelessWidget {
                   ikInstruction,
                   style: TextStyle(
                     fontSize: 20,
-                    fontWeight: fontWeightSemiBold,
+                    fontWeight: fontSemiBold,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -348,23 +322,19 @@ class TablePemeriksaan extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: bgWhite,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: penjab!.toLowerCase() == 'umum'
-                    ? warningColor
-                    : accentColor,
+                color: Helper.penjabColor(penjab!),
                 width: 1.2,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: penjab!.toLowerCase() == 'umum'
-                      ? warningColor.withOpacity(.3)
-                      : primaryColor.withOpacity(0.3),
-                  blurRadius: 2,
-                  offset: const Offset(3, 3),
-                )
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Helper.penjabOpacityColor(penjab!),
+              //     blurRadius: 2,
+              //     offset: const Offset(3, 3),
+              //   )
+              // ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,7 +343,7 @@ class TablePemeriksaan extends StatelessWidget {
                   ikEvaluation,
                   style: TextStyle(
                     fontSize: 20,
-                    fontWeight: fontWeightSemiBold,
+                    fontWeight: fontSemiBold,
                   ),
                 ),
                 const SizedBox(height: 10),

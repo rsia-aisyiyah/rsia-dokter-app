@@ -2,9 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/table.dart';
 
@@ -140,18 +141,15 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                               horizontal: 10,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: bgWhite,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                color:
-                                    pjab == "bpjs" ? accentColor : warningColor,
+                                color: Helper.penjabColor(pjab),
                                 width: 1.5,
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: pjab == "bpjs"
-                                      ? accentColor.withOpacity(.2)
-                                      : warningColor.withOpacity(.2),
+                                  color: Helper.penjabOpacityColor(pjab),
                                   spreadRadius: 1,
                                   blurRadius: 3,
                                   offset: const Offset(2, 3),
@@ -181,17 +179,17 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                                     ),
                                     const SizedBox(width: 5),
                                     Text(
-                                      "( $ikNoRm. ${dataJdwl['reg_periksa']['no_rkm_medis']} )",
+                                      "( $ikRm. ${dataJdwl['reg_periksa']['no_rkm_medis']} )",
                                       style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: fontWeightSemiBold),
+                                        fontSize: 14,
+                                        fontWeight: fontSemiBold,
+                                      ),
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 15),
                                 GenTable(data: {
-                                  labelDates:
-                                      Helper.formatDate(dataJdwl['tanggal']),
+                                  labelDates: Helper.formatDate(dataJdwl['tanggal']),
                                   labelTime: dataJdwl['jam_mulai'] +
                                       " - " +
                                       dataJdwl['jam_selesai'],
@@ -264,7 +262,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
           vertical: 5,
         ),
         decoration: BoxDecoration(
-          color: pjab == 'bpjs' ? accentColor : warningColor,
+          color: Helper.penjabColor(pjab),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(10),
             bottomRight: Radius.circular(10),
@@ -272,10 +270,10 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
         ),
         child: Text(
           Helper.getRealPenjab(dataJdwl['reg_periksa']['penjab']['png_jawab']),
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 11,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
+            fontWeight: fontSemiBold,
+            color: textWhite,
           ),
         ),
       ),

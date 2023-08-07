@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:rsiap_dokter/api/request.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/index.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     bool isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0.0;
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: bgColor,
       body: SafeArea(
         child: Container(
           alignment: Alignment.center,
@@ -132,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             vertical: 5,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: bgWhite,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
@@ -164,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             vertical: 5,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: bgWhite,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
@@ -233,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                               _isLoading ? processingText : loginText,
                               style: TextStyle(
-                                color: textColorLight,
+                                color: textWhite,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),

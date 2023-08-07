@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 
 class SectionTitle extends StatelessWidget {
   final String title;
@@ -17,7 +18,7 @@ class SectionTitle extends StatelessWidget {
           style: TextStyle(
             color: color,
             fontSize: 18,
-            fontWeight: FontWeight.w600,
+            fontWeight: fontSemiBold,
           ),
         ),
         Container(

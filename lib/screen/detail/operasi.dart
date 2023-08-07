@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
+import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/table.dart';
 
 class OperasiDetail extends StatefulWidget {
@@ -69,14 +71,13 @@ class OperasiDetailState extends State<OperasiDetail> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return loadingku(primaryColor);
+      return loadingku();
     } else {
       if (!response['success']) {
         return Scaffold(
-          backgroundColor:
-              widget.penjab.contains("UMUM") ? Colors.orange[100] : backgroundColor,
+          backgroundColor: bgWhite,
           appBar: AppBar(
-            backgroundColor: widget.penjab.contains("UMUM") ? Colors.orange[400] : accentColor,
+            backgroundColor: Helper.penjabColor(widget.penjab),
             title: const Text('Detail Operasi'),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
@@ -90,10 +91,9 @@ class OperasiDetailState extends State<OperasiDetail> {
       }
 
       return Scaffold(
-        backgroundColor:
-            widget.penjab.contains("UMUM") ? Colors.orange[100] : backgroundColor,
+        backgroundColor: bgWhite,
         appBar: AppBar(
-          backgroundColor: widget.penjab.contains("UMUM") ? Colors.orange[400] : accentColor,
+          backgroundColor: Helper.penjabColor(widget.penjab),
           title: const Text('Detail Operasi'),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
@@ -132,68 +132,10 @@ class OperasiDetailState extends State<OperasiDetail> {
             ),
           ),
           const SizedBox(height: 8),
-          RichText(
-            text: TextSpan(
-              text: "$ikNoRm : ",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: textColor,
-              ),
-              children: [
-                TextSpan(
-                  text: widget.rm,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: textColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 3),
-          RichText(
-            text: TextSpan(
-              text: "$ikCategory : ",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: textColor,
-              ),
-              children: [
-                TextSpan(
-                  text: widget.penjab,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: textColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 3),
-          RichText(
-            text: TextSpan(
-              text: "$ikNoRawat : ",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: textColor,
-              ),
-              children: [
-                TextSpan(
-                  text: widget.noRawat,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: textColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          GenTable(data: {
+            ikNoRm: widget.rm,
+            ikNoRawat: widget.noRawat,
+          }),
         ],
       ),
     );
@@ -209,29 +151,36 @@ class OperasiDetailState extends State<OperasiDetail> {
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Helper.penjabColor(widget.penjab).withOpacity(0.3),
             borderRadius: BorderRadius.circular(10),
           ),
+          clipBehavior: Clip.hardEdge,
           child: Theme(
             data: ThemeData().copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
-              textColor:
-                  widget.penjab.contains('UMUM') ? warningColor : accentColor,
-              iconColor:
-                  widget.penjab.contains('UMUM') ? warningColor : accentColor,
-              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Helper.penjabColor(widget.penjab),
+                  width: 1.3,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              clipBehavior: Clip.hardEdge,
+              textColor: textColor,
+              iconColor: Helper.penjabColor(widget.penjab),
+              backgroundColor: bgWhite,
               title: Text(
                 data['tgl_operasi'],
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: fontSemiBold,
                 ),
               ),
               subtitle: Text(
                 data['paket_operasi']['nm_perawatan'],
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: fontNormal,
                 ),
               ),
               children: [_tableHasil(data)],

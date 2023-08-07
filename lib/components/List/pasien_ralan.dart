@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/screen/detail/pasien.dart';
+import 'package:rsiap_dokter/utils/helper.dart';
 
 class ListPasienRalan extends StatefulWidget {
   const ListPasienRalan({super.key});
@@ -120,12 +121,7 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
                     MaterialPageRoute(
                       builder: (context) => DetailPasien(
                         noRawat: dataPasien[index]['no_rawat'],
-                        kategori: dataPasien[index]['penjab']['png_jawab']
-                                .toString()
-                                .toLowerCase()
-                                .contains("umum")
-                            ? "umum"
-                            : "bpjs",
+                        kategori: Helper.getPenjab(dataPasien[index]['penjab']['png_jawab']),
                       ),
                     ),
                   );

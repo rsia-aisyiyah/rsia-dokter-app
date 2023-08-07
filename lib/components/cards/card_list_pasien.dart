@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
+import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/table.dart';
 
 createCardPasien(pasien) {
@@ -17,22 +19,20 @@ createCardPasien(pasien) {
       Stack(
         children: [
           Container(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.only(
+              top: 15, left: 15, right: 15, bottom: 25,
+            ),
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: bgWhite,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: penjab.toLowerCase().contains("bpjs")
-                    ? accentColor
-                    : warningColor,
+                color: Helper.penjabColor(penjab),
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: penjab.toLowerCase().contains("bpjs")
-                      ? accentColor.withOpacity(.3)
-                      : warningColor.withOpacity(.3),
+                  color: Helper.penjabOpacityColor(penjab),
                   blurRadius: 5,
                   offset: const Offset(3, 3),
                 ),
@@ -44,9 +44,9 @@ createCardPasien(pasien) {
               children: [
                 Text(
                   pasien['pasien']['nm_pasien'],
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: fontSemiBold,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -57,7 +57,6 @@ createCardPasien(pasien) {
                     poliklinikText: pasien['poliklinik']['nm_poli']
                   else
                     kamarInalText: pasien['kamar_inap']['kamar']['bangsal']['nm_bangsal'],
-
                   if (pasien['kamar_inap'] != null) 
                     "Status Pulang": pasien['kamar_inap']['stts_pulang'],
                 }),
@@ -73,9 +72,7 @@ createCardPasien(pasien) {
                 vertical: 5,
               ),
               decoration: BoxDecoration(
-                color: penjab.toLowerCase().contains("bpjs")
-                    ? accentColor
-                    : warningColor,
+                color: Helper.penjabColor(penjab),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10),
                   bottomRight: Radius.circular(10),
@@ -83,10 +80,10 @@ createCardPasien(pasien) {
               ),
               child: Text(
                 penjab,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  fontWeight: fontSemiBold,
+                  color: textWhite,
                 ),
               ),
             ),

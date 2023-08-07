@@ -5,9 +5,11 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/filter/bottom_sheet_filter.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/detail/operasi.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
+import 'package:rsiap_dokter/utils/helper.dart';
 
 class PasienOperasi extends StatefulWidget {
   const PasienOperasi({super.key});
@@ -169,28 +171,28 @@ class _PasienOperasiState extends State<PasienOperasi> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return loadingku(primaryColor);
+      return loadingku();
     } else {
       return Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: bgColor,
         appBar: AppBar(
           title: Text(
             pasienOperasiTitle,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: textWhite,
               fontSize: 18,
-              fontWeight: FontWeight.w600,
+              fontWeight: fontSemiBold,
             ),
           ),
-          backgroundColor: accentColor,
+          backgroundColor: primaryColor,
           elevation: 0,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back_ios,
-              color: Colors.white,
+              color: textWhite,
             ),
           ),
           actions: [
@@ -198,9 +200,9 @@ class _PasienOperasiState extends State<PasienOperasi> {
               onPressed: () {
                 _onFilterIconClicked(context);
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.filter_alt_outlined,
-                color: Colors.white,
+                color: textWhite,
               ),
             ),
             if (isFilter)
@@ -220,9 +222,9 @@ class _PasienOperasiState extends State<PasienOperasi> {
                     _setData(value, false);
                   });
                 },
-                icon: const Icon(
+                icon: Icon(
                   Icons.clear,
-                  color: Colors.white,
+                  color: textWhite,
                 ),
               )
             else
@@ -236,8 +238,8 @@ class _PasienOperasiState extends State<PasienOperasi> {
           onRefresh: _onRefresh,
           onLoading: _loadMore,
           header: WaterDropMaterialHeader(
-            color: Colors.white,
-            backgroundColor: accentColor,
+            color: textWhite,
+            backgroundColor: primaryColor,
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -263,9 +265,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
                               builder: (context) => OperasiDetail(
                                 noRawat: dataOperasi['no_rawat'],
                                 pasien: dataOperasi['pasien'],
-                                penjab: _getPenjab(
-                                  dataOperasi['penjab']['png_jawab'],
-                                ),
+                                penjab: Helper.getRealPenjab(dataOperasi['penjab']['png_jawab']),
                                 rm: dataOperasi['no_rkm_medis'],
                                 statusLanjut: dataOperasi['status_lanjut'],
                               ),
@@ -282,23 +282,15 @@ class _PasienOperasiState extends State<PasienOperasi> {
                                     horizontal: 10,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: bgWhite,
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
-                                      color: _getPenjab(
-                                        dataOperasi['penjab']['png_jawab'],
-                                      ).contains('BPJS')
-                                          ? accentColor
-                                          : warningColor,
+                                      color: Helper.penjabColor(dataOperasi['penjab']['png_jawab']),
                                       width: 1.5,
                                     ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: _getPenjab(
-                                          dataOperasi['penjab']['png_jawab'],
-                                        ).contains('BPJS')
-                                            ? accentColor.withOpacity(.2)
-                                            : warningColor.withOpacity(.2),
+                                        color: Helper.penjabOpacityColor(dataOperasi['penjab']['png_jawab']),
                                         spreadRadius: 1,
                                         blurRadius: 3,
                                         offset: const Offset(2, 3),
@@ -353,32 +345,32 @@ class _PasienOperasiState extends State<PasienOperasi> {
             .size
             .width,
         decoration: BoxDecoration(
-          color: accentColor.withOpacity(0.3),
+          color: primaryColor.withOpacity(0.3),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           children: [
             Text(
               "Pasien Operasi",
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
-                fontWeight: FontWeight.w600,
+                fontWeight: fontSemiBold,
               ),
             ),
             const SizedBox(height: 8),
             filterData.containsKey('penjab') ? Text(
               "Kategori ${filterData['penjab']}",
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
-                fontWeight: FontWeight.w600,
+                fontWeight: fontSemiBold,
               ),
             ) : const SizedBox(),
             const SizedBox(height: 5),
             Text(
               "Periode ${filterData['tgl_operasi']['start']} s/d ${filterData['tgl_operasi']['end']}",
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
-                fontWeight: FontWeight.w600,
+                fontWeight: fontSemiBold,
               ),
             ),
           ],
@@ -395,36 +387,24 @@ class _PasienOperasiState extends State<PasienOperasi> {
       height: MediaQuery.of(context).size.height * 0.1,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: bgColor,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           width: 1.3,
-          color: accentColor,
+          color: primaryColor,
         ),
       ),
       child: Text(
         belumAdaPasien,
         style: TextStyle(
-          color: accentColor,
+          color: primaryColor,
           fontSize: 14,
-          fontWeight: FontWeight.w500,
+          fontWeight: fontMedium,
         ),
       ),
     );
   }
   
-  String _getPenjab(penjab) {
-    var plow = penjab.toString().toLowerCase();
-
-    if (plow.contains('/')) {
-      var p = "BPJS${plow.split('/').last.toUpperCase()}";
-      return p;
-    } else {
-      var p = plow.toUpperCase();
-      return p;
-    }
-  }
-
   Positioned _labelPenjab(dataOperasi) {
     return Positioned(
       bottom: 0,
@@ -432,24 +412,18 @@ class _PasienOperasiState extends State<PasienOperasi> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
         decoration: BoxDecoration(
-          color: _getPenjab(
-            dataOperasi['penjab']['png_jawab'],
-          ).contains('BPJS')
-              ? accentColor
-              : warningColor,
+          color: Helper.penjabColor(dataOperasi['penjab']['png_jawab']),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(10),
             bottomRight: Radius.circular(10),
           ),
         ),
         child: Text(
-          _getPenjab(
-            dataOperasi['penjab']['png_jawab'],
-          ),
-          style: const TextStyle(
+          Helper.getRealPenjab(dataOperasi['penjab']['png_jawab']),
+          style: TextStyle(
             fontSize: 11,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
+            fontWeight: fontSemiBold,
+            color: textWhite,
           ),
         ),
       ),
@@ -479,7 +453,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
                   ikNoRawat,
                   style: TextStyle(
                     fontSize: 14,
-                    fontWeight: fontWeightSemiBold,
+                    fontWeight: fontSemiBold,
                   ),
                 ),
               ),
@@ -506,7 +480,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
                   ikNoRm,
                   style: TextStyle(
                     fontSize: 14,
-                    fontWeight: fontWeightSemiBold,
+                    fontWeight: fontSemiBold,
                   ),
                 ),
               ),

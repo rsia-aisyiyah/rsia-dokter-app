@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 
 class Helper {
   static String getAssetName(String name) {
@@ -20,6 +22,16 @@ class Helper {
       var p = plow.toUpperCase();
       return p;
     }
+  }
+
+  static Color penjabColor(String penjab) {
+    return penjab.toLowerCase().contains("bpjs") ? bpjsColor : umumColor;
+  }
+
+  static Color penjabOpacityColor(String penjab) {
+    return penjab.toLowerCase().contains("bpjs")
+        ? bpjsColor.withOpacity(.3)
+        : umumColor.withOpacity(.3);
   }
 
   static String realStatusLanjut(String status) {

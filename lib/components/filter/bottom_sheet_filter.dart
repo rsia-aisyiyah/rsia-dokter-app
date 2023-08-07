@@ -1,8 +1,9 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:rsiap_dokter/config/config.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 
 //ignore: must_be_immutable
 class BottomSheetFilter extends StatefulWidget {
@@ -56,13 +57,13 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
             color: widget.filterData[key] == value
-                ? accentColor.withOpacity(0.2)
-                : Colors.grey[200],
+                ? primaryColor.withOpacity(0.2)
+                : bgGray,
             borderRadius: BorderRadius.circular(5),
             border: Border.all(
               color: widget.filterData[key] == value
-                  ? accentColor
-                  : Colors.grey[500]!,
+                  ? primaryColor
+                  : borderGray,
               width: 1.5,
             ),
           ),
@@ -71,10 +72,10 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: widget.filterData[key] == value
-                  ? accentColor
-                  : Colors.grey[500]!,
+                  ? primaryColor
+                  : borderGray,
               fontSize: 14,
-              fontWeight: fontWeightSemiBold,
+              fontWeight: fontSemiBold,
             ),
           ),
         ),
@@ -104,25 +105,24 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // icon filter
                         Container(
                           padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            color: accentColor.withOpacity(0.2),
+                            color: primaryColor.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Icon(
                             Icons.filter_alt,
-                            color: accentColor,
+                            color: primaryColor,
                             size: 20,
                           ),
                         ),
                         const SizedBox(width: 10),
                         Text(
                           filterPasienText,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 18,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: fontSemiBold,
                           ),
                         ),
                       ],
@@ -143,9 +143,9 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
               const SizedBox(height: 10),
               Text(
                 searchPasienText,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: fontSemiBold,
                 ),
               ),
               const SizedBox(height: 10),
@@ -161,18 +161,18 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
                       color: widget.searchController.text.isNotEmpty
-                          ? accentColor
-                          : Colors.grey[400]!,
+                          ? primaryColor
+                          : borderGray,
                       width: 2,
                     ),
                   ),
-                  hintStyle: TextStyle(color: Colors.grey[400]),
+                  hintStyle: TextStyle(color: borderGray),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: accentColor, width: 2),
+                    borderSide: BorderSide(color: primaryColor, width: 2),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey[400]!, width: 2),
+                    borderSide: BorderSide(color: borderGray, width: 2),
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
@@ -181,9 +181,9 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
               const SizedBox(height: 15),
               Text(
                 labelSelectDate,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: fontSemiBold,
                 ),
               ),
               const SizedBox(height: 10),
@@ -194,27 +194,27 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                   suffixIcon: Icon(
                     Icons.calendar_today,
                     color: widget.dateinput.text.isNotEmpty
-                        ? accentColor
-                        : Colors.grey,
+                        ? primaryColor
+                        : grayColor,
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 10,
                     horizontal: 15,
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: accentColor, width: 2),
+                    borderSide: BorderSide(color: primaryColor, width: 2),
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey[400]!, width: 2),
+                    borderSide: BorderSide(color: borderGray, width: 2),
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
                       color: widget.dateinput.text.isNotEmpty
-                          ? accentColor
-                          : Colors.grey[400]!,
+                          ? primaryColor
+                          : borderGray,
                       width: 2,
                     ),
                   ),
@@ -229,11 +229,11 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                     config: CalendarDatePicker2WithActionButtonsConfig(
                       centerAlignModePicker: true,
                       customModePickerIcon: const SizedBox(),
-                      selectedDayTextStyle: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
+                      selectedDayTextStyle: TextStyle(
+                        color: textWhite,
+                        fontWeight: fontBold,
                       ),
-                      selectedDayHighlightColor: accentColor,
+                      selectedDayHighlightColor: primaryColor,
                       calendarType: CalendarDatePicker2Type.range,
                     ),
                   );
@@ -263,11 +263,11 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           "Tanggal Sebagai",
                           style: TextStyle(
                             fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: fontSemiBold,
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -293,9 +293,9 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                   : Container(),
               Text(
                 labelSelectkategori,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: fontSemiBold,
                 ),
               ),
               const SizedBox(height: 10),
@@ -334,7 +334,7 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       foregroundColor: textColor,
-                      backgroundColor: Colors.grey[200],
+                      backgroundColor: bgGray,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),
                       ),
@@ -354,8 +354,8 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: textColorLight,
-                      backgroundColor: accentColor,
+                      foregroundColor: textWhite,
+                      backgroundColor: primaryColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),
                       ),

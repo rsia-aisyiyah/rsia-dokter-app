@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 
 // ignore: must_be_immutable
 class BoxMessage extends StatelessWidget {
@@ -43,7 +44,7 @@ class BoxMessage extends StatelessWidget {
                     style: TextStyle(
                       color: borderColor,
                       fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: fontSemiBold,
                     ),
                   ),
               )
@@ -53,7 +54,7 @@ class BoxMessage extends StatelessWidget {
             style: TextStyle(
               color: borderColor,
               fontSize: 14,
-              fontWeight: FontWeight.w500,
+              fontWeight: fontMedium,
             ),
           ),
         ],

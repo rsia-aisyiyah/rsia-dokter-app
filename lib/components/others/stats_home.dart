@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/components/cards/card_stats.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 
 class StatsHomeWidget extends StatelessWidget {
@@ -24,7 +26,7 @@ class StatsHomeWidget extends StatelessWidget {
     ));
 
     return Container(
-      color: backgroundColor,
+      color: bgColor,
       padding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 5),
       child: SafeArea(
         child: Column(
@@ -35,7 +37,7 @@ class StatsHomeWidget extends StatelessWidget {
               Helper.greeting(),
               style: TextStyle(
                 fontSize: 15,
-                fontWeight: fontWeightNormal,
+                fontWeight: fontNormal,
                 color: textColor,
               ),
             ),
@@ -44,7 +46,7 @@ class StatsHomeWidget extends StatelessWidget {
               dokter['data']['nm_dokter'],
               style: TextStyle(
                 fontSize: 25,
-                fontWeight: FontWeight.bold,
+                fontWeight: fontBold,
                 color: textColor,
               ),
             ),
@@ -59,7 +61,7 @@ class StatsHomeWidget extends StatelessWidget {
               width: double.infinity,
               decoration: STRExpired <= STRExpMin
                   ? BoxDecoration(
-                      color: Colors.yellow[700],
+                      color: warningColor,
                       borderRadius: BorderRadius.circular(5),
                     )
                   : null,
@@ -77,7 +79,7 @@ class StatsHomeWidget extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 14,
                               color: textColor,
-                              fontWeight: fontWeightSemiBold,
+                              fontWeight: fontSemiBold,
                             ),
                           ),
                           TextSpan(
@@ -104,7 +106,7 @@ class StatsHomeWidget extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 14,
                               color: textColor,
-                              fontWeight: fontWeightSemiBold,
+                              fontWeight: fontSemiBold,
                             ),
                           ),
                         ],

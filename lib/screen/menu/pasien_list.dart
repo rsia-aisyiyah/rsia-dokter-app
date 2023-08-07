@@ -6,9 +6,10 @@ import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/components/filter/bottom_sheet_filter.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/detail/pasien.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PasienList extends StatefulWidget {
@@ -226,28 +227,28 @@ class PasienListState extends State<PasienList> {
   @override
   Widget build(BuildContext context) {
     if (isLoding) {
-      return loadingku(primaryColor);
+      return loadingku();
     } else {
       return Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: bgColor,
         appBar: AppBar(
           title: Text(
             title,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: textWhite,
               fontSize: 18,
-              fontWeight: FontWeight.w600,
+              fontWeight: fontSemiBold,
             ),
           ),
-          backgroundColor: accentColor,
+          backgroundColor: primaryColor,
           elevation: 0,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back_ios,
-              color: Colors.white,
+              color: textWhite,
             ),
           ),
           actions: [
@@ -255,9 +256,9 @@ class PasienListState extends State<PasienList> {
               onPressed: () {
                 _onFilterIconClicked(context);
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.filter_alt_outlined,
-                color: Colors.white,
+                color: textWhite,
               ),
             ),
             if (isFilter)
@@ -277,9 +278,9 @@ class PasienListState extends State<PasienList> {
                     _setData(value);
                   });
                 },
-                icon: const Icon(
+                icon: Icon(
                   Icons.clear,
-                  color: Colors.white,
+                  color: textWhite,
                 ),
               )
             else
@@ -293,8 +294,8 @@ class PasienListState extends State<PasienList> {
           onRefresh: _onRefresh,
           onLoading: _loadMore,
           header: WaterDropMaterialHeader(
-            color: Colors.white,
-            backgroundColor: accentColor,
+            color: bgWhite,
+            backgroundColor: primaryColor,
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -339,7 +340,7 @@ class PasienListState extends State<PasienList> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w400,
+                            fontWeight: fontNormal,
                             color: textColor.withOpacity(.5),
                           ),
                         ),
@@ -367,34 +368,34 @@ class PasienListState extends State<PasienList> {
         padding: EdgeInsets.all(15),
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          color: accentColor.withOpacity(0.3),
+          color: primaryColor.withOpacity(0.3),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           children: [
             Text(
               "Pasien Operasi",
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
-                fontWeight: FontWeight.w600,
+                fontWeight: fontSemiBold,
               ),
             ),
             const SizedBox(height: 8),
             filterData.containsKey('penjab')
                 ? Text(
                     "Kategori ${filterData['penjab']}",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: fontSemiBold,
                     ),
                   )
                 : const SizedBox(),
             const SizedBox(height: 5),
             Text(
               "Periode ${filterData['tgl_registrasi']['start']} s/d ${filterData['tgl_registrasi']['end']}",
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
-                fontWeight: FontWeight.w600,
+                fontWeight: fontSemiBold,
               ),
             ),
           ],

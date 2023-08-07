@@ -9,7 +9,7 @@ import 'package:rsiap_dokter/components/List/pasien_ralan.dart';
 import 'package:rsiap_dokter/components/List/pasien_ranap.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/components/others/stats_home.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,7 +23,6 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true;
   int selectedTab = 0;
 
-  var _pasienNow = {};
   var _dokter = {};
 
   List dataPasien = [];
@@ -109,7 +108,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return loadingku(primaryColor);
+      return loadingku();
     } else {
       return DefaultTabController(
         length: tabsHome.length,
@@ -142,13 +141,13 @@ class _HomePageState extends State<HomePage> {
           ],
           fullyStretchable: false,
           backgroundColor: Colors.white,
-          appBarColor: accentColor,
+          appBarColor: primaryColor,
           bottomNavigationBar: Container(
-            color: accentColor,
+            color: primaryColor,
             padding: const EdgeInsets.symmetric(vertical: 2),
             child: TabBar(
               onTap: _changeSelectedNavBar,
-              labelColor: textColorLight,
+              labelColor: textColor,
               indicatorColor: Colors.transparent,
               unselectedLabelColor: textColor.withOpacity(.5),
               tabs: tabsHome.map(

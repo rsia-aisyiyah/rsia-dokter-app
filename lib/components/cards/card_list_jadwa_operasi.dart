@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 
 createCardJadwalOperasi(pasien) {
   return Container(
     margin: const EdgeInsets.only(bottom: 10),
     padding: const EdgeInsets.all(15),
     decoration: BoxDecoration(
-      color: textColorLight,
+      color: textWhite,
       borderRadius: BorderRadius.circular(10),
       boxShadow: [
         BoxShadow(
@@ -25,16 +26,16 @@ createCardJadwalOperasi(pasien) {
           children: [
             Text(
               pasien['no_rawat'],
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontWeight: fontBold,
               ),
             ),
             Text(
               pasien['tanggal'],
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
-                fontWeight: FontWeight.normal,
+                fontWeight: fontNormal,
               ),
             )
           ],

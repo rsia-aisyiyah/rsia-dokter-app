@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
-import 'package:rsiap_dokter/config/config.dart';
+import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 
 class CreatePasienList extends StatefulWidget {
   final List pasien;
@@ -65,7 +66,7 @@ class _CreatePasienListState extends State<CreatePasienList> {
                         widget.title,
                         style: TextStyle(
                           fontSize: 20,
-                          fontWeight: fontWeightBold,
+                          fontWeight: fontBold,
                         ),
                       ),
                       InkWell(
@@ -74,12 +75,12 @@ class _CreatePasienListState extends State<CreatePasienList> {
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
-                            color: accentColor,
+                            color: primaryColor ,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.filter_list,
-                            color: Colors.white,
+                            color: textWhite,
                           ),
                         ),
                       ),
@@ -103,12 +104,12 @@ class _CreatePasienListState extends State<CreatePasienList> {
                     height: 40,
                     width: 40,
                     decoration: BoxDecoration(
-                      color: accentColor,
+                      color: primaryColor,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.add,
-                      color: Colors.white,
+                      color: textColor,
                     ),
                   ),
                 ),
