@@ -162,8 +162,8 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                                 Text(
                                   dataJdwl['reg_periksa']['pasien']
                                       ['nm_pasien'],
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                  style: TextStyle(
+                                    fontWeight: fontBold,
                                     fontSize: 18,
                                   ),
                                 ),

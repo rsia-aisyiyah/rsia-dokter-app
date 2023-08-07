@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/ext/string_capitalize.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/section_title.dart';
 import 'package:rsiap_dokter/utils/table.dart';
@@ -75,10 +76,10 @@ class _DetailPasienState extends State<DetailPasien> {
             return Center(
               child: Text(
                 data['message'],
-                style: const TextStyle(
-                  color: Colors.red,
+                style: TextStyle(
+                  color: warningColor,
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: fontBold,
                 ),
               ),
             );
@@ -241,8 +242,8 @@ class _DetailPasienState extends State<DetailPasien> {
           children: [
             Text(
               tglPerawatan,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+              style: TextStyle(
+                fontWeight: fontBold,
               ),
             ),
             Text(pemeriksaan[index]['jam_rawat'])
@@ -286,9 +287,9 @@ class _DetailPasienState extends State<DetailPasien> {
         children: [
           Text(
             pasien['pasien']['nm_pasien'],
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 25,
-              fontWeight: FontWeight.bold,
+              fontWeight: fontBold,
             ),
           ),
           const SizedBox(height: 8),

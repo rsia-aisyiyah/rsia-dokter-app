@@ -6,6 +6,7 @@ import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/index.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -235,7 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                 color: textWhite,
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: fontBold,
                               ),
                             ),
                           ),

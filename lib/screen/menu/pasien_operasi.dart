@@ -302,8 +302,8 @@ class _PasienOperasiState extends State<PasienOperasi> {
                                     children: [
                                       Text(
                                         dataOperasi['pasien']['nm_pasien'],
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                        style: TextStyle(
+                                          fontWeight: fontBold,
                                           fontSize: 18,
                                         ),
                                       ),

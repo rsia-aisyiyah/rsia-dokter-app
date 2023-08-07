@@ -126,9 +126,9 @@ class OperasiDetailState extends State<OperasiDetail> {
         children: [
           Text(
             pasien['nm_pasien'],
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 25,
-              fontWeight: FontWeight.bold,
+              fontWeight: fontBold,
             ),
           ),
           const SizedBox(height: 8),

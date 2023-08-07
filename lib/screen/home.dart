@@ -156,7 +156,12 @@ class _HomePageState extends State<HomePage> {
                     child: Center(
                       child: Text(
                         e['label'] as String,
-                        style: const TextStyle(fontSize: 12),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: e['label'] == tabsHome[selectedTab]['label']
+                              ? textColor
+                              : textColor.withOpacity(.5),
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),

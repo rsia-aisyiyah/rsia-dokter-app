@@ -27,93 +27,75 @@ class StatsHomeWidget extends StatelessWidget {
 
     return Container(
       color: bgColor,
-      padding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 5),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 5),
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              Helper.greeting(),
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: fontNormal,
-                color: textColor,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              dokter['data']['nm_dokter'],
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: fontBold,
-                color: textColor,
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 10),
-              padding: STRExpired <= STRExpMin
-                  ? const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
-                    )
-                  : const EdgeInsets.all(0),
-              width: double.infinity,
-              decoration: STRExpired <= STRExpMin
-                  ? BoxDecoration(
-                      color: warningColor,
-                      borderRadius: BorderRadius.circular(5),
-                    )
-                  : null,
-              child: STRExpired <= STRExpMin
-                  ? RichText(
-                      text: TextSpan(
-                        text: strExpiredIn,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: textColor,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: " ${STRExpired.toStringAsFixed(1)} Bulan",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: textColor,
-                              fontWeight: fontSemiBold,
-                            ),
-                          ),
-                          TextSpan(
-                            text: ". $strRenewText",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: textColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : RichText(
-                      text: TextSpan(
-                        text: "SIP : ",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: textColor,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: dokter['data']['pegawai']['kualifikasi_staff']
-                                ['nomor_sip'],
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: textColor,
-                              fontWeight: fontSemiBold,
-                            ),
-                          ),
-                        ],
-                      ),
+            Flex(
+              direction: Axis.horizontal,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    border: Border.all(
+                      color: textWhite,
+                      width: 2.5,
                     ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.network(
+                      photoUrl + dokter['data']['pegawai']['photo'],
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 15),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        Helper.greeting(),
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: fontNormal,
+                          color: textColor,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        dokter['data']['nm_dokter'],
+                        style: TextStyle(
+                          fontSize: 21,
+                          fontWeight: fontBold,
+                          color: textColor,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        dokter['data']['pegawai']['kualifikasi_staff']
+                            ['nomor_sip'],
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: fontNormal,
+                          color: textColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
-            SizedBox(height: STRExpired <= STRExpMin ? 10 : 15),
+            _STRCheck(STRExpired, dokter),
             IntrinsicHeight(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -147,6 +129,53 @@ class StatsHomeWidget extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Container _STRCheck(double STRExpired, data) {
+    return Container(
+      margin: EdgeInsets.only(top: STRExpired <= STRExpMin ? 10 : 10, bottom: STRExpired <= STRExpMin ? 10 : 10),
+      padding: STRExpired <= STRExpMin
+          ? const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 5,
+            )
+          : const EdgeInsets.all(0),
+      width: double.infinity,
+      decoration: STRExpired <= STRExpMin
+          ? BoxDecoration(
+              color: warningColor,
+              borderRadius: BorderRadius.circular(5),
+            )
+          : null,
+      child: STRExpired <= STRExpMin
+          ? RichText(
+              text: TextSpan(
+                text: strExpiredIn,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: textColor,
+                ),
+                children: [
+                  TextSpan(
+                    text: " ${STRExpired.toStringAsFixed(1)} $labelBulan",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: textColor,
+                      fontWeight: fontSemiBold,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ". $strRenewText",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: textColor,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : const SizedBox(),
     );
   }
 }

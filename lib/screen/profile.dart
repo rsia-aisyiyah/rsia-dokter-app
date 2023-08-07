@@ -10,6 +10,7 @@ import 'package:rsiap_dokter/screen/login.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
+import 'package:rsiap_dokter/utils/section_title.dart';
 import 'package:rsiap_dokter/utils/table.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +23,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late Map<String, dynamic> dataTbl;
+  late Map<String, dynamic> dataSTR;
 
   @override
   void initState() {
@@ -64,17 +66,20 @@ class _ProfilePageState extends State<ProfilePage> {
       "Jabatan": detailDokter['pegawai']['jbtn'],
       "NIK": detailDokter['pegawai']['nik'],
       "Agama": detailDokter['agama'],
-      "STR": detailDokter['pegawai']['kualifikasi_staff']['nomor_str'],
-      "Tanggal STR": Helper.formatDate(
-        detailDokter['pegawai']['kualifikasi_staff']['tanggal_str'],
-      ),
-      "Akhir STR": Helper.formatDate(
-        detailDokter['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
-      ),
       "Tempat Lahir": detailDokter['tmp_lahir'],
-      "Tanggal Lahir": detailDokter['tgl_lahir'],
+      "Tanggal Lahir": Helper.formatDate(detailDokter['tgl_lahir']),
       "Alamat": detailDokter['pegawai']['alamat'],
       "Kota": detailDokter['pegawai']['kota'],
+    };
+  }
+
+  void setSTR(dokter) {
+    var k_staff = dokter['pegawai']['kualifikasi_staff'];
+    dataSTR = {
+      "STR": k_staff['nomor_str'],
+      "Tanggal STR": Helper.formatDate(k_staff['tanggal_str']),
+      "Akhir STR": Helper.formatDate(k_staff['tanggal_akhir_str']),
+      "Kategori Profesi": k_staff['kategori_profesi'],
     };
   }
 
@@ -90,6 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
               var data = json.decode(json.encode(snapshot.data));
               if (data['success']) {
                 setDataTbl(data['data']);
+                setSTR(data['data']);
                 var STRExpired = monthBetween(DateTime.parse(
                   data['data']['pegawai']['kualifikasi_staff']
                       ['tanggal_akhir_str'],
@@ -107,14 +113,23 @@ class _ProfilePageState extends State<ProfilePage> {
                           Flex(
                             direction: Axis.horizontal,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: Image.network(
-                                  photoUrl + data['data']['pegawai']['photo'],
-                                  width: 80,
-                                  height: 80,
-                                  fit: BoxFit.cover,
-                                  alignment: Alignment.topCenter,
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  border: Border.all(
+                                    color: textWhite,
+                                    width: 2.5,
+                                  ),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Image.network(
+                                    photoUrl + data['data']['pegawai']['photo'],
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                    alignment: Alignment.topCenter,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 15),
@@ -134,14 +149,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                     ),
                                     const SizedBox(height: 5),
-                                    Container(
-                                      child: Text(
-                                        data['data']['nm_dokter'],
-                                        style: TextStyle(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          color: textWhite,
-                                        ),
+                                    Text(
+                                      data['data']['nm_dokter'],
+                                      style: TextStyle(
+                                        fontSize: 21,
+                                        fontWeight: fontBold,
+                                        color: textWhite,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      data['data']['pegawai']
+                                          ['kualifikasi_staff']['nomor_sip'],
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: fontNormal,
+                                        color: textWhite,
                                       ),
                                     ),
                                   ],
@@ -173,7 +196,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
+                              const SectionTitle(title: "Detail Dokter"),
+                              const SizedBox(height: 5),
                               GenTable(data: dataTbl),
+                              const SizedBox(height: 20),
+                              const SectionTitle(title: "Detail STR"),
+                              const SizedBox(height: 5),
+                              GenTable(data: dataSTR),
                               const Spacer(),
                               ElevatedButton(
                                 onPressed: () {
@@ -192,9 +221,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: Text(
                                   logoutText,
                                   style: TextStyle(
-                                    color: textColor,
+                                    color: textWhite,
                                     fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: fontBold,
                                   ),
                                 ),
                               ),
@@ -212,9 +241,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       Text(
                         failedToFetchDataMsg,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: fontBold,
                         ),
                       ),
                     ],
