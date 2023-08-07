@@ -87,7 +87,8 @@ class _DetailPasienState extends State<DetailPasien> {
             var pasien = data['data'];
             var pemeriksaan = pasien['pemeriksaan'];
             return Scaffold(
-              backgroundColor: bgWhite,
+              backgroundColor: pemeriksaan == null || pemeriksaan.length == 0
+                  ? bgWhite : Helper.penjabBgColor(widget.kategori),
               appBar: AppBar(
                 backgroundColor: Helper.penjabColor(widget.kategori),
                 title: Text(titlePasienDetail),
@@ -121,7 +122,7 @@ class _DetailPasienState extends State<DetailPasien> {
             SectionTitle(title: historySectionText),
             const SizedBox(height: 10),
             BoxMessage(
-              body: pasienBelumPemeriksa,
+              body: pasienBelumPeriksa,
             ),
           ],
         ),
@@ -172,7 +173,7 @@ class _DetailPasienState extends State<DetailPasien> {
                 SectionTitle(title: historySectionText),
                 const SizedBox(height: 10),
                 BoxMessage(
-                  body: pasienBelumPemeriksa,
+                  body: pasienBelumPeriksa,
                 ),
               ],
             ),
@@ -193,21 +194,25 @@ class _DetailPasienState extends State<DetailPasien> {
                       child: _pasienDetails(pasien),
                     )
                   : const SizedBox(),
-              index == 0
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 15,
-                      ),
-                      child: Column(
-                        children: [
-                          SectionTitle(title: graphSectionText2),
-                          const SizedBox(height: 10),
-                          _chartList(),
-                        ],
-                      ),
-                    )
-                  : const SizedBox(),
+              if (index == 0)
+                Container(
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: bgWhite,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(50),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      SectionTitle(title: graphSectionText2),
+                      const SizedBox(height: 10),
+                      _chartList(),
+                    ],
+                  ),
+                )
+              else
+                const SizedBox(),
               _pemeriksaanPasien(
                 tglPerawatan,
                 pemeriksaan,
@@ -266,17 +271,17 @@ class _DetailPasienState extends State<DetailPasien> {
 
   Widget _pasienDetails(pasien) {
     return Container(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: bgWhite,
         borderRadius: BorderRadius.circular(15),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Helper.penjabOpacityColor(widget.kategori),
-        //     offset: const Offset(0, 3),
-        //     blurRadius: 5,
-        //   ),
-        // ],
+        boxShadow: [
+          BoxShadow(
+            color: Helper.penjabOpacityColor(widget.kategori),
+            offset: const Offset(0, 3),
+            blurRadius: 5,
+          ),
+        ],
         border: Border.all(
           color: Helper.penjabColor(widget.kategori),
           width: 1.2,
@@ -288,7 +293,7 @@ class _DetailPasienState extends State<DetailPasien> {
           Text(
             pasien['pasien']['nm_pasien'],
             style: TextStyle(
-              fontSize: 25,
+              fontSize: 20,
               fontWeight: fontBold,
             ),
           ),

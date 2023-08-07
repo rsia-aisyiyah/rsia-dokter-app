@@ -34,6 +34,12 @@ class Helper {
         : umumColor.withOpacity(.3);
   }
 
+  static Color penjabBgColor(String penjab) {
+    return penjab.toLowerCase().contains("bpjs")
+        ? bgBPJS
+        : bgUMUM;
+  }
+
   static String realStatusLanjut(String status) {
     return status.toLowerCase().contains("ralan")
         ? "Rawat Jalan"

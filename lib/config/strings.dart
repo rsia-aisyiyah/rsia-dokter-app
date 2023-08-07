@@ -60,7 +60,7 @@ String passwordEmpty                      = "Password cannot be empty";
 String wrongCredentials                   = "Username or password is wrong, please try again";
 
 String forgotPasswordMsg                  = "Please contact your administrator to reset your password";
-String pasienBelumPemeriksa               = "Patient has not been examined";
+String pasienBelumPeriksa                 = "Patient has not been examined";
 String belumAdaPasien                     = "There are no patients yet";
 
 String titlePasienDetail                  = "Detail Pasien";

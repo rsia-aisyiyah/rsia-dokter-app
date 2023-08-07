@@ -20,6 +20,9 @@ Color textWhite = HexColor("#ffffff");
 Color bpjsColor = primaryColor;
 Color umumColor = Colors.amber.shade600;
 
+Color bgBPJS = bgColor;
+Color bgUMUM = Colors.amber.shade100;
+
 // gray
 Color grayColor = Colors.grey;
 Color bgGray = Colors.grey.shade200;
