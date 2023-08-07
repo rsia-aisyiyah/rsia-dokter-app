@@ -145,13 +145,15 @@ class PasienListState extends State<PasienList> {
   Future fetchPasien() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var spesialis = localStorage.getString('spesialis');
-    var strUrl = "";
+    var strUrl = url;
 
-    if (spesialis!.toLowerCase().contains('umum')) {
-      strUrl = '/dokter/pasien/ranap/all';
-    } else {
-      strUrl = url;
+    if (widget.ranap) {
+      if (spesialis!.toLowerCase().contains('umum')) {
+        strUrl = '/dokter/pasien/ranap/all';
+      }
     }
+
+    print("URL " + strUrl);
 
     var res = await Api().getData(strUrl);
     if (res.statusCode == 200) {
