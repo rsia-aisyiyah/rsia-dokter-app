@@ -86,7 +86,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
       return loadingku();
     } else {
       return Scaffold(
-        backgroundColor: bgColor,
+        backgroundColor: bgWhite,
         appBar: AppBar(
           title: Text(
             rekapKunjunganTitle,
@@ -133,7 +133,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
       context: context,
       builder: (context) {
         return Container(
-          padding:  const EdgeInsets.all(15),
+          padding:  const EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -332,24 +332,27 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
         color: bgWhite,
         backgroundColor: primaryColor,
       ),
-      child: dataMetrics.isNotEmpty
-          ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              metricsTitleWidget(),
-              metricsWidgets(),
-            ],
-          )
-          : Text(
-              belumAdaPasien,
-              style:  TextStyle(
-                color: textWhite,
-                fontSize: 18,
-                fontWeight: fontSemiBold,
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: dataMetrics.isNotEmpty
+            ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                metricsTitleWidget(),
+                metricsWidgets(),
+              ],
+            )
+            : Text(
+                belumAdaPasien,
+                style:  TextStyle(
+                  color: textWhite,
+                  fontSize: 18,
+                  fontWeight: fontSemiBold,
+                ),
               ),
-            ),
+      ),
     );
   }
 
@@ -411,8 +414,12 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
             width: MediaQuery.of(context).size.width,
             padding:  const EdgeInsets.all(15),
             decoration: BoxDecoration(
-              color: primaryColor.withOpacity(0.3),
+              color: bgColor,
               borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: primaryColor.withOpacity(.5),
+                width: 2,
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -431,9 +438,9 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                   ),
                 ),
                 Container(
-                  padding:  const EdgeInsets.all(10),
+                  padding:  const EdgeInsets.all(15),
                   decoration: BoxDecoration(
-                    color: textWhite,
+                    color: bgWhite,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Column(
@@ -469,7 +476,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                       child: Container(
                         padding:  const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: warningColor.withOpacity(.8),
+                          color: umumColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
@@ -503,7 +510,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                       child: Container(
                         padding:  const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: successColor.withOpacity(.8),
+                          color: bpjsColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
