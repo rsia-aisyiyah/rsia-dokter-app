@@ -11,6 +11,7 @@ import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/components/others/stats_home.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/fonts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -119,6 +120,7 @@ class _HomePageState extends State<HomePage> {
           headerWidget: StatsHomeWidget(
             dokter: _dokter,
             metrics: metrics,
+            onTap: _changeSelectedNavBar
             // pasienNow: dataPasien,
             // totalHariIni: _pasienNow['data']['total'],
           ),
@@ -147,7 +149,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.symmetric(vertical: 2),
             child: TabBar(
               onTap: _changeSelectedNavBar,
-              labelColor: textColor,
+              labelColor: textWhite,
               indicatorColor: Colors.transparent,
               unselectedLabelColor: textColor.withOpacity(.5),
               tabs: tabsHome.map(
@@ -158,8 +160,11 @@ class _HomePageState extends State<HomePage> {
                         e['label'] as String,
                         style: TextStyle(
                           fontSize: 12,
+                          fontWeight: e['label'] == tabsHome[selectedTab]['label']
+                              ? fontSemiBold
+                              : fontNormal,
                           color: e['label'] == tabsHome[selectedTab]['label']
-                              ? textColor
+                              ? textWhite
                               : textColor.withOpacity(.5),
                         ),
                         textAlign: TextAlign.center,

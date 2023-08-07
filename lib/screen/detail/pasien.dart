@@ -88,7 +88,8 @@ class _DetailPasienState extends State<DetailPasien> {
             var pemeriksaan = pasien['pemeriksaan'];
             return Scaffold(
               backgroundColor: pemeriksaan == null || pemeriksaan.length == 0
-                  ? bgWhite : Helper.penjabBgColor(widget.kategori),
+                  ? bgWhite
+                  : Helper.penjabBgColor(widget.kategori),
               appBar: AppBar(
                 backgroundColor: Helper.penjabColor(widget.kategori),
                 title: Text(titlePasienDetail),
@@ -134,19 +135,36 @@ class _DetailPasienState extends State<DetailPasien> {
       );
 
       return SingleChildScrollView(
-        padding: const EdgeInsets.all(15),
+        // padding: const EdgeInsets.all(15),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            _pasienDetails(pasien),
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: _pasienDetails(pasien),
+            ),
             const SizedBox(height: 20),
-            SectionTitle(title: historySectionText),
-            TablePemeriksaan(
-              pasien: pemeriksaan,
-              penjab: penjab,
-              statusLanjut: statusLanjut,
+            Container(
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: bgWhite,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(50),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SectionTitle(title: historySectionText),
+                  TablePemeriksaan(
+                    pasien: pemeriksaan,
+                    penjab: penjab,
+                    statusLanjut: statusLanjut,
+                  ),
+                ],
+              ),
             ),
           ],
         ),

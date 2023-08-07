@@ -9,7 +9,9 @@ import 'package:rsiap_dokter/utils/helper.dart';
 class StatsHomeWidget extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   final dokter, metrics;
-  const StatsHomeWidget({super.key, this.dokter, this.metrics});
+  final Function onTap;
+  const StatsHomeWidget(
+      {super.key, this.dokter, this.metrics, required this.onTap});
 
   double monthBetween(DateTime endDate) {
     var now = DateTime.now();
@@ -101,26 +103,35 @@ class StatsHomeWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                    child: cardStats(
-                      rawatInapText,
-                      metrics['pasien_ranap'].toString(),
-                      context,
+                    child: InkWell(
+                      onTap: () => onTap(0),
+                      child: cardStats(
+                        rawatInapText,
+                        metrics['pasien_ranap'].toString(),
+                        context,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: cardStats(
-                      rawatJalanText,
-                      metrics['pasien_ralan'].toString(),
-                      context,
+                    child: InkWell(
+                      onTap: () => onTap(1),
+                      child: cardStats(
+                        rawatJalanText,
+                        metrics['pasien_ralan'].toString(),
+                        context,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: cardStats(
-                      jadwalOperasiText,
-                      metrics['jadwal_operasi'].toString(),
-                      context,
+                    child: InkWell(
+                      onTap: () => onTap(2),
+                      child: cardStats(
+                        jadwalOperasiText,
+                        metrics['jadwal_operasi'].toString(),
+                        context,
+                      ),
                     ),
                   ),
                 ],
@@ -134,7 +145,9 @@ class StatsHomeWidget extends StatelessWidget {
 
   Container _STRCheck(double STRExpired, data) {
     return Container(
-      margin: EdgeInsets.only(top: STRExpired <= STRExpMin ? 10 : 10, bottom: STRExpired <= STRExpMin ? 10 : 10),
+      margin: EdgeInsets.only(
+          top: STRExpired <= STRExpMin ? 10 : 10,
+          bottom: STRExpired <= STRExpMin ? 10 : 10),
       padding: STRExpired <= STRExpMin
           ? const EdgeInsets.symmetric(
               horizontal: 12,

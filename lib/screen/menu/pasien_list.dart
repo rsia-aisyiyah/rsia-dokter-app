@@ -66,12 +66,17 @@ class PasienListState extends State<PasienList> {
   }
 
   _initialSet() {
+    var now = DateTime.now();
+    var bulan = now.month.toString().padLeft(2, '0');
+    var tahun = now.year.toString();
+
     if (widget.ralan == true) {
       title = "Pasien Rawat Jalan";
-      url = "/dokter/pasien/ralan";
+      url = "/dokter/pasien/ralan/$tahun/$bulan";
     } else if (widget.ranap == true) {
       title = "Pasien Rawat Inap";
-      url = "/dokter/pasien/ranap";
+      // TODO : pasien pindah kamar tidak usah ditampilkan.
+      url = "/dokter/pasien/ranap/$tahun/$bulan";
     } else {
       title = "Pasien";
       url = "/dokter/pasien";

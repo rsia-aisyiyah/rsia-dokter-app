@@ -100,137 +100,149 @@ class _ProfilePageState extends State<ProfilePage> {
                   data['data']['pegawai']['kualifikasi_staff']
                       ['tanggal_akhir_str'],
                 ));
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                return Stack(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Flex(
-                            direction: Axis.horizontal,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                    color: textWhite,
-                                    width: 2.5,
-                                  ),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: Image.network(
-                                    photoUrl + data['data']['pegawai']['photo'],
-                                    width: 80,
-                                    height: 80,
-                                    fit: BoxFit.cover,
-                                    alignment: Alignment.topCenter,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 15),
-                              Flexible(
-                                flex: 1,
-                                fit: FlexFit.tight,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      Helper.greeting(),
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: fontNormal,
-                                        color: textWhite,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      data['data']['nm_dokter'],
-                                      style: TextStyle(
-                                        fontSize: 21,
-                                        fontWeight: fontBold,
-                                        color: textWhite,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      data['data']['pegawai']
-                                          ['kualifikasi_staff']['nomor_sip'],
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: fontNormal,
-                                        color: textWhite,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          _STRCheck(STRExpired, data),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: bgWhite,
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(50),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: textColor.withOpacity(0.1),
-                              blurRadius: 10,
-                              offset: const Offset(0, -1),
-                            ),
-                          ],
-                        ),
-                        child: Padding(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
                           padding: const EdgeInsets.all(20),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              const SectionTitle(title: "Detail Dokter"),
-                              const SizedBox(height: 5),
-                              GenTable(data: dataTbl),
-                              const SizedBox(height: 20),
-                              const SectionTitle(title: "Detail STR"),
-                              const SizedBox(height: 5),
-                              GenTable(data: dataSTR),
-                              const Spacer(),
-                              ElevatedButton(
-                                onPressed: () {
-                                  _logout();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: primaryColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flex(
+                                direction: Axis.horizontal,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      border: Border.all(
+                                        color: textWhite,
+                                        width: 2.5,
+                                      ),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: Image.network(
+                                        photoUrl +
+                                            data['data']['pegawai']['photo'],
+                                        width: 80,
+                                        height: 80,
+                                        fit: BoxFit.cover,
+                                        alignment: Alignment.topCenter,
+                                      ),
+                                    ),
                                   ),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 50,
-                                    vertical: 20,
+                                  const SizedBox(width: 15),
+                                  Flexible(
+                                    flex: 2,
+                                    fit: FlexFit.tight,
+                                    child: Container(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            Helper.greeting(),
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: fontNormal,
+                                              color: textWhite,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Text(
+                                            data['data']['nm_dokter'],
+                                            style: TextStyle(
+                                              fontSize: 21,
+                                              fontWeight: fontBold,
+                                              color: textWhite,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Text(
+                                            data['data']['pegawai']
+                                                    ['kualifikasi_staff']
+                                                ['nomor_sip'],
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: fontNormal,
+                                              color: textWhite,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                child: Text(
-                                  logoutText,
-                                  style: TextStyle(
-                                    color: textWhite,
-                                    fontSize: 18,
-                                    fontWeight: fontBold,
-                                  ),
-                                ),
+                                ],
                               ),
+                              _STRCheck(STRExpired, data),
                             ],
                           ),
                         ),
-                      ),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: bgWhite,
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(50),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: textColor.withOpacity(0.1),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, -1),
+                                ),
+                              ],
+                            ),
+                            child: SingleChildScrollView(
+                              padding: const EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: <Widget>[
+                                  const SectionTitle(title: "Detail Dokter"),
+                                  const SizedBox(height: 5),
+                                  GenTable(data: dataTbl),
+                                  const SizedBox(height: 20),
+                                  const SectionTitle(title: "Detail STR"),
+                                  const SizedBox(height: 5),
+                                  GenTable(data: dataSTR),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // positioned logout icon on top right
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: InkWell(
+                        onTap: () => _logout(),
+                        child: Container(
+                          margin: const EdgeInsets.all(8),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          child: Icon(
+                            Icons.logout,
+                            color: textWhite,
+                          ),
+                        ),
+                      )
+                      // child: IconButton(
+                      //   onPressed: () {
+                      //     _logout();
+                      //   },
+                      //   icon: Icon(
+                      //     Icons.logout,
+                      //     color: textWhite,
+                      //   ),
+                      // ),
                     ),
                   ],
                 );
