@@ -53,6 +53,8 @@ createCardPasien(pasien) {
                 GenTable(data: {
                   ikNoRm: pasien['no_rkm_medis'],
                   ikNoRawat: pasien['no_rawat'],
+                  if (pasien['kamar_inap'] != null) 
+                    "Diagnosa Awal": pasien['kamar_inap']['diagnosa_awal'],
                   if (pasien['kamar_inap'] == null)
                     poliklinikText: pasien['poliklinik']['nm_poli']
                   else

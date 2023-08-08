@@ -158,8 +158,6 @@ class PasienListState extends State<PasienList> {
       }
     }
 
-    print("URL " + strUrl);
-
     var res = await Api().getData(strUrl);
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
