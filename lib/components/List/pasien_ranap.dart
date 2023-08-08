@@ -5,6 +5,7 @@ import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/screen/detail/pasien.dart';
+import 'package:rsiap_dokter/utils/box_message.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -125,9 +126,16 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: dataPasien.length,
+            itemCount: dataPasien.isEmpty ? 1 : dataPasien.length,
             padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
             itemBuilder: (context, index) {
+              if (dataPasien.isEmpty) {
+                return const BoxMessage(
+                  title: "Tidak ada pasien",
+                  body: "Tidak ada pasien hari ini yang dirawat",
+                );
+              }
+              
               return InkWell(
                 onTap: () {
                   Navigator.push(

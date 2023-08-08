@@ -5,6 +5,7 @@ import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/box_message.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/table.dart';
@@ -145,8 +146,16 @@ class OperasiDetailState extends State<OperasiDetail> {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: response.length,
+      itemCount: response.length == 0 ? 1 : response.length,
       itemBuilder: (context, index) {
+
+        if (response.length == 0) {
+          return const BoxMessage(
+            title: "Tidak ada operasi",
+            body: "Tidak ada operasi yang dilakukan pada pasien ini",
+          );
+        }
+
         var data = response[index];
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),

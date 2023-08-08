@@ -5,6 +5,7 @@ import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/screen/detail/pasien.dart';
+import 'package:rsiap_dokter/utils/box_message.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 
 class ListPasienRalan extends StatefulWidget {
@@ -69,7 +70,7 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
   }
 
   Future fetchPasien() async {
-    var res = await Api().getData('/dokter/pasien/ralan');
+    var res = await Api().getData('/dokter/pasien/ralan/now');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;
@@ -111,9 +112,16 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: dataPasien.length,
+            itemCount: dataPasien.isEmpty ? 1 : dataPasien.length,
             padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
             itemBuilder: (context, index) {
+              if (dataPasien.isEmpty) {
+                return const BoxMessage(
+                  title: "Tidak ada pasien",
+                  body: "Tidak ada pasien hari ini yang dirawat",
+                );
+              }
+
               return InkWell(
                 onTap: () {
                   Navigator.push(

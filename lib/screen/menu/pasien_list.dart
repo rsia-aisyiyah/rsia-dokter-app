@@ -75,7 +75,6 @@ class PasienListState extends State<PasienList> {
       url = "/dokter/pasien/ralan/$tahun/$bulan";
     } else if (widget.ranap == true) {
       title = "Pasien Rawat Inap";
-      // TODO : pasien pindah kamar tidak usah ditampilkan.
       url = "/dokter/pasien/ranap/$tahun/$bulan";
     } else {
       title = "Pasien";
