@@ -81,6 +81,7 @@ String ikPasien                           = "Pasien";
 String ikDiagnosis                        = "Diagnosa";
 String ikCategory                         = "Kategori";
 String ikNoRawat                          = "No. Rawat";
+String ikTglDaftar                        = "Tgl Registrasi";
 String ikStartTime                        = "Waktu Mulai";
 String ikEndTime                          = "Waktu Selesai";
 String ikJenisOperasi                     = "Jenis Operasi";
@@ -104,7 +105,7 @@ String ikTglPeriksa                       = "Tanggal Periksa";
 String umumText                           = "UMUM";
 String bpjsText                           = "BPJS";
 
-String kamarInalText                      = "Kamar Inap";
+String kamarInalText                      = "Ruang";
 String poliklinikText                     = "Poliklinik";
 String checkUpResult                      = "Check up result";
 String rawatInapText                      = "Rawat Inap";

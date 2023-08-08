@@ -78,10 +78,10 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
     var spesialis = localStorage.getString('spesialis');
     var strUrl = "";
 
-    if (!spesialis!.toLowerCase().contains('umum')) {
-      strUrl = '/dokter/pasien/ranap/now';
-    } else {
+    if (spesialis!.toLowerCase().contains('umum')) {
       strUrl = '/dokter/pasien/ranap/all';
+    } else {
+      strUrl = '/dokter/pasien/ranap/now';
     }
 
     var res = await Api().getData(strUrl);
