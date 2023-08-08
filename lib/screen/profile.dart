@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
@@ -125,13 +126,28 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(100),
-                                      child: Image.network(
-                                        photoUrl +
-                                            data['data']['pegawai']['photo'],
+                                      child: CachedNetworkImage(
+                                        imageUrl: photoUrl + data['data']['pegawai']['photo'].toString(),
                                         width: 80,
                                         height: 80,
                                         fit: BoxFit.cover,
                                         alignment: Alignment.topCenter,
+                                        placeholder: (context, url) => Container(
+                                          width: 80,
+                                          height: 80,
+                                          color: Colors.grey[300],
+                                          child: Center(
+                                            child: CircularProgressIndicator(
+                                              color: primaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) => Container(
+                                          width: 80,
+                                          height: 80,
+                                          color: Colors.grey[300],
+                                          child: const Icon(Icons.error),
+                                        ),
                                       ),
                                     ),
                                   ),
