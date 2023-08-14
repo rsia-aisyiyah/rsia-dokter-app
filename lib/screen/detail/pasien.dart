@@ -3,10 +3,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/config/colors.dart';
-import 'package:rsiap_dokter/ext/string_capitalize.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
+import 'package:rsiap_dokter/utils/msg.dart';
 import 'package:rsiap_dokter/utils/section_title.dart';
 import 'package:rsiap_dokter/utils/table.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -58,6 +58,17 @@ class _DetailPasienState extends State<DetailPasien> {
     var response = await Api().postData({
       "no_rawat": widget.noRawat,
     }, '/dokter/pasien/pemeriksaan');
+
+    var body = json.decode(response.body);
+    return body;
+  }
+
+  Future verifySoap(noRawat, tglPerawatan, jamRawat) async {
+    var response = await Api().postData({
+      'no_rawat': noRawat,
+      'tgl_perawatan': tglPerawatan,
+      'jam_rawat': jamRawat,
+    }, '/dokter/pasien/pemeriksaan/verify');
 
     var body = json.decode(response.body);
     return body;
@@ -150,7 +161,7 @@ class _DetailPasienState extends State<DetailPasien> {
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
                 color: bgWhite,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(50),
                 ),
               ),
@@ -257,19 +268,62 @@ class _DetailPasienState extends State<DetailPasien> {
         height: 50.0,
         color: penjab.toLowerCase() == 'umum'
             ? Colors.orange.shade200
-            : accentColor,
+            : primaryShade,
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         alignment: Alignment.centerLeft,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              tglPerawatan,
-              style: TextStyle(
-                fontWeight: fontBold,
-              ),
+            Row(
+              children: [
+                Text(
+                  tglPerawatan,
+                  style: TextStyle(
+                    fontWeight: fontBold,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Text(pemeriksaan[index]['jam_rawat'])
+              ],
             ),
-            Text(pemeriksaan[index]['jam_rawat'])
+            // icon btton
+            IconButton(
+              onPressed: () {
+                if (pemeriksaan[index]['verifikasi'] != null) {
+                  Msg.withData(
+                      context,
+                      'success',
+                      "Data Sudah Diverifikasi",
+                      const Icon(
+                        Icons.verified,
+                        color: Colors.white,
+                      ),
+                      {
+                        "Petugas": pemeriksaan[index]['verifikasi']['petugas']['nama'],
+                        "Tanggal": pemeriksaan[index]['verifikasi']['tgl_verif'] + " " + pemeriksaan[index]['verifikasi']['jam_verif']
+                      });
+                } else {
+                  // verifySoap
+                  verifySoap(
+                    pemeriksaan[index]['no_rawat'],
+                    pemeriksaan[index]['tgl_perawatan'],
+                    pemeriksaan[index]['jam_rawat'],
+                  ).then((value) {
+                    setState(() {});
+                    Msg.success(context, "Data Berhasil Diverifikasi");
+                  });
+                }
+              },
+              icon: pemeriksaan[index]['verifikasi'] != null
+                  ? const Icon(
+                      Icons.verified,
+                      color: Colors.blue,
+                    )
+                  : const Icon(
+                      Icons.check_circle_outline_outlined,
+                      color: Colors.grey,
+                    ),
+            )
           ],
         ),
       ),
@@ -336,20 +390,14 @@ class _DetailPasienState extends State<DetailPasien> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        _buildChart('suhu_tubuh', suhuTubuhTooltipBehavior),
-        const SizedBox(height: 10),
-        _buildChart('nadi', nadiTooltipBehavior),
-        const SizedBox(height: 10),
-        _buildChart('respirasi', respirasiTooltipBehavior),
-        const SizedBox(height: 10),
-        _buildChart('spo2', spo2TooltipBehavior),
-        const SizedBox(height: 20),
+        _buildChart('Grafik Pemeriksaan', suhuTubuhTooltipBehavior),
+        const SizedBox(height: 10)
       ],
     );
   }
 
-  Widget _buildChart(String columnName, TooltipBehavior tooltipBehavior) {
-    var nameTitle = columnName.replaceAll('_', ' ').toLowerCase();
+  Widget _buildChart(String title, TooltipBehavior tooltipBehavior) {
+    var nameTitle = title.replaceAll('_', ' ').toLowerCase();
     return FutureBuilder(
       future: _getChartData(),
       builder: (context, snapshot) {
@@ -358,13 +406,26 @@ class _DetailPasienState extends State<DetailPasien> {
           chartData = <_ChartData>[];
 
           for (var i = 0; i < data.length; i++) {
-            if (data[i][columnName].toString().isEmpty) {
+            if (data[i]['suhu_tubuh'].toString().isEmpty ||
+                data[i]['suhu_tubuh'].toString() == '-' ||
+                data[i]['suhu_tubuh'].toString() == ' ' ||
+                data[i]['nadi'].toString().isEmpty ||
+                data[i]['nadi'].toString() == '-' || 
+                data[i]['nadi'].toString() == ' '
+              ) {
               continue;
             }
 
+            // remove all character except number and dot and comma
+            var suhu = data[i]['suhu_tubuh'].toString().replaceAll(RegExp(r'[^0-9.,]'), '');
+            var nadi = data[i]['nadi'].toString().replaceAll(RegExp(r'[^0-9.,]'), '');
+
             chartData!.add(
-              _ChartData('${data[i]['tgl_perawatan']} ${data[i]['jam_rawat']}',
-                  double.parse(data[i][columnName]!.replaceAll(',', '.'))),
+              _ChartData(
+                '${data[i]['tgl_perawatan']} ${data[i]['jam_rawat']}',
+                double.parse(suhu),
+                double.parse(nadi),
+              ),
             );
           }
 
@@ -377,7 +438,7 @@ class _DetailPasienState extends State<DetailPasien> {
             ),
             child: SfCartesianChart(
               title: ChartTitle(
-                text: '$graphSectionText ${nameTitle.capitalize()}',
+                text: 'Grafik Pemeriksaan',
               ),
               legend: const Legend(
                 isVisible: true,
@@ -389,11 +450,12 @@ class _DetailPasienState extends State<DetailPasien> {
                 isVisible: false,
               ),
               primaryYAxis: NumericAxis(
+                interval: 100,
                 labelFormat: '{value}',
                 axisLine: const AxisLine(width: 0),
                 majorTickLines: const MajorTickLines(color: Colors.transparent),
               ),
-              series: _getDefaultLineSeries(nameTitle),
+              series: _getDefaultLineSeries(),
             ),
           );
         } else {
@@ -413,29 +475,54 @@ class _DetailPasienState extends State<DetailPasien> {
     );
   }
 
-  List<LineSeries<_ChartData, String>> _getDefaultLineSeries(String name) {
+  List<LineSeries<_ChartData, String>> _getDefaultLineSeries() {
     return <LineSeries<_ChartData, String>>[
       LineSeries<_ChartData, String>(
         animationDuration: 2500,
         dataSource: chartData!,
         xValueMapper: (_ChartData data, _) => data.tanggal,
-        yValueMapper: (_ChartData data, _) => data.value,
+        yValueMapper: (_ChartData data, _) => data.suhu,
         width: 2,
-        name: name,
+        name: "Suhu Tubuh",
         dataLabelSettings: const DataLabelSettings(
           isVisible: true,
           labelAlignment: ChartDataLabelAlignment.top,
         ),
         markerSettings: const MarkerSettings(isVisible: true),
-        color: dataColor[Random().nextInt(dataColor.length)],
+        color: getColor("Suhu Tubuh"),
+      ),
+      LineSeries<_ChartData, String>(
+        animationDuration: 2500,
+        dataSource: chartData!,
+        xValueMapper: (_ChartData data, _) => data.tanggal,
+        yValueMapper: (_ChartData data, _) => data.nadi,
+        width: 2,
+        name: "Nadi",
+        dataLabelSettings: const DataLabelSettings(
+          isVisible: true,
+          labelAlignment: ChartDataLabelAlignment.top,
+        ),
+        markerSettings: const MarkerSettings(isVisible: true),
+        color: getColor("Nadi"),
       ),
     ];
+  }
+
+  Color getColor(String name) {
+    if (name.toLowerCase().contains('suhu')) {
+      return Colors.pink;
+    } else if (name.toLowerCase().contains('nadi')) {
+      return Colors.blue;
+    } else {
+      return dataColor[Random().nextInt(dataColor.length)];
+    }
   }
 }
 
 class _ChartData {
-  _ChartData(this.tanggal, this.value);
+  _ChartData(this.tanggal, this.suhu, this.nadi);
 
   final String tanggal;
-  final double value;
+  final double suhu;
+  final double nadi;
 }
