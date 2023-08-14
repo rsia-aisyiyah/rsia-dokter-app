@@ -55,9 +55,9 @@ createCardPasien(pasien) {
                   ikNoRawat: pasien['no_rawat'],
                   
                   if(pasien['kamar_inap'] == null)
-                    ikTglDaftar: Helper.formatDate(pasien['tgl_registrasi'])
+                    ikTglDaftar: Helper.formatDate2(pasien['tgl_registrasi'])
                   else 
-                    ikTglDaftar: "${Helper.formatDate(pasien['tgl_registrasi'])}   ( ${pasien['kamar_inap']['lama']} Hari )",
+                    ikTglMasuk: "${Helper.formatDate2(pasien['kamar_inap']['tgl_masuk'])}   ( ${pasien['kamar_inap']['lama']} Hari )",
 
                   if (pasien['kamar_inap'] != null) 
                     "Diagnosa Awal": pasien['kamar_inap']['diagnosa_awal'],
