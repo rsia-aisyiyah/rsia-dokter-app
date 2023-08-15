@@ -42,7 +42,6 @@ dependencies:
   pull_to_refresh: ^2.0.0
   shared_preferences: ^2.1.2
   calendar_date_picker2: ^0.5.2
-  flutter_launcher_icons: ^0.13.1
   syncfusion_flutter_charts: ^22.2.5
   cached_network_image: ^3.2.3
   jwt_decoder: ^2.0.1
@@ -51,6 +50,27 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  image_path: "assets/images/logo.png"
+  adaptive_icon_background: "#FFFFFF"
+  android: "launcher_icon"
+  ios: true
+  web:
+    generate: true
+    image_path: "assets/images/logo.png"
+    background_color: "#FFFFFF"
+    theme_color: "#23c799"
+  windows:
+    generate: true
+    image_path: "assets/images/logo.png"
+    icon_size: 256 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/images/logo.png"
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
