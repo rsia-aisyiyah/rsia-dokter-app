@@ -1,5 +1,5 @@
 name: rsiap_dokter
-description: A new Flutter project.
+description: Mobile Dokter App for RSIA Aisyiyah Pekajangan
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -46,6 +46,9 @@ dependencies:
   cached_network_image: ^3.2.3
   jwt_decoder: ^2.0.1
   sticky_headers: ^0.3.0+2
+  firebase_core: ^2.15.0
+  firebase_messaging: ^14.6.5
+  flutter_local_notifications: ^15.1.0+1
 
 dev_dependencies:
   flutter_test:
