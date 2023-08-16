@@ -20,7 +20,10 @@ createCardPasien(pasien) {
         children: [
           Container(
             padding: const EdgeInsets.only(
-              top: 15, left: 15, right: 15, bottom: 25,
+              top: 15,
+              left: 15,
+              right: 15,
+              bottom: 25,
             ),
             width: double.infinity,
             decoration: BoxDecoration(
@@ -53,21 +56,19 @@ createCardPasien(pasien) {
                 GenTable(data: {
                   ikNoRm: pasien['no_rkm_medis'],
                   ikNoRawat: pasien['no_rawat'],
-                  
-                  if(pasien['kamar_inap'] == null)
+                  if (pasien['kamar_inap'] == null)
                     ikTglDaftar: Helper.formatDate(pasien['tgl_registrasi'])
-                  else 
-                    ikTglDaftar: "${Helper.formatDate(pasien['tgl_registrasi'])}   ( ${pasien['kamar_inap']['lama']} Hari )",
-
-                  if (pasien['kamar_inap'] != null) 
+                  else
+                    ikTglDaftar:
+                        "${Helper.formatDate(pasien['tgl_registrasi'])}   ( ${pasien['kamar_inap']['lama']} Hari )",
+                  if (pasien['kamar_inap'] != null)
                     "Diagnosa Awal": pasien['kamar_inap']['diagnosa_awal'],
-                  
                   if (pasien['kamar_inap'] == null)
                     poliklinikText: pasien['poliklinik']['nm_poli']
                   else
-                    kamarInalText: pasien['kamar_inap']['kamar']['bangsal']['nm_bangsal'],
-                  
-                  if (pasien['kamar_inap'] != null) 
+                    kamarInalText: pasien['kamar_inap']['kamar']['bangsal']
+                        ['nm_bangsal'],
+                  if (pasien['kamar_inap'] != null)
                     "Status Pulang": pasien['kamar_inap']['stts_pulang'],
                 }),
               ],
