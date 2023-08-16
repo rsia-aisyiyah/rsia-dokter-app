@@ -20,7 +20,10 @@ createCardPasien(pasien) {
         children: [
           Container(
             padding: const EdgeInsets.only(
-              top: 15, left: 15, right: 15, bottom: 25,
+              top: 15,
+              left: 15,
+              right: 15,
+              bottom: 25,
             ),
             width: double.infinity,
             decoration: BoxDecoration(
@@ -53,6 +56,14 @@ createCardPasien(pasien) {
                 GenTable(data: {
                   ikNoRm: pasien['no_rkm_medis'],
                   ikNoRawat: pasien['no_rawat'],
+<<<<<<< HEAD
+                  if (pasien['kamar_inap'] == null)
+                    ikTglDaftar: Helper.formatDate(pasien['tgl_registrasi'])
+                  else
+                    ikTglDaftar:
+                        "${Helper.formatDate(pasien['tgl_registrasi'])}   ( ${pasien['kamar_inap']['lama']} Hari )",
+                  if (pasien['kamar_inap'] != null)
+=======
                   
                   if(pasien['kamar_inap'] == null)
                     ikTglDaftar: Helper.formatDate2(pasien['tgl_registrasi'])
@@ -60,14 +71,14 @@ createCardPasien(pasien) {
                     ikTglMasuk: "${Helper.formatDate2(pasien['kamar_inap']['tgl_masuk'])}   ( ${pasien['kamar_inap']['lama']} Hari )",
 
                   if (pasien['kamar_inap'] != null) 
+>>>>>>> 7f27c873e815142f570d6f22087b1f401e13dbc4
                     "Diagnosa Awal": pasien['kamar_inap']['diagnosa_awal'],
-                  
                   if (pasien['kamar_inap'] == null)
                     poliklinikText: pasien['poliklinik']['nm_poli']
                   else
-                    kamarInalText: pasien['kamar_inap']['kamar']['bangsal']['nm_bangsal'],
-                  
-                  if (pasien['kamar_inap'] != null) 
+                    kamarInalText: pasien['kamar_inap']['kamar']['bangsal']
+                        ['nm_bangsal'],
+                  if (pasien['kamar_inap'] != null)
                     "Status Pulang": pasien['kamar_inap']['stts_pulang'],
                 }),
               ],

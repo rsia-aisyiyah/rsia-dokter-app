@@ -105,4 +105,28 @@ class Helper {
 
     return nightGreeting; // malam
   }
+
+  static String numberFormat(dynamic number) {
+    NumberFormat numberFormat = NumberFormat(
+      '#,##0.00',
+      'ID',
+    );
+    return numberFormat.format(number);
+  }
+
+  static String convertToIdr(dynamic number, int decimalDigit) {
+    NumberFormat currencyFormatter = NumberFormat.currency(
+      locale: 'id',
+      symbol: 'Rp ',
+      decimalDigits: decimalDigit,
+    );
+    return currencyFormatter.format(number);
+  }
+
+  static String numToMonth(int month) {
+    return DateFormat(
+      'MMMM',
+      'id_ID',
+    ).format(DateTime(0, month));
+  }
 }

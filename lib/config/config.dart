@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/screen/home.dart';
 import 'package:rsiap_dokter/screen/menu.dart';
+import 'package:rsiap_dokter/screen/menu/jasa_medis.dart';
 import 'package:rsiap_dokter/screen/menu/pasien_list.dart';
 import 'package:rsiap_dokter/screen/menu/pasien_operasi.dart';
 import 'package:rsiap_dokter/screen/menu/rekap_kunjungan.dart';
@@ -53,7 +54,11 @@ List<Map<String, Object>> menuScreenItems = [
     'widget': const RekapKunjunganPasien(),
     'disabled': false
   },
-  {'label': 'Jasa Medis', 'widget': "", 'disabled': true},
+  {
+    'label': 'Jasa Medis',
+    'widget': const JasaMedis(),
+    'disabled': false,
+  },
   {'label': 'Cuti', 'widget': "", 'disabled': true},
   {'label': 'Undangan', 'widget': "", 'disabled': true}
 ];
