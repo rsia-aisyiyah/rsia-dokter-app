@@ -8,8 +8,10 @@ Color primaryColor = HexColor('#23c799');
 Color accentColor = HexColor('#2bdaa8');
 Color secondaryColor = HexColor('#cbf6ea');
 
+Color primaryShade = HexColor("#d3f4eb");
+
 Color successColor = Colors.teal;
-Color warningColor = Colors.amber;
+Color warningColor = Colors.orange;
 Color errorColor = Colors.red;
 Color infoColor = Colors.blue;
 

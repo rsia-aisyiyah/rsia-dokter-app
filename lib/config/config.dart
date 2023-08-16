@@ -26,7 +26,7 @@ const String appVersion = '1.0.0';
 
 // =================== Others Config ==================== //
 
-const int snackBarDuration = 2;
+const int snackBarDuration = 5;
 
 // ================= End Others Config ================== //
 

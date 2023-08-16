@@ -397,7 +397,6 @@ class _DetailPasienState extends State<DetailPasien> {
   }
 
   Widget _buildChart(String title, TooltipBehavior tooltipBehavior) {
-    var nameTitle = title.replaceAll('_', ' ').toLowerCase();
     return FutureBuilder(
       future: _getChartData(),
       builder: (context, snapshot) {

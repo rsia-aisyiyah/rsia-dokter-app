@@ -31,7 +31,7 @@ class PasienListState extends State<PasienList> {
 
   TextEditingController searchController = TextEditingController();
   TextEditingController dateinput = TextEditingController();
-  RefreshController _refreshController = RefreshController(
+  final RefreshController _refreshController = RefreshController(
     initialRefresh: false,
   );
 

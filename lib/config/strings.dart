@@ -82,6 +82,7 @@ String ikDiagnosis                        = "Diagnosa";
 String ikCategory                         = "Kategori";
 String ikNoRawat                          = "No. Rawat";
 String ikTglDaftar                        = "Tgl Registrasi";
+String ikTglMasuk                         = "Tgl Masuk";
 String ikStartTime                        = "Waktu Mulai";
 String ikEndTime                          = "Waktu Selesai";
 String ikJenisOperasi                     = "Jenis Operasi";

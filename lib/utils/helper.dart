@@ -8,6 +8,8 @@ class Helper {
     return 'assets/images/$name';
   }
 
+  //  ====================  //
+
   static String getPenjab(String penjab) {
     return penjab.toLowerCase().contains("umum") ? "umum" : "bpjs";
   }
@@ -35,16 +37,37 @@ class Helper {
   }
 
   static Color penjabBgColor(String penjab) {
-    return penjab.toLowerCase().contains("bpjs")
-        ? bgBPJS
-        : bgUMUM;
+    return penjab.toLowerCase().contains("bpjs") ? bgBPJS : bgUMUM;
   }
+
+  // ====================  //
 
   static String realStatusLanjut(String status) {
     return status.toLowerCase().contains("ralan")
         ? "Rawat Jalan"
         : "Rawat Inap";
   }
+
+  // ====================  //
+
+  static double getFontSize(BuildContext context, double size) {
+    var width = MediaQuery.of(context).size.width;
+    
+    // Mobile
+    if (width < 768) {
+      return size;
+    }
+
+    // Tablet
+    if (width < 1024) {
+      return size + 2;
+    }
+
+    // Desktop
+    return size + 4;
+  }
+
+  // ====================  //
 
   static String formatDate(String date) {
     return DateFormat(
@@ -53,22 +76,33 @@ class Helper {
     ).format(DateTime.parse(date));
   }
 
+  static String formatDate2(String date) {
+    return DateFormat(
+      'EEE, dd MMM yyyy',
+      'id_ID',
+    ).format(DateTime.parse(date));
+  }
+
+  // ====================  //
+
   static String greeting() {
     var hour = DateTime.now().hour;
 
-    // pagi
     if (hour < 12) {
+      // Pagi
       return morningGreeting;
     }
-    // siang
+
     if (hour < 16) {
+      // Siang
       return afternoonGreeting;
     }
-    // sore
+
     if (hour < 19) {
+      // Sore
       return eveningGreeting;
     }
-    // malam
-    return nightGreeting;
+
+    return nightGreeting; // malam
   }
 }

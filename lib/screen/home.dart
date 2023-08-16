@@ -12,6 +12,7 @@ import 'package:rsiap_dokter/components/others/stats_home.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
+import 'package:rsiap_dokter/utils/helper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -159,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                       child: Text(
                         e['label'] as String,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: Helper.getFontSize(context, mobileCaption),
                           fontWeight: e['label'] == tabsHome[selectedTab]['label']
                               ? fontSemiBold
                               : fontNormal,

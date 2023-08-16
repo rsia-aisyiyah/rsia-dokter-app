@@ -384,21 +384,13 @@ class _PasienOperasiState extends State<PasienOperasi> {
   Widget _pasienKosong() {
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.1,
+      height: MediaQuery.of(context).size.height * 0.5,
       alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          width: 1.3,
-          color: primaryColor,
-        ),
-      ),
       child: Text(
         belumAdaPasien,
         style: TextStyle(
-          color: primaryColor,
-          fontSize: 14,
+          color: grayColor,
+          fontSize: Helper.getFontSize(context, 16),
           fontWeight: fontMedium,
         ),
       ),

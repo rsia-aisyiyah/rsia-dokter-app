@@ -90,7 +90,7 @@ class StatsHomeWidget extends StatelessWidget {
                       Text(
                         Helper.greeting(),
                         style: TextStyle(
-                          fontSize: 17,
+                          fontSize: Helper.getFontSize(context, mobileBody),
                           fontWeight: fontNormal,
                           color: textColor,
                         ),
@@ -99,7 +99,7 @@ class StatsHomeWidget extends StatelessWidget {
                       Text(
                         dokter['data']['nm_dokter'],
                         style: TextStyle(
-                          fontSize: 21,
+                          fontSize: Helper.getFontSize(context, STRExpired <= STRExpMin ? mobileSubTitle : mobileTitle),
                           fontWeight: fontBold,
                           color: textColor,
                         ),
@@ -109,7 +109,7 @@ class StatsHomeWidget extends StatelessWidget {
                         dokter['data']['pegawai']['kualifikasi_staff']
                             ['nomor_sip'],
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: Helper.getFontSize(context, mobileOverline),
                           fontWeight: fontNormal,
                           color: textColor,
                         ),
@@ -119,7 +119,7 @@ class StatsHomeWidget extends StatelessWidget {
                 )
               ],
             ),
-            _STRCheck(STRExpired, dokter),
+            _STRCheck(context, STRExpired, dokter),
             IntrinsicHeight(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -131,6 +131,7 @@ class StatsHomeWidget extends StatelessWidget {
                         rawatInapText,
                         metrics['pasien_ranap'].toString(),
                         context,
+                        STRExpired
                       ),
                     ),
                   ),
@@ -142,6 +143,7 @@ class StatsHomeWidget extends StatelessWidget {
                         rawatJalanText,
                         metrics['pasien_ralan'].toString(),
                         context,
+                        STRExpired
                       ),
                     ),
                   ),
@@ -153,6 +155,7 @@ class StatsHomeWidget extends StatelessWidget {
                         jadwalOperasiText,
                         metrics['jadwal_operasi'].toString(),
                         context,
+                        STRExpired
                       ),
                     ),
                   ),
@@ -165,7 +168,7 @@ class StatsHomeWidget extends StatelessWidget {
     );
   }
 
-  Container _STRCheck(double STRExpired, data) {
+  Container _STRCheck(BuildContext context, double STRExpired, data) {
     return Container(
       margin: EdgeInsets.only(
           top: STRExpired <= STRExpMin ? 10 : 10,
@@ -188,14 +191,14 @@ class StatsHomeWidget extends StatelessWidget {
               text: TextSpan(
                 text: strExpiredIn,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: Helper.getFontSize(context, mobileCaption),
                   color: textColor,
                 ),
                 children: [
                   TextSpan(
                     text: " ${STRExpired.toStringAsFixed(1)} $labelBulan",
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: Helper.getFontSize(context, mobileCaption),
                       color: textColor,
                       fontWeight: fontSemiBold,
                     ),
@@ -203,7 +206,7 @@ class StatsHomeWidget extends StatelessWidget {
                   TextSpan(
                     text: ". $strRenewText",
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: Helper.getFontSize(context, mobileCaption),
                       color: textColor,
                     ),
                   ),

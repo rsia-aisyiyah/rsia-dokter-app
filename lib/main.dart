@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:rsiap_dokter/config/strings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/login.dart';
 import 'package:rsiap_dokter/screen/index.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api/request.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting('id_ID', null)
-      .then((_) => runApp(const MainApp()));
+  await initializeDateFormatting('id_ID', null).then(
+    (_) => runApp(
+      const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
