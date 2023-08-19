@@ -12,7 +12,7 @@ import 'package:rsiap_dokter/utils/table.dart';
 // }
 
 class createCardJasaMedis extends StatefulWidget {
-  final List dataJasaMedis;
+  final Map dataJasaMedis;
   const createCardJasaMedis({
     super.key,
     required this.dataJasaMedis,
@@ -70,9 +70,9 @@ class _createCardJasaMedisState extends State<createCardJasaMedis> {
                     children: [
                       Text(
                         Helper.numToMonth(
-                                int.parse(widget.dataJasaMedis[0]['bulan'])) +
+                                int.parse(widget.dataJasaMedis['bulan'])) +
                             " " +
-                            widget.dataJasaMedis[0]['bulan'],
+                            widget.dataJasaMedis['tahun'],
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: fontSemiBold,
@@ -84,8 +84,8 @@ class _createCardJasaMedisState extends State<createCardJasaMedis> {
                             child: IconButton(
                               onPressed: () {
                                 _changeIcon();
-                                print(showIcon);
-                                print(widget.dataJasaMedis[0]['bulan']);
+                                // print(showIcon);
+                                // print(widget.dataJasaMedis['bulan']);
                                 // print(widget.dataJasaMedis[0]["bulan"]);
                               },
                               icon: Icon(showIcon
@@ -100,22 +100,22 @@ class _createCardJasaMedisState extends State<createCardJasaMedis> {
                     data: {
                       nominalText: showIcon
                           ? '*****'
-                          : Helper.numberFormat(
-                              widget.dataJasaMedis[0]['jm_dokter']),
+                          : Helper.convertToIdr(
+                              widget.dataJasaMedis['jm_dokter'], 2),
                       tambahanText: showIcon
                           ? '*****'
                           : '(+) ' +
-                              Helper.numberFormat(
-                                  widget.dataJasaMedis[0]['tambahan']),
+                              Helper.convertToIdr(
+                                  widget.dataJasaMedis['tambahan'], 2),
                       potonganText: showIcon
                           ? '*****'
                           : '(-) ' +
-                              Helper.numberFormat(
-                                  widget.dataJasaMedis[0]['potongan']),
+                              Helper.convertToIdr(
+                                  widget.dataJasaMedis['potongan'], 2),
                       jasaMedisText: showIcon
                           ? '*****'
-                          : Helper.numberFormat(
-                              widget.dataJasaMedis[0]['jm_diterima']),
+                          : Helper.convertToIdr(
+                              widget.dataJasaMedis['jm_diterima'], 2),
                     },
                     style: "right",
                   ),
