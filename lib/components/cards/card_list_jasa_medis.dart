@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
@@ -57,9 +55,11 @@ createCardJasaMedis(jasamedis) {
                         alignment: Alignment.centerRight,
                         child: IconButton(
                           onPressed: () {},
-                          icon: Icon(seticon == true
-                              ? Icons.visibility
-                              : Icons.visibility_off),
+                          icon: Icon(
+                            seticon == true
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
                         ),
                       ),
                     ),
@@ -69,11 +69,18 @@ createCardJasaMedis(jasamedis) {
                 GenTable(
                   data: {
                     nominalText: Helper.numberFormat(jasamedis['jm_dokter']),
-                    tambahanText: '(+) ' + Helper.numberFormat(jasamedis['tambahan']),
-                    potonganText: '(-) ' + Helper.numberFormat(jasamedis['potongan']),
-                    jasaMedisText: Helper.numberFormat(jasamedis['jm_diterima']),
+                    tambahanText:
+                        '(+) ' + Helper.numberFormat(jasamedis['tambahan']),
+                    potonganText:
+                        '(-) ' + Helper.numberFormat(jasamedis['potongan']),
+                    jasaMedisText:
+                        Helper.numberFormat(jasamedis['jm_diterima']),
                   },
-                  style: "right",
+                  textStyle: TextStyle(
+                    fontSize: 14,
+                    fontWeight: fontSemiBold,
+                  ),
+                  textAlign: TextAlign.right,
                 ),
               ],
             ),

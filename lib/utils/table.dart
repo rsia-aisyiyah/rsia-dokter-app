@@ -4,12 +4,14 @@ import 'package:rsiap_dokter/utils/fonts.dart';
 // ignore: must_be_immutable
 class GenTable extends StatelessWidget {
   Map data;
-  String? style;
+  TextStyle? textStyle;
+  TextAlign? textAlign;
 
   GenTable({
     super.key,
     required this.data,
-    this.style,
+    this.textStyle,
+    this.textAlign,
   });
 
   @override
@@ -43,18 +45,10 @@ class GenTable extends StatelessWidget {
             TableCell(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Align(
-                  alignment: style == "right"
-                      ? Alignment.centerRight
-                      : style == "center"
-                          ? Alignment.center
-                          : Alignment.centerLeft,
-                  child: Text(
-                    e.value,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
+                child: Text(
+                  e.value,
+                  textAlign: textAlign ?? TextAlign.right,
+                  style: textStyle,
                 ),
               ),
             ),

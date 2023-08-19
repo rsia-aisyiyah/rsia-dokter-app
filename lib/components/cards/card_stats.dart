@@ -5,7 +5,7 @@ import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 
 cardStats(String title, String value, BuildContext context, strExp) {
-  double h = strExp <= STRExpMin ? 0.13 : 0.15;
+  double h = strExp <= STRExpMin ? 0.12 : 0.14;
   return Container(
     padding: const EdgeInsets.all(15),
     height: MediaQuery.of(context).size.height * h,
@@ -20,7 +20,7 @@ cardStats(String title, String value, BuildContext context, strExp) {
         Text(
           title,
           style: TextStyle(
-            fontSize: Helper.getFontSize(context, mobileSubTitle),
+            fontSize: Helper.getFontSize(context, mobileBody),
             fontWeight: fontNormal,
             color: textWhite,
           ),

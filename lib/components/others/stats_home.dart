@@ -99,7 +99,7 @@ class StatsHomeWidget extends StatelessWidget {
                       Text(
                         dokter['data']['nm_dokter'],
                         style: TextStyle(
-                          fontSize: Helper.getFontSize(context, STRExpired <= STRExpMin ? mobileSubTitle : mobileTitle),
+                          fontSize: Helper.getFontSize(context, STRExpired <= STRExpMin ? mobileSubTitle : 22),
                           fontWeight: fontBold,
                           color: textColor,
                         ),
