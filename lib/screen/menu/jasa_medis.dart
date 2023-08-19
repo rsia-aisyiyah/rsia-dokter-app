@@ -51,6 +51,8 @@ class JasaMedisState extends State<JasaMedis> {
   // filter
   Map filterData = {};
 
+  bool isIconActive = false;
+
   @override
   void initState() {
     super.initState();
@@ -306,9 +308,11 @@ class JasaMedisState extends State<JasaMedis> {
                   itemCount: dataJasaMedis.isEmpty ? 1 : dataJasaMedis.length,
                   itemBuilder: (context, index) {
                     if (dataJasaMedis.isNotEmpty) {
+                      print(dataJasaMedis[index]);
                       return InkWell(
                         onTap: () {},
-                        child: createCardJasaMedis(dataJasaMedis[index]),
+                        child:
+                            createCardJasaMedis(dataJasaMedis: dataJasaMedis),
                       );
                     } else {
                       return Container(
@@ -384,6 +388,18 @@ class JasaMedisState extends State<JasaMedis> {
       return Container();
     }
   }
+
+  // Widget _changeIcon() {
+  //   return Column(
+  //     children: [
+  //       createCardJasaMedis(isActive: isIconActive),
+  //       ElevatedButton(
+  //         onPressed: toggleIcon,
+  //         child: Text('Toggle Icon'),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Future<dynamic> _onFilterIconClicked(BuildContext context) {
     return showModalBottomSheet(
