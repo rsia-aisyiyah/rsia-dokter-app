@@ -106,9 +106,9 @@ class Helper {
     return nightGreeting; // malam
   }
 
-  static String numberFormat(dynamic number) {
+  static String numberFormat(number) {
     NumberFormat numberFormat = NumberFormat(
-      '#,##0.00',
+      '#,##0',
       'ID',
     );
     return numberFormat.format(number);

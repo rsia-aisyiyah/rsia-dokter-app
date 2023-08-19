@@ -5,12 +5,8 @@ import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/table.dart';
 
-// createCardJasaMedis(jasamedis, callback) {
-//   return createCardJasaMedis();
-// }
-
 class createCardJasaMedis extends StatefulWidget {
-  final List dataJasaMedis;
+  final Map dataJasaMedis;
   const createCardJasaMedis({
     super.key,
     required this.dataJasaMedis,
@@ -26,7 +22,6 @@ class _createCardJasaMedisState extends State<createCardJasaMedis> {
   bool showIcon = true;
   void _changeIcon() {
     setState(() {
-      // Change the icon when the button is pressed
       showIcon = !showIcon;
     });
   }
@@ -68,9 +63,9 @@ class _createCardJasaMedisState extends State<createCardJasaMedis> {
                     children: [
                       Text(
                         Helper.numToMonth(
-                                int.parse(widget.dataJasaMedis[0]['bulan'])) +
+                                int.parse(widget.dataJasaMedis['bulan'])) +
                             " " +
-                            widget.dataJasaMedis[0]['bulan'],
+                            widget.dataJasaMedis['bulan'],
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: fontSemiBold,
@@ -82,9 +77,6 @@ class _createCardJasaMedisState extends State<createCardJasaMedis> {
                             child: IconButton(
                               onPressed: () {
                                 _changeIcon();
-                                print(showIcon);
-                                print(widget.dataJasaMedis[0]['bulan']);
-                                // print(widget.dataJasaMedis[0]["bulan"]);
                               },
                               icon: Icon(showIcon
                                   ? Icons.visibility_off
@@ -96,24 +88,18 @@ class _createCardJasaMedisState extends State<createCardJasaMedis> {
                   const SizedBox(height: 8),
                   GenTable(
                     data: {
-                      nominalText: showIcon
-                          ? '*****'
-                          : Helper.numberFormat(
-                              widget.dataJasaMedis[0]['jm_dokter']),
-                      tambahanText: showIcon
-                          ? '*****'
-                          : '(+) ' +
-                              Helper.numberFormat(
-                                  widget.dataJasaMedis[0]['tambahan']),
-                      potonganText: showIcon
-                          ? '*****'
-                          : '(-) ' +
-                              Helper.numberFormat(
-                                  widget.dataJasaMedis[0]['potongan']),
-                      jasaMedisText: showIcon
-                          ? '*****'
-                          : Helper.numberFormat(
-                              widget.dataJasaMedis[0]['jm_diterima']),
+                      nominalText: showIcon ? "* * * * *" : Helper.numberFormat(
+                        widget.dataJasaMedis['jm_dokter'],
+                      ),
+                      tambahanText: showIcon ? "* * * * *" : "( + ) " + Helper.numberFormat(
+                        widget.dataJasaMedis['tambahan'],
+                      ),
+                      potonganText: showIcon ? "* * * * *" : "( - ) " + Helper.numberFormat(
+                        widget.dataJasaMedis['potongan'],
+                      ),
+                      jasaMedisText: showIcon ? "* * * * *" : Helper.numberFormat(
+                        widget.dataJasaMedis['jm_diterima'],
+                      ),
                     },
                     textStyle: TextStyle(
                       fontSize: 14,

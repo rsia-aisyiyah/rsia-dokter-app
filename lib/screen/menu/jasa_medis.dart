@@ -8,7 +8,6 @@ import 'package:rsiap_dokter/components/filter/bottom_sheet_filter.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
-import 'package:rsiap_dokter/screen/detail/pasien.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -68,9 +67,6 @@ class JasaMedisState extends State<JasaMedis> {
   }
 
   _initialSet() {
-    var now = DateTime.now();
-    var bulan = now.month.toString().padLeft(2, '0');
-    var tahun = now.year.toString();
     title = "Jasa Medis";
     url = "/dokter/jasamedis";
   }
@@ -308,18 +304,18 @@ class JasaMedisState extends State<JasaMedis> {
                   itemCount: dataJasaMedis.isEmpty ? 1 : dataJasaMedis.length,
                   itemBuilder: (context, index) {
                     if (dataJasaMedis.isNotEmpty) {
-                      print(dataJasaMedis[index]);
+                      // print(dataJasaMedis[index]);
                       return InkWell(
                         onTap: () {},
                         child:
-                            createCardJasaMedis(dataJasaMedis: dataJasaMedis),
+                            createCardJasaMedis(dataJasaMedis: dataJasaMedis[index]),
                       );
                     } else {
                       return Container(
                         height: MediaQuery.of(context).size.height / 1.5,
                         alignment: Alignment.center,
                         child: Text(
-                          belumAdaPasien,
+                          "Data tidak ditemukan",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16,
