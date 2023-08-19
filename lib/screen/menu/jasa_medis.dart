@@ -43,7 +43,7 @@ class JasaMedisState extends State<JasaMedis> {
   String currentPage = '';
   String lastPage = '';
 
-  List dataJasaMedis = [];
+  List<dynamic> dataJasaMedis = [];
   bool isLoding = true;
   bool isFilter = false;
 
@@ -307,8 +307,9 @@ class JasaMedisState extends State<JasaMedis> {
                       // print(dataJasaMedis[index]);
                       return InkWell(
                         onTap: () {},
-                        child:
-                            createCardJasaMedis(dataJasaMedis: dataJasaMedis[index]),
+                        child: createCardJasaMedis(
+                          dataJasaMedis: dataJasaMedis[index],
+                        ),
                       );
                     } else {
                       return Container(

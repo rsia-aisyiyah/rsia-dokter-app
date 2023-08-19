@@ -65,7 +65,7 @@ class _createCardJasaMedisState extends State<createCardJasaMedis> {
                         Helper.numToMonth(
                                 int.parse(widget.dataJasaMedis['bulan'])) +
                             " " +
-                            widget.dataJasaMedis['bulan'],
+                            widget.dataJasaMedis['tahun'],
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: fontSemiBold,
@@ -88,18 +88,32 @@ class _createCardJasaMedisState extends State<createCardJasaMedis> {
                   const SizedBox(height: 8),
                   GenTable(
                     data: {
-                      nominalText: showIcon ? "* * * * *" : Helper.numberFormat(
-                        widget.dataJasaMedis['jm_dokter'],
-                      ),
-                      tambahanText: showIcon ? "* * * * *" : "( + ) " + Helper.numberFormat(
-                        widget.dataJasaMedis['tambahan'],
-                      ),
-                      potonganText: showIcon ? "* * * * *" : "( - ) " + Helper.numberFormat(
-                        widget.dataJasaMedis['potongan'],
-                      ),
-                      jasaMedisText: showIcon ? "* * * * *" : Helper.numberFormat(
-                        widget.dataJasaMedis['jm_diterima'],
-                      ),
+                      nominalText: showIcon
+                          ? '* * * * *'
+                          : Helper.convertToIdr(
+                              widget.dataJasaMedis['jm_dokter'],
+                              2,
+                            ),
+                      tambahanText: showIcon
+                          ? '* * * * *'
+                          : '(+) ' +
+                              Helper.convertToIdr(
+                                widget.dataJasaMedis['tambahan'],
+                                2,
+                              ),
+                      potonganText: showIcon
+                          ? '* * * * *'
+                          : '(-) ' +
+                              Helper.convertToIdr(
+                                widget.dataJasaMedis['potongan'],
+                                2,
+                              ),
+                      jasaMedisText: showIcon
+                          ? '* * * * *'
+                          : Helper.convertToIdr(
+                              widget.dataJasaMedis['jm_diterima'],
+                              2,
+                            ),
                     },
                     textStyle: TextStyle(
                       fontSize: 14,
