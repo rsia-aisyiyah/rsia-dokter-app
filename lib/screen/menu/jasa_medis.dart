@@ -7,7 +7,6 @@ import 'package:rsiap_dokter/components/cards/card_list_jasa_medis.dart';
 import 'package:rsiap_dokter/components/filter/bottom_sheet_filter.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/colors.dart';
-import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
