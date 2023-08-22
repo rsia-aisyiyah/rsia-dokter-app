@@ -288,42 +288,44 @@ class _DetailPasienState extends State<DetailPasien> {
             ),
             // icon btton
             IconButton(
-              onPressed: () {
-                if (pemeriksaan[index]['verifikasi'] != null) {
-                  Msg.withData(
-                      context,
-                      'success',
-                      "Data Sudah Diverifikasi",
-                      const Icon(
+                onPressed: () {
+                  if (pemeriksaan[index]['verifikasi'] != null) {
+                    Msg.withData(
+                        context,
+                        'success',
+                        "Data Sudah Diverifikasi",
+                        const Icon(
+                          Icons.verified,
+                          color: Colors.white,
+                        ),
+                        {
+                          "Petugas": pemeriksaan[index]['verifikasi']['petugas']
+                              ['nama'],
+                          "Tanggal": pemeriksaan[index]['verifikasi']
+                                  ['tgl_verif'] +
+                              " " +
+                              pemeriksaan[index]['verifikasi']['jam_verif']
+                        });
+                  } else {
+                    // verifySoap
+                    verifySoap(
+                      pemeriksaan[index]['no_rawat'],
+                      pemeriksaan[index]['tgl_perawatan'],
+                      pemeriksaan[index]['jam_rawat'],
+                    ).then((value) {
+                      setState(() {});
+                      Msg.success(context, "Data Berhasil Diverifikasi");
+                    });
+                  }
+                },
+                icon: pemeriksaan[index]['verifikasi'] != null
+                    ? const Icon(
                         Icons.verified,
-                        color: Colors.white,
-                      ),
-                      {
-                        "Petugas": pemeriksaan[index]['verifikasi']['petugas']['nama'],
-                        "Tanggal": pemeriksaan[index]['verifikasi']['tgl_verif'] + " " + pemeriksaan[index]['verifikasi']['jam_verif']
-                      });
-                } else {
-                  // verifySoap
-                  verifySoap(
-                    pemeriksaan[index]['no_rawat'],
-                    pemeriksaan[index]['tgl_perawatan'],
-                    pemeriksaan[index]['jam_rawat'],
-                  ).then((value) {
-                    setState(() {});
-                    Msg.success(context, "Data Berhasil Diverifikasi");
-                  });
-                }
-              },
-              icon: pemeriksaan[index]['verifikasi'] != null
-                  ? const Icon(
-                      Icons.verified,
-                      color: Colors.blue,
-                    )
-                  : const Icon(
-                      Icons.check_circle_outline_outlined,
-                      color: Colors.grey,
-                    ),
-            )
+                        color: Colors.blue,
+                      )
+                    : const Icon(
+                        Icons.check,
+                      )),
           ],
         ),
       ),
@@ -409,15 +411,17 @@ class _DetailPasienState extends State<DetailPasien> {
                 data[i]['suhu_tubuh'].toString() == '-' ||
                 data[i]['suhu_tubuh'].toString() == ' ' ||
                 data[i]['nadi'].toString().isEmpty ||
-                data[i]['nadi'].toString() == '-' || 
-                data[i]['nadi'].toString() == ' '
-              ) {
+                data[i]['nadi'].toString() == '-' ||
+                data[i]['nadi'].toString() == ' ') {
               continue;
             }
 
             // remove all character except number and dot and comma
-            var suhu = data[i]['suhu_tubuh'].toString().replaceAll(RegExp(r'[^0-9.,]'), '');
-            var nadi = data[i]['nadi'].toString().replaceAll(RegExp(r'[^0-9.,]'), '');
+            var suhu = data[i]['suhu_tubuh']
+                .toString()
+                .replaceAll(RegExp(r'[^0-9.,]'), '');
+            var nadi =
+                data[i]['nadi'].toString().replaceAll(RegExp(r'[^0-9.,]'), '');
 
             chartData!.add(
               _ChartData(

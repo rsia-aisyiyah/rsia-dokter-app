@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/screen/home.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
+import 'package:path_provider/path_provider.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -45,7 +47,8 @@ class _MenuPageState extends State<MenuPage> {
                 ),
                 child: GridView.builder(
                   itemCount: menuScreenItems.length,
-                  padding: const EdgeInsets.only(left:10, right:10, bottom:10, top:0),
+                  padding: const EdgeInsets.only(
+                      left: 10, right: 10, bottom: 10, top: 0),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -113,10 +116,11 @@ class _MenuPageState extends State<MenuPage> {
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: fontSemiBold,
-                                      color:
-                                          menuScreenItems[index]['disabled'] == true
-                                              ? Colors.grey[600]
-                                              : textColor,
+                                      color: menuScreenItems[index]
+                                                  ['disabled'] ==
+                                              true
+                                          ? Colors.grey[600]
+                                          : textColor,
                                     ),
                                   ),
                                 ],
@@ -134,10 +138,11 @@ class _MenuPageState extends State<MenuPage> {
                                     child: Image.network(
                                       "https://raw.githubusercontent.com/hungps/flutter_pokedex/master/assets/images/pokeball.png",
                                       fit: BoxFit.cover,
-                                      color:
-                                          menuScreenItems[index]['disabled'] == true
-                                              ? Colors.grey[400]
-                                              : accentColor.withOpacity(0.3),
+                                      color: menuScreenItems[index]
+                                                  ['disabled'] ==
+                                              true
+                                          ? Colors.grey[400]
+                                          : accentColor.withOpacity(0.3),
                                       // color: primaryColor.withOpacity(0.3),
                                     ),
                                   ),
