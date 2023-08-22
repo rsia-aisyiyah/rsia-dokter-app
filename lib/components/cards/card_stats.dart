@@ -5,7 +5,7 @@ import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 
 cardStats(String title, String value, BuildContext context, strExp) {
-  double h = strExp <= STRExpMin ? 0.12 : 0.14;
+  double h = strExp <= STRExpMin ? 0.10 : 0.12;
   return Container(
     padding: const EdgeInsets.all(15),
     height: MediaQuery.of(context).size.height * h,
