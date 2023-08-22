@@ -15,17 +15,26 @@ class IndexScreen extends StatefulWidget {
 
 class _IndexScreenState extends State<IndexScreen> {
   int _selectedNavbar = 0;
+  final navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
-    firebaseInit();
     super.initState();
+    firebaseInit();
   }
 
   void firebaseInit() async {
     await Firebase.initializeApp();
-    await FirebaseApi().initNotif();
+    await FirebaseApi().initNotif(context);
     await FirebaseMessaging.instance.subscribeToTopic('dokter');
+    SharedPreferences.getInstance().then((prefs) async {
+      var spesialis = prefs.getString('spesialis')!.toLowerCase();
+      if (spesialis.contains('kandungan')) {
+        await FirebaseMessaging.instance.subscribeToTopic('kandungan');
+      } else if (spesialis.contains('umum')) {
+        await FirebaseMessaging.instance.subscribeToTopic('umum');
+      }
+    });
   }
 
   void _changeSelectedNavBar(int index) {

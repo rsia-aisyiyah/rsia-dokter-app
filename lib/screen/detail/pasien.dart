@@ -278,52 +278,62 @@ class _DetailPasienState extends State<DetailPasien> {
               children: [
                 Text(
                   tglPerawatan,
-                  style: TextStyle(
-                    fontWeight: fontBold,
-                  ),
+                  style: TextStyle(fontWeight: fontBold),
                 ),
                 const SizedBox(width: 10),
                 Text(pemeriksaan[index]['jam_rawat'])
               ],
             ),
-            // icon btton
-            IconButton(
-              onPressed: () {
-                if (pemeriksaan[index]['verifikasi'] != null) {
-                  Msg.withData(
-                      context,
-                      'success',
-                      "Data Sudah Diverifikasi",
-                      const Icon(
-                        Icons.verified,
-                        color: Colors.white,
-                      ),
-                      {
-                        "Petugas": pemeriksaan[index]['verifikasi']['petugas']['nama'],
-                        "Tanggal": pemeriksaan[index]['verifikasi']['tgl_verif'] + " " + pemeriksaan[index]['verifikasi']['jam_verif']
-                      });
-                } else {
-                  // verifySoap
-                  verifySoap(
-                    pemeriksaan[index]['no_rawat'],
-                    pemeriksaan[index]['tgl_perawatan'],
-                    pemeriksaan[index]['jam_rawat'],
-                  ).then((value) {
-                    setState(() {});
-                    Msg.success(context, "Data Berhasil Diverifikasi");
-                  });
-                }
-              },
-              icon: pemeriksaan[index]['verifikasi'] != null
-                  ? const Icon(
+            pemeriksaan[index]['verifikasi'] != null
+                ? IconButton(
+                    onPressed: () {
+                      Msg.withData(
+                        context,
+                        'success',
+                        "Data Sudah Diverifikasi",
+                        const Icon(
+                          Icons.verified,
+                          color: Colors.white,
+                        ),
+                        {
+                          "Petugas": pemeriksaan[index]['verifikasi']['petugas']['nama'],
+                          "Tanggal": pemeriksaan[index]['verifikasi']['tgl_verif'] + " " + pemeriksaan[index]['verifikasi']['jam_verif']
+                        },
+                      );
+                    },
+                    icon: Icon(
                       Icons.verified,
-                      color: Colors.blue,
-                    )
-                  : const Icon(
-                      Icons.check_circle_outline_outlined,
-                      color: Colors.grey,
+                      color: Colors.blue.shade400,
                     ),
-            )
+                  )
+                : ElevatedButton(
+                    onPressed: () {
+                      verifySoap(
+                        pemeriksaan[index]['no_rawat'],
+                        pemeriksaan[index]['tgl_perawatan'],
+                        pemeriksaan[index]['jam_rawat'],
+                      ).then((value) {
+                        setState(() {});
+                        Msg.success(context, "Data Berhasil Diverifikasi");
+                      });
+                    },
+                    onLongPress: () {
+                      Msg.info(context, "Verifikasi SOAP");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Helper.penjabBgColor(penjab),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      'VERIFIKASI',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: fontBold,
+                      ),
+                    ),
+                )
           ],
         ),
       ),
@@ -409,15 +419,17 @@ class _DetailPasienState extends State<DetailPasien> {
                 data[i]['suhu_tubuh'].toString() == '-' ||
                 data[i]['suhu_tubuh'].toString() == ' ' ||
                 data[i]['nadi'].toString().isEmpty ||
-                data[i]['nadi'].toString() == '-' || 
-                data[i]['nadi'].toString() == ' '
-              ) {
+                data[i]['nadi'].toString() == '-' ||
+                data[i]['nadi'].toString() == ' ') {
               continue;
             }
 
             // remove all character except number and dot and comma
-            var suhu = data[i]['suhu_tubuh'].toString().replaceAll(RegExp(r'[^0-9.,]'), '');
-            var nadi = data[i]['nadi'].toString().replaceAll(RegExp(r'[^0-9.,]'), '');
+            var suhu = data[i]['suhu_tubuh']
+                .toString()
+                .replaceAll(RegExp(r'[^0-9.,]'), '');
+            var nadi =
+                data[i]['nadi'].toString().replaceAll(RegExp(r'[^0-9.,]'), '');
 
             chartData!.add(
               _ChartData(
@@ -477,7 +489,7 @@ class _DetailPasienState extends State<DetailPasien> {
   List<LineSeries<_ChartData, String>> _getDefaultLineSeries() {
     return <LineSeries<_ChartData, String>>[
       LineSeries<_ChartData, String>(
-        animationDuration: 2500,
+        animationDuration: 2000,
         dataSource: chartData!,
         xValueMapper: (_ChartData data, _) => data.tanggal,
         yValueMapper: (_ChartData data, _) => data.suhu,
@@ -485,13 +497,13 @@ class _DetailPasienState extends State<DetailPasien> {
         name: "Suhu Tubuh",
         dataLabelSettings: const DataLabelSettings(
           isVisible: true,
-          labelAlignment: ChartDataLabelAlignment.top,
+          labelAlignment: ChartDataLabelAlignment.bottom,
         ),
         markerSettings: const MarkerSettings(isVisible: true),
         color: getColor("Suhu Tubuh"),
       ),
       LineSeries<_ChartData, String>(
-        animationDuration: 2500,
+        animationDuration: 2000,
         dataSource: chartData!,
         xValueMapper: (_ChartData data, _) => data.tanggal,
         yValueMapper: (_ChartData data, _) => data.nadi,

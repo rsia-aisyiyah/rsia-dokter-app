@@ -64,6 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void setDataTbl(detailDokter) {
     dataTbl = {
+      "Spesialis": detailDokter['spesialis']['nm_sps'],
       "Jabatan": detailDokter['pegawai']['jbtn'],
       "NIK": detailDokter['pegawai']['nik'],
       "Agama": detailDokter['agama'],

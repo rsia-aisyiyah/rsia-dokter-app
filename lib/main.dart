@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:rsiap_dokter/screen/menu.dart';
+import 'package:rsiap_dokter/screen/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:rsiap_dokter/config/strings.dart';
@@ -24,13 +26,19 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: appName,
       debugShowCheckedModeBanner: false,
       home: Directionality(
         textDirection: TextDirection.ltr,
         child: CheckAuth(),
       ),
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/index': (context) => const IndexScreen(),
+        '/manu': (context) => const MenuPage(),
+        '/profile': (context) => const ProfilePage(),
+      },
     );
   }
 }

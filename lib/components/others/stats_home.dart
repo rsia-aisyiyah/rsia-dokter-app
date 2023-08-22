@@ -54,8 +54,7 @@ class StatsHomeWidget extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: CachedNetworkImage(
-                      imageUrl: photoUrl +
-                          dokter['data']['pegawai']['photo'].toString(),
+                      imageUrl: photoUrl + dokter['data']['pegawai']['photo'].toString(),
                       width: 80,
                       height: 80,
                       fit: BoxFit.cover,
