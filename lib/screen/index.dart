@@ -45,22 +45,33 @@ class _IndexScreenState extends State<IndexScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: navigationItems[_selectedNavbar]['widget'] as Widget,
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: accentColor,
-        unselectedItemColor: textColor.withOpacity(0.5),
-        currentIndex: _selectedNavbar,
-        showUnselectedLabels: false,
-        onTap: (index) {
-          _changeSelectedNavBar(index);
-        },
-        items: navigationItems.map((item) {
-          return BottomNavigationBarItem(
-            icon: Icon(item['icon'] as IconData),
-            label: item['label'] as String,
-          );
-        }).toList(),
+    return WillPopScope(
+      onWillPop: () async {
+        if (_selectedNavbar != 0) {
+          setState(() {
+            _selectedNavbar = 0;
+          });
+          return false; // Block the default back button behavior
+        }
+        return true; // Allow the default back button behavior
+      },
+      child: Scaffold(
+        body: navigationItems[_selectedNavbar]['widget'] as Widget,
+        bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: accentColor,
+          unselectedItemColor: textColor.withOpacity(0.5),
+          currentIndex: _selectedNavbar,
+          showUnselectedLabels: false,
+          onTap: (index) {
+            _changeSelectedNavBar(index);
+          },
+          items: navigationItems.map((item) {
+            return BottomNavigationBarItem(
+              icon: Icon(item['icon'] as IconData),
+              label: item['label'] as String,
+            );
+          }).toList(),
+        ),
       ),
     );
   }

@@ -284,10 +284,11 @@ class _DetailPasienState extends State<DetailPasien> {
                 Text(pemeriksaan[index]['jam_rawat'])
               ],
             ),
-            pemeriksaan[index]['verifikasi'] != null
-                ? IconButton(
-                    onPressed: () {
-                      Msg.withData(
+            // icon btton
+            IconButton(
+                onPressed: () {
+                  if (pemeriksaan[index]['verifikasi'] != null) {
+                    Msg.withData(
                         context,
                         'success',
                         "Data Sudah Diverifikasi",
@@ -296,44 +297,33 @@ class _DetailPasienState extends State<DetailPasien> {
                           color: Colors.white,
                         ),
                         {
-                          "Petugas": pemeriksaan[index]['verifikasi']['petugas']['nama'],
-                          "Tanggal": pemeriksaan[index]['verifikasi']['tgl_verif'] + " " + pemeriksaan[index]['verifikasi']['jam_verif']
-                        },
-                      );
-                    },
-                    icon: Icon(
-                      Icons.verified,
-                      color: Colors.blue.shade400,
-                    ),
-                  )
-                : ElevatedButton(
-                    onPressed: () {
-                      verifySoap(
-                        pemeriksaan[index]['no_rawat'],
-                        pemeriksaan[index]['tgl_perawatan'],
-                        pemeriksaan[index]['jam_rawat'],
-                      ).then((value) {
-                        setState(() {});
-                        Msg.success(context, "Data Berhasil Diverifikasi");
-                      });
-                    },
-                    onLongPress: () {
-                      Msg.info(context, "Verifikasi SOAP");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Helper.penjabBgColor(penjab),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Text(
-                      'VERIFIKASI',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: fontBold,
-                      ),
-                    ),
-                )
+                          "Petugas": pemeriksaan[index]['verifikasi']['petugas']
+                              ['nama'],
+                          "Tanggal": pemeriksaan[index]['verifikasi']
+                                  ['tgl_verif'] +
+                              " " +
+                              pemeriksaan[index]['verifikasi']['jam_verif']
+                        });
+                  } else {
+                    // verifySoap
+                    verifySoap(
+                      pemeriksaan[index]['no_rawat'],
+                      pemeriksaan[index]['tgl_perawatan'],
+                      pemeriksaan[index]['jam_rawat'],
+                    ).then((value) {
+                      setState(() {});
+                      Msg.success(context, "Data Berhasil Diverifikasi");
+                    });
+                  }
+                },
+                icon: pemeriksaan[index]['verifikasi'] != null
+                    ? const Icon(
+                        Icons.verified,
+                        color: Colors.blue,
+                      )
+                    : const Icon(
+                        Icons.check,
+                      )),
           ],
         ),
       ),
