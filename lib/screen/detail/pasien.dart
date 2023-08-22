@@ -322,7 +322,7 @@ class _DetailPasienState extends State<DetailPasien> {
                         color: Colors.blue,
                       )
                     : const Icon(
-                        Icons.check,
+                        Icons.verified_outlined,
                       )),
           ],
         ),
