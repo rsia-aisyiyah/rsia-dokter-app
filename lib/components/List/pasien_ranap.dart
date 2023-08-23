@@ -135,16 +135,16 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
                   body: "Tidak ada pasien hari ini yang dirawat",
                 );
               }
-              
+
               return InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => DetailPasien(
-                        noRawat: dataPasien[index]['no_rawat'],
-                        kategori: Helper.getPenjab(dataPasien[index]['penjab']['png_jawab'])
-                      ),
+                          noRawat: dataPasien[index]['no_rawat'],
+                          kategori: Helper.getPenjab(
+                              dataPasien[index]['penjab']['png_jawab'])),
                     ),
                   );
                 },
@@ -162,7 +162,7 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
               ),
               child: btnLoading
                   ? Center(
-                    child: Padding(
+                      child: Padding(
                         padding: const EdgeInsets.all(14),
                         child: SizedBox(
                           height: 20,
@@ -173,7 +173,7 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
                           ),
                         ),
                       ),
-                  )
+                    )
                   : IconButton(
                       onPressed: () async {
                         setState(() {

@@ -109,6 +109,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // print(_dokter);
     if (isLoading) {
       return loadingku();
     } else {
@@ -118,13 +119,12 @@ class _HomePageState extends State<HomePage> {
           title: Text(
             tabsHome[selectedTab]['label'] as String,
           ),
+          headerExpandedHeight: 0.4, //TODO : biar tidak nabark header wiget
           headerWidget: StatsHomeWidget(
-            dokter: _dokter,
-            metrics: metrics,
-            onTap: _changeSelectedNavBar
-            // pasienNow: dataPasien,
-            // totalHariIni: _pasienNow['data']['total'],
-          ),
+              dokter: _dokter, metrics: metrics, onTap: _changeSelectedNavBar
+              // pasienNow: dataPasien,
+              // totalHariIni: _pasienNow['data']['total'],
+              ),
           body: [
             Row(
               children: [
@@ -161,9 +161,10 @@ class _HomePageState extends State<HomePage> {
                         e['label'] as String,
                         style: TextStyle(
                           fontSize: Helper.getFontSize(context, mobileCaption),
-                          fontWeight: e['label'] == tabsHome[selectedTab]['label']
-                              ? fontSemiBold
-                              : fontNormal,
+                          fontWeight:
+                              e['label'] == tabsHome[selectedTab]['label']
+                                  ? fontSemiBold
+                                  : fontNormal,
                           color: e['label'] == tabsHome[selectedTab]['label']
                               ? textWhite
                               : textColor.withOpacity(.5),
