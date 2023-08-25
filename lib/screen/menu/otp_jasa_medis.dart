@@ -30,6 +30,7 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
   late Timer? countdownTimer;
   Duration myDuration = Duration(seconds: 60);
   bool isLoading = true;
+  bool isLoadingButton = true;
   bool button = true;
   String kode = "";
   var _dokter = {};
@@ -149,6 +150,10 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
     required String recipientEmail,
     required String mailMessage,
   }) async {
+    setState(() {
+      isLoadingButton = false;
+      random = Random().nextInt(8000) + 1000;
+    });
     // change your email here
     String username = _smtp['data']['email'].toString();
     // change your password here
@@ -165,6 +170,9 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
     try {
       await send(message, smtpServer);
       showSnackbar('Kode verifikasi terkirim ', 'success');
+      setState(() {
+        isLoadingButton = true;
+      });
       _activeButton();
       // resetTimer();
       startTimer();
@@ -211,107 +219,94 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
-                Text(
-                    "Cek email anda dan masukkan kode verifikasi pada kolom berikut : "),
+                Text(button
+                    ? "Dibutuhkan kode verifikasi untuk akses menu Jasa Medis, silahkan klik tombol Kirim Kode Verifikasi dibawah"
+                    : "Cek email anda dan masukkan kode verifikasi pada kolom berikut : "),
                 SizedBox(
-                  height: 10,
+                  height: button ? 0 : 10,
                 ),
-
-                OtpTextField(
-                  numberOfFields: 4,
-                  borderColor: primaryColor,
-                  disabledBorderColor: primaryColor,
-                  focusedBorderColor: textColor,
-                  styles: otpTextStyles,
-                  showFieldAsBox: true,
-                  borderWidth: 2.0,
-                  enabledBorderColor: primaryColor,
-                  fieldWidth: 70,
-                  //runs when a code is typed in
-                  onCodeChanged: (String code) {
-                    //handle validation or checks here if necessary
-                  },
-                  //runs when every textfield is filled
-                  onSubmit: (String verificationCode) {
-                    kode = verificationCode;
-                  },
-                ),
+                button
+                    ? Text('')
+                    : OtpTextField(
+                        numberOfFields: 4,
+                        borderColor: primaryColor,
+                        disabledBorderColor: primaryColor,
+                        focusedBorderColor: textColor,
+                        styles: otpTextStyles,
+                        showFieldAsBox: true,
+                        borderWidth: 2.0,
+                        enabledBorderColor: primaryColor,
+                        fieldWidth: 55,
+                        //runs when a code is typed in
+                        onCodeChanged: (String code) {
+                          //handle validation or checks here if necessary
+                        },
+                        //runs when every textfield is filled
+                        onSubmit: (String verificationCode) {
+                          kode = verificationCode;
+                        },
+                      ),
                 SizedBox(
-                  height: 10,
+                  height: button ? 0 : 10,
                 ),
-                RichText(
-                  text: TextSpan(style: TextStyle(color: textColor), children: [
-                    TextSpan(text: 'Kirim ulang Kode Verifikasi pada : '),
-                    TextSpan(
-                        text: '00:$seconds',
-                        style: TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.bold)),
-                  ]),
-                ),
+                button
+                    ? Text('')
+                    : RichText(
+                        text: TextSpan(
+                            style: TextStyle(color: textColor),
+                            children: [
+                              TextSpan(
+                                  text: 'Kirim ulang Kode Verifikasi pada : '),
+                              TextSpan(
+                                  text: '00:$seconds',
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold)),
+                            ]),
+                      ),
 
                 const SizedBox(height: 20),
                 // const SizedBox(height: 30),
                 Flex(
                   direction: Axis.horizontal,
                   children: [
-                    Expanded(
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: textWhite,
-                            backgroundColor: primaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                          ),
-                          onPressed: !button
-                              ? null
-                              : () {
+                    !button
+                        ? buttonSubmit()
+                        : Expanded(
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                label: Text(!isLoadingButton
+                                    ? ' Mengirim Kode Verifikasi'
+                                    : 'Kirim Kode Verifikasi'),
+                                icon: !isLoadingButton
+                                    ? SizedBox(
+                                        child: Center(
+                                            child: CircularProgressIndicator()),
+                                        width: 25,
+                                        height: 25,
+                                      )
+                                    : Icon(Icons.send),
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: textWhite,
+                                  backgroundColor: primaryColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 15),
+                                ),
+                                onPressed: () {
                                   sendMail(
                                       recipientEmail: _dokter['data']['pegawai']
                                               ['npwp']
                                           .toString(),
                                       mailMessage: random.toString());
                                 },
-                          child: const Text('Kirim Kode Verifikasi'),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: textWhite,
-                            backgroundColor: primaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
+                                // child: const Text('Kirim Kode Verifikasi'),
+                              ),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 15),
                           ),
-                          onPressed: button
-                              ? null
-                              : () {
-                                  print(kode);
-                                  cekOtp(
-                                    otp: kode,
-                                    // mailMessage: _mailMessageController.text.toString(),
-                                  );
-                                },
-                          // onPressed: () {
-                          //   print(kode);
-                          //   cekOtp(
-                          //     otp: kode,
-                          //     // mailMessage: _mailMessageController.text.toString(),
-                          //   );
-                          // },
-                          child: const Text('Submit'),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ],
@@ -322,6 +317,75 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
         return Scaffold();
       }
     }
+  }
+
+  Widget buttonVerif() {
+    return Expanded(
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton.icon(
+          label: Text(!isLoadingButton
+              ? ' Mengirim Kode Verifikasi'
+              : 'Kirim Kode Verifikasi'),
+          icon: !isLoadingButton
+              ? SizedBox(
+                  child: Center(child: CircularProgressIndicator()),
+                  width: 20,
+                  height: 20,
+                )
+              : Icon(Icons.send),
+          style: ElevatedButton.styleFrom(
+            foregroundColor: textWhite,
+            backgroundColor: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(100),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 15),
+          ),
+          onPressed: () {
+            sendMail(
+                recipientEmail: _dokter['data']['pegawai']['npwp'].toString(),
+                mailMessage: random.toString());
+          },
+          // child: const Text('Kirim Kode Verifikasi'),
+        ),
+      ),
+    );
+  }
+
+  Widget buttonSubmit() {
+    return Expanded(
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: textWhite,
+            backgroundColor: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(100),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 15),
+          ),
+          onPressed: button
+              ? null
+              : () {
+                  print(kode);
+                  cekOtp(
+                    otp: kode,
+                    // mailMessage: _mailMessageController.text.toString(),
+                  );
+                },
+          // onPressed: () {
+          //   print(kode);
+          //   cekOtp(
+          //     otp: kode,
+          //     // mailMessage: _mailMessageController.text.toString(),
+          //   );
+          // },
+          child: const Text('Submit'),
+        ),
+      ),
+    );
   }
 
   void showSnackbar(String message, String alert) {
