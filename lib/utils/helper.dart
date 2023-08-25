@@ -52,7 +52,7 @@ class Helper {
 
   static double getFontSize(BuildContext context, double size) {
     var width = MediaQuery.of(context).size.width;
-    
+
     // Mobile
     if (width < 768) {
       return size;

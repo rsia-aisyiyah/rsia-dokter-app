@@ -113,13 +113,16 @@ class _HomePageState extends State<HomePage> {
     if (isLoading) {
       return loadingku();
     } else {
+      print("Height : ");
+      print((MediaQuery.of(context).size.height));
       return DefaultTabController(
         length: tabsHome.length,
         child: DraggableHome(
           title: Text(
             tabsHome[selectedTab]['label'] as String,
           ),
-          headerExpandedHeight: 0.4, //TODO : biar tidak nabark header wiget
+          headerExpandedHeight: 0.35, //TODO : biar tidak nabark header wiget
+          stretchMaxHeight: 0.9,
           headerWidget: StatsHomeWidget(
               dokter: _dokter, metrics: metrics, onTap: _changeSelectedNavBar
               // pasienNow: dataPasien,
