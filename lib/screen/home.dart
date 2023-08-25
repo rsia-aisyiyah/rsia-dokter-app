@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/List/jadwal_operasi.dart';

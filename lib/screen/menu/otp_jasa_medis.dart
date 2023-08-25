@@ -6,7 +6,6 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/colors.dart';
-import 'package:rsiap_dokter/main.dart';
 import 'package:rsiap_dokter/screen/menu/jasa_medis.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:rsiap_dokter/api/request.dart';
@@ -187,12 +186,11 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
   @override
   Widget build(BuildContext context) {
     String strDigits(int n) => n.toString().padLeft(2, '0');
-    final days = strDigits(myDuration.inDays);
     final seconds = strDigits(myDuration.inSeconds.remainder(60));
     // stopTimer();
     TextStyle? createStyle(Color color) {
       ThemeData theme = Theme.of(context);
-      return theme.textTheme.headline3?.copyWith(color: color);
+      return theme.textTheme.displaySmall?.copyWith(color: color);
     }
 
     var otpTextStyles = [

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rsiap_dokter/utils/fonts.dart';
 
 // ignore: must_be_immutable
 class GenTable extends StatelessWidget {
