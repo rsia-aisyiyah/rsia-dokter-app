@@ -62,6 +62,7 @@ class _IndexScreenState extends State<IndexScreen> {
           unselectedItemColor: textColor.withOpacity(0.5),
           currentIndex: _selectedNavbar,
           showUnselectedLabels: false,
+          showSelectedLabels: false,
           onTap: (index) {
             _changeSelectedNavBar(index);
           },

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
@@ -36,6 +37,10 @@ class _DetailPasienState extends State<DetailPasien> {
   TooltipBehavior nadiTooltipBehavior = TooltipBehavior(enable: true);
   TooltipBehavior spo2TooltipBehavior = TooltipBehavior(enable: true);
   TooltipBehavior respirasiTooltipBehavior = TooltipBehavior(enable: true);
+
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
   List<_ChartData>? chartData;
   bool chartIsLoaded = false;
 
@@ -112,9 +117,20 @@ class _DetailPasienState extends State<DetailPasien> {
                 ),
               ),
               body: SafeArea(
-                child: pasien['status_lanjut'].toLowerCase().contains("ranap")
-                    ? _ranapDetails(pemeriksaan, pasien)
-                    : _ralanDetails(pemeriksaan, pasien),
+                child: SmartRefresher(
+                  enablePullDown: true,
+                  enablePullUp: false,
+                  header: const ClassicHeader(),
+                  controller: _refreshController,
+                  onRefresh: () async {
+                    await Future.delayed(const Duration(seconds: 3));
+                    setState(() {});
+                    _refreshController.refreshCompleted();
+                  },
+                  child: pasien['status_lanjut'].toLowerCase().contains("ranap")
+                      ? _ranapDetails(pemeriksaan, pasien)
+                      : _ralanDetails(pemeriksaan, pasien),
+                ),
               ),
             );
           }

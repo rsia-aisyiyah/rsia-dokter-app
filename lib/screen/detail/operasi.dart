@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/colors.dart';
@@ -38,6 +39,9 @@ class OperasiDetailState extends State<OperasiDetail> {
   Map response = {};
   Map data = {};
 
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
   @override
   void initState() {
     super.initState();
@@ -74,23 +78,6 @@ class OperasiDetailState extends State<OperasiDetail> {
     if (isLoading) {
       return loadingku();
     } else {
-      if (!response['success']) {
-        return Scaffold(
-          backgroundColor: bgWhite,
-          appBar: AppBar(
-            backgroundColor: Helper.penjabColor(widget.penjab),
-            title: const Text('Detail Operasi'),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          body: Center(child: Text(response['message'])),
-        );
-      }
-
       return Scaffold(
         backgroundColor: bgWhite,
         appBar: AppBar(
@@ -103,17 +90,28 @@ class OperasiDetailState extends State<OperasiDetail> {
             },
           ),
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _pasienDetails(widget.pasien),
-                const SizedBox(height: 10),
-                _operasiDetails(response['data']),
-              ],
-            ),
-          ),
+        body: SmartRefresher(
+          controller: refreshController,
+          enablePullDown: true,
+          header: const ClassicHeader(),
+          onRefresh: () async {
+            await fetchDataOperasi();
+            refreshController.refreshCompleted();
+          },
+          child: !response['success']
+              ? Center(child: Text(response['message']))
+              : SafeArea(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _pasienDetails(widget.pasien),
+                        const SizedBox(height: 10),
+                        _operasiDetails(response['data']),
+                      ],
+                    ),
+                  ),
+                ),
         ),
       );
     }
@@ -148,7 +146,6 @@ class OperasiDetailState extends State<OperasiDetail> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: response.length == 0 ? 1 : response.length,
       itemBuilder: (context, index) {
-
         if (response.length == 0) {
           return const BoxMessage(
             title: "Tidak ada operasi",

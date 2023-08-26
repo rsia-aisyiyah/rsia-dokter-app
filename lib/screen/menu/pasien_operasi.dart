@@ -250,7 +250,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
+                  padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
                   itemCount: dataJadwal.isEmpty ? 1 : dataJadwal.length,
                   itemBuilder: (context, i) {
                     if (dataJadwal.isEmpty) {
@@ -278,8 +278,8 @@ class _PasienOperasiState extends State<PasienOperasi> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 10,
+                                    vertical: 15,
+                                    horizontal: 15,
                                   ),
                                   decoration: BoxDecoration(
                                     color: bgWhite,
