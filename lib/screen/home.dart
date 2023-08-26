@@ -64,8 +64,13 @@ class _HomePageState extends State<HomePage> {
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       if (mounted) {
+        var STRExpired = monthBetween(DateTime.parse(
+          body['data']['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
+        ));
+
         setState(() {
           _dokter = body;
+          strExpired = STRExpired;
         });
       }
     }
@@ -75,15 +80,11 @@ class _HomePageState extends State<HomePage> {
     var res = await Api().getData('/dokter/pasien/metric/now');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
-      var STRExpired = monthBetween(DateTime.parse(
-        _dokter['data']['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
-      ));
       if (mounted) {
         setState(() {
           // _pasienNow = body;
           // dataPasien = body['data']['data'];
           metrics = body['data'];
-          strExpired = STRExpired;
         });
       }
     }
@@ -137,7 +138,8 @@ class _HomePageState extends State<HomePage> {
     double initMax = (height.floorToDouble() - topWidgetHeight).floorToDouble();
 
     double percentageInitMax = ((initMax / height.floorToDouble()) * 100).floorToDouble();
-    double percentageTopWidgetHeight = ((topWidgetHeight / height.floorToDouble()) * 100).floorToDouble();
+    double percentageTopWidgetHeight =
+        ((topWidgetHeight / height.floorToDouble()) * 100).floorToDouble();
 
     // percentage to decimal
     percentageInitMax = (percentageInitMax / 100);
@@ -192,13 +194,12 @@ class _HomePageState extends State<HomePage> {
                       e['label'] as String,
                       style: TextStyle(
                         fontSize: Helper.getFontSize(context, mobileCaption),
-                        fontWeight:
-                            e['label'] == tabsHome[selectedTab]['label']
-                                ? fontSemiBold
-                                : fontNormal,
+                        fontWeight: e['label'] == tabsHome[selectedTab]['label']
+                              ? fontSemiBold
+                              : fontNormal,
                         color: e['label'] == tabsHome[selectedTab]['label']
-                            ? textWhite
-                            : textColor.withOpacity(.5),
+                          ? textWhite
+                          : textColor.withOpacity(.5),
                       ),
                       textAlign: TextAlign.center,
                     ),
