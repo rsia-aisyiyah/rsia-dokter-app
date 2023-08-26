@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/List/jadwal_operasi.dart';
@@ -12,6 +13,7 @@ import 'package:rsiap_dokter/components/others/stats_home.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/box_message.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 
@@ -71,6 +73,12 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           _dokter = body;
           strExpired = STRExpired;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          _dokter = {};
         });
       }
     }
@@ -152,7 +160,11 @@ class _HomePageState extends State<HomePage> {
           tabsHome[selectedTab]['label'] as String,
         ),
         headerExpandedHeight: percentageTopWidgetHeight,
-        headerWidget: StatsHomeWidget(
+        headerWidget: _dokter.isEmpty ? BoxMessage(
+          title: "Data Dokter Tidak Ditemukan",
+          body: "Data dokter tidak ditemukan, hal ini bisa terjadi karena data dokter belum diinputkan oleh admin. Silahkan hubungi admin untuk menginputkan data dokter.",
+          backgroundColour: bgColor,
+        ) : StatsHomeWidget(
           dokter: _dokter,
           metrics: metrics,
           onTap: _changeSelectedNavBar,

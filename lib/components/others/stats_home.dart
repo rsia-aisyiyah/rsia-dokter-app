@@ -29,7 +29,6 @@ class StatsHomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: non_constant_identifier_names
     var STRExpired = monthBetween(DateTime.parse(
       dokter['data']['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
     ));

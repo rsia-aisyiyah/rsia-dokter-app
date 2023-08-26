@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
-import 'package:rsiap_dokter/screen/home.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
-import 'package:path_provider/path_provider.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -20,35 +18,40 @@ class _MenuPageState extends State<MenuPage> {
     return Scaffold(
       backgroundColor: bgColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(20),
-                child: Text(
-                  "Menu Aplikasi",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: fontSemiBold,
-                    color: textColor,
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/splash-bg.png'),
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Text(
+                    "Menu Aplikasi",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: fontSemiBold,
+                      color: textColor,
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/splash-bg.png'),
-                    fit: BoxFit.cover,
-                    alignment: Alignment.center,
-                  ),
-                ),
-                child: GridView.builder(
+                GridView.builder(
                   itemCount: menuScreenItems.length,
                   padding: const EdgeInsets.only(
-                      left: 10, right: 10, bottom: 10, top: 0),
+                    left: 10,
+                    right: 10,
+                    bottom: 10,
+                    top: 0,
+                  ),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -155,8 +158,8 @@ class _MenuPageState extends State<MenuPage> {
                     );
                   },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
