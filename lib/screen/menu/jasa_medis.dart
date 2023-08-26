@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rsiap_dokter/api/request.dart';
@@ -27,7 +27,8 @@ class JasaMedis extends StatefulWidget {
 
 class JasaMedisState extends State<JasaMedis> {
   SharedPreferences? pref;
-
+  Timer? countdownTimer;
+  Duration myDuration = Duration(days: 5);
   TextEditingController searchController = TextEditingController();
   TextEditingController dateinput = TextEditingController();
   RefreshController _refreshController = RefreshController(
@@ -56,7 +57,9 @@ class JasaMedisState extends State<JasaMedis> {
   void initState() {
     super.initState();
     _initialSet();
-
+    // if (mounted) {
+    //   setState(() {});
+    // }
     widget.ranap ? filterData['dateby'] = 'masuk' : null;
 
     fetchPasien().then((value) {
