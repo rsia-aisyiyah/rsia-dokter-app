@@ -1,39 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:rsiap_dokter/config/colors.dart';
-import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 
-cardStats(String title, String value, BuildContext context, strExp) {
-  double h = strExp <= STRExpMin ? 0.10 : 0.12;
+cardStats(BuildContext context, String title, String value) {
+  var val = int.parse(value);
+  var valFormat = NumberFormat.currency(
+    locale: 'id',
+    symbol: '',
+    decimalDigits: 0,
+  ).format(val);
+
+  const padding = 15.0;
+
   return Container(
-      padding: const EdgeInsets.all(10),
-      height: MediaQuery.of(context).size.height * h,
-      decoration: BoxDecoration(
-        color: primaryColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: Helper.getFontSize(context, mobileBody),
-              fontWeight: fontNormal,
-              color: textWhite,
-            ),
+    padding: const EdgeInsets.all(padding),
+    margin: const EdgeInsets.only(bottom: padding + 5),
+    decoration: BoxDecoration(
+      color: primaryColor,
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Text(
+          title,
+          maxLines: 2,
+          style: TextStyle(
+            fontSize: Helper.getFontSize(context, mobileCaption),
+            fontWeight: fontNormal,
+            color: textWhite,
+            overflow: TextOverflow.ellipsis,
           ),
-          const Spacer(),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: Helper.getFontSize(context, mobileTitle),
-              fontWeight: fontBold,
-              color: textWhite,
-            ),
+        ),
+        const Spacer(),
+        Text(
+          valFormat,
+          style: TextStyle(
+            fontSize: Helper.getFontSize(context, mobileBody),
+            fontWeight: fontBold,
+            color: textWhite,
           ),
-        ],
-      ));
+        ),
+      ],
+    ),
+  );
 }

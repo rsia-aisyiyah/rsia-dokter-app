@@ -10,6 +10,7 @@ import 'package:rsiap_dokter/components/List/pasien_ranap.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/components/others/stats_home.dart';
 import 'package:rsiap_dokter/config/colors.dart';
+import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
@@ -25,22 +26,25 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true;
   int selectedTab = 0;
 
-  var _dokter = {};
-
   List dataPasien = [];
 
   Map metrics = {};
+  var _dokter = {};
+
+  var strExpired = 0.35;
 
   @override
   void initState() {
     super.initState();
-    fetchAllData().then((value) {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    });
+    if (mounted) {
+      fetchAllData().then((value) {
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      });
+    }
   }
 
   // ---------------------- Fetch Data
@@ -59,9 +63,11 @@ class _HomePageState extends State<HomePage> {
     var res = await Api().getData('/dokter');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
-      setState(() {
-        _dokter = body;
-      });
+      if (mounted) {
+        setState(() {
+          _dokter = body;
+        });
+      }
     }
   }
 
@@ -69,11 +75,13 @@ class _HomePageState extends State<HomePage> {
     var res = await Api().getData('/dokter/pasien/metric/now');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
-      setState(() {
-        // _pasienNow = body;
-        // dataPasien = body['data']['data'];
-        metrics = body['data'];
-      });
+      if (mounted) {
+        setState(() {
+          // _pasienNow = body;
+          // dataPasien = body['data']['data'];
+          metrics = body['data'];
+        });
+      }
     }
   }
 
@@ -82,9 +90,11 @@ class _HomePageState extends State<HomePage> {
   // ---------------------- Tab Home
 
   void _changeSelectedNavBar(int index) {
-    setState(() {
-      selectedTab = index;
-    });
+    if (mounted) {
+      setState(() {
+        selectedTab = index;
+      });
+    }
   }
 
   List tabsHome = [
@@ -107,24 +117,55 @@ class _HomePageState extends State<HomePage> {
 
   // ---------------------- End Tab Home
 
+  double monthBetween(DateTime endDate) {
+    var now = DateTime.now();
+    var difference = endDate.difference(now).inDays;
+    var month = difference / 30;
+    return month;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // print(_dokter);
+    double ph = strExpired <= STRExpMin ? 0.385 : .35;
+    double height = MediaQuery.of(context).size.height;
+
+    double topWidgetHeight = (height.floorToDouble() * ph)
+        .floorToDouble(); // ganti 0.4 untuk mengatur tinggi top widget
+    double initMax = (height.floorToDouble() - topWidgetHeight).floorToDouble();
+
+    double percentageInitMax =
+        ((initMax / height.floorToDouble()) * 100).floorToDouble();
+    double percentageTopWidgetHeight =
+        ((topWidgetHeight / height.floorToDouble()) * 100).floorToDouble();
+
+    // percentage to decimal
+    percentageInitMax = (percentageInitMax / 100);
+    percentageTopWidgetHeight = (percentageTopWidgetHeight / 100);
+
     if (isLoading) {
       return loadingku();
     } else {
+      // set strExpired
+      setState(() {
+        var STRExpired = monthBetween(DateTime.parse(
+          _dokter['data']['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
+        ));
+        strExpired = STRExpired;
+      });
+
       return DefaultTabController(
         length: tabsHome.length,
         child: DraggableHome(
           title: Text(
             tabsHome[selectedTab]['label'] as String,
           ),
-          headerExpandedHeight: 0.4, //TODO : biar tidak nabark header wiget
+          headerExpandedHeight: percentageTopWidgetHeight,
           headerWidget: StatsHomeWidget(
-              dokter: _dokter, metrics: metrics, onTap: _changeSelectedNavBar
-              // pasienNow: dataPasien,
-              // totalHariIni: _pasienNow['data']['total'],
-              ),
+            dokter: _dokter,
+            metrics: metrics,
+            onTap: _changeSelectedNavBar,
+            widgetHeight: topWidgetHeight,
+          ),
           body: [
             Row(
               children: [

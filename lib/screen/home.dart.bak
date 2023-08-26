@@ -1,0 +1,199 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:rsiap_dokter/api/request.dart';
+import 'package:rsiap_dokter/components/List/jadwal_operasi.dart';
+import 'package:rsiap_dokter/components/List/pasien_ralan.dart';
+import 'package:rsiap_dokter/components/List/pasien_ranap.dart';
+import 'package:rsiap_dokter/components/loadingku.dart';
+import 'package:rsiap_dokter/components/others/stats_home.dart';
+import 'package:rsiap_dokter/config/colors.dart';
+import 'package:rsiap_dokter/config/strings.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int selectedTab = 0;
+  bool isLoading = true;
+
+  List dataPasien = [];
+
+  Map metrics = {};
+  var _dokter = {};
+
+  ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (mounted) {
+      fetchAllData().then((value) {
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      });
+    }
+  }
+
+  // ---------------------- Fetch Data
+
+  Future<void> fetchAllData() async {
+    List<Future> futures = [
+      _getDokter(),
+      _getMetricsToday(),
+      // _getJadwalOperasiNow(),
+    ];
+
+    await Future.wait(futures);
+  }
+
+  Future<void> _getDokter() async {
+    var res = await Api().getData('/dokter');
+    if (res.statusCode == 200) {
+      var body = json.decode(res.body);
+      if (mounted) {
+        setState(() {
+          _dokter = body;
+        });
+      }
+    }
+  }
+
+  Future<void> _getMetricsToday() async {
+    var res = await Api().getData('/dokter/pasien/metric/now');
+    if (res.statusCode == 200) {
+      var body = json.decode(res.body);
+      if (mounted) {
+        setState(() {
+          // _pasienNow = body;
+          // dataPasien = body['data']['data'];
+          metrics = body['data'];
+        });
+      }
+    }
+  }
+
+  // ---------------------- End Fetch Data
+
+  // ---------------------- Tab Home
+
+  void _changeSelectedNavBar(int index) {
+    if (mounted) {
+      setState(() {
+        selectedTab = index;
+      });
+    }
+  }
+
+  List tabsHome = [
+    {
+      "label": rawatInapText,
+      "icon": Icons.close,
+      "widget": const ListPasienRanap()
+    },
+    {
+      "label": rawatJalanText,
+      "icon": Icons.close,
+      "widget": const ListPasienRalan()
+    },
+    {
+      "label": jadwalOperasiText,
+      "icon": Icons.close,
+      "widget": const ListJadwalOperasi()
+    },
+  ];
+
+  // ---------------------- End Tab Home
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
+    double topWidgetHeight = (height.floorToDouble() * 0.4).floorToDouble(); // ganti 0.7 untuk mengatur tinggi top widget
+    double initMax = (height.floorToDouble() - topWidgetHeight).floorToDouble();
+
+    double percentageInitMax = ((initMax / height.floorToDouble()) * 100).floorToDouble();
+    double percentageTopWidgetHeight = ((topWidgetHeight / height.floorToDouble()) * 100).floorToDouble();
+
+    // percentage to decimal
+    percentageInitMax = (percentageInitMax / 100);
+    percentageTopWidgetHeight = (percentageTopWidgetHeight / 100) - 0.02;
+
+    if (isLoading) {
+      return loadingku();
+    } else {
+      return DefaultTabController(
+        length: tabsHome.length,
+        child: Scaffold(
+          backgroundColor: bgColor,
+          body: Stack(
+            children: [
+              // top widget
+              Container(
+                height: (height * percentageTopWidgetHeight),
+                width: width,
+                child: StatsHomeWidget(
+                  dokter: _dokter,
+                  metrics: metrics,
+                  onTap: _changeSelectedNavBar,
+                  widgetHeight: topWidgetHeight,
+                ),
+              ),
+              // bottom widget
+              DraggableScrollableSheet(
+                initialChildSize: percentageInitMax,
+                minChildSize: percentageInitMax,
+                maxChildSize: 1,
+                snap: true,
+                builder: (BuildContext context, _scrollController) {
+                  return Container(
+                    width: width,
+                    color: Colors.white,
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            const Spacer(),
+                            Container(
+                              height: 3,
+                              width: 60,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const Spacer(),
+                          ],
+                        ),
+                        ListView.builder(
+                          controller: _scrollController,
+                          itemCount: 30,
+                          padding: const EdgeInsets.all(15),
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              height: 100,
+                              color: Colors.red,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              )
+            ],
+          ),
+        ),
+      );
+    }
+  }
+}

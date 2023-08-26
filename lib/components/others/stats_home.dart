@@ -11,11 +11,13 @@ class StatsHomeWidget extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   final dokter, metrics;
   final Function onTap;
+  final double widgetHeight;
   const StatsHomeWidget({
     super.key,
     this.dokter,
     this.metrics,
     required this.onTap,
+    required this.widgetHeight,
   });
 
   double monthBetween(DateTime endDate) {
@@ -31,142 +33,134 @@ class StatsHomeWidget extends StatelessWidget {
     var STRExpired = monthBetween(DateTime.parse(
       dokter['data']['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
     ));
-
     return Container(
       color: bgColor,
-      padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 5),
+      padding: const EdgeInsets.all(15),
+      // margin: const EdgeInsets.only(bottom: 25),
       child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flex(
-                direction: Axis.horizontal,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      border: Border.all(
-                        color: textWhite,
-                        width: 2.5,
-                      ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flex(
+              direction: Axis.horizontal,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    border: Border.all(
+                      color: textWhite,
+                      width: 2.5,
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: CachedNetworkImage(
-                        imageUrl: photoUrl +
-                            dokter['data']['pegawai']['photo'].toString(),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: CachedNetworkImage(
+                      imageUrl: photoUrl + dokter['data']['pegawai']['photo'].toString(),
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
+                      placeholder: (context, url) => Container(
                         width: 80,
                         height: 80,
-                        fit: BoxFit.cover,
-                        alignment: Alignment.topCenter,
-                        placeholder: (context, url) => Container(
-                          width: 80,
-                          height: 80,
-                          color: Colors.grey[300],
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: primaryColor,
-                            ),
+                        color: Colors.grey[300],
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: primaryColor,
                           ),
                         ),
-                        errorWidget: (context, url, error) => Container(
-                          width: 80,
-                          height: 80,
-                          color: Colors.grey[300],
-                          child: const Icon(Icons.error),
-                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        width: 80,
+                        height: 80,
+                        color: Colors.grey[300],
+                        child: const Icon(Icons.error),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 15),
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          Helper.greeting(),
-                          style: TextStyle(
-                            fontSize: Helper.getFontSize(context, mobileBody),
-                            fontWeight: fontNormal,
-                            color: textColor,
-                          ),
+                ),
+                const SizedBox(width: 15),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        Helper.greeting(),
+                        style: TextStyle(
+                          fontSize: Helper.getFontSize(context, mobileCaption),
+                          fontWeight: fontNormal,
+                          color: textColor,
                         ),
-                        const SizedBox(height: 5),
-                        Text(
-                          dokter['data']['nm_dokter'],
-                          style: TextStyle(
-                            fontSize: Helper.getFontSize(
-                                context,
-                                STRExpired <= STRExpMin
-                                    ? mobileSubTitle
-                                    : mobileTitle),
-                            fontWeight: fontBold,
-                            color: textColor,
-                          ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        dokter['data']['nm_dokter'],
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontSize: Helper.getFontSize(context, mobileTitle),
+                          overflow: TextOverflow.ellipsis,
+                          fontWeight: fontBold,
+                          color: textColor,
                         ),
-                        const SizedBox(height: 5),
-                        Text(
-                          dokter['data']['pegawai']['kualifikasi_staff']
-                              ['nomor_sip'],
-                          style: TextStyle(
-                            fontSize:
-                                Helper.getFontSize(context, mobileOverline),
-                            fontWeight: fontNormal,
-                            color: textColor,
-                          ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        dokter['data']['pegawai']['kualifikasi_staff']['nomor_sip'],
+                        style: TextStyle(
+                          fontSize: Helper.getFontSize(context, mobileOverline),
+                          fontWeight: fontNormal,
+                          color: textColor,
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            _STRCheck(context, STRExpired, dokter),
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => onTap(0),
+                      child: cardStats(
+                        context,
+                        rawatInapText,
+                        metrics['pasien_ranap'].toString(),
+                      ),
                     ),
-                  )
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => onTap(1),
+                      child: cardStats(
+                        context,
+                        rawatJalanText,
+                        metrics['pasien_ralan'].toString(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => onTap(2),
+                      child: cardStats(
+                        context,
+                        jadwalOperasiText,
+                        metrics['jadwal_operasi'].toString(),
+                      ),
+                    ),
+                  ),
                 ],
               ),
-              _STRCheck(context, STRExpired, dokter),
-              IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: () => onTap(0),
-                        child: cardStats(
-                            rawatInapText,
-                            metrics['pasien_ranap'].toString(),
-                            context,
-                            STRExpired),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () => onTap(1),
-                        child: cardStats(
-                            rawatJalanText,
-                            metrics['pasien_ralan'].toString(),
-                            context,
-                            STRExpired),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () => onTap(2),
-                        child: cardStats(
-                            jadwalOperasiText,
-                            metrics['jadwal_operasi'].toString(),
-                            context,
-                            STRExpired),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
