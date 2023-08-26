@@ -75,11 +75,15 @@ class _HomePageState extends State<HomePage> {
     var res = await Api().getData('/dokter/pasien/metric/now');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
+      var STRExpired = monthBetween(DateTime.parse(
+        _dokter['data']['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
+      ));
       if (mounted) {
         setState(() {
           // _pasienNow = body;
           // dataPasien = body['data']['data'];
           metrics = body['data'];
+          strExpired = STRExpired;
         });
       }
     }
@@ -129,97 +133,82 @@ class _HomePageState extends State<HomePage> {
     double ph = strExpired <= STRExpMin ? 0.385 : .35;
     double height = MediaQuery.of(context).size.height;
 
-    double topWidgetHeight = (height.floorToDouble() * ph)
-        .floorToDouble(); // ganti 0.4 untuk mengatur tinggi top widget
+    double topWidgetHeight = (height.floorToDouble() * ph).floorToDouble(); // ganti 0.4 untuk mengatur tinggi top widget
     double initMax = (height.floorToDouble() - topWidgetHeight).floorToDouble();
 
-    double percentageInitMax =
-        ((initMax / height.floorToDouble()) * 100).floorToDouble();
-    double percentageTopWidgetHeight =
-        ((topWidgetHeight / height.floorToDouble()) * 100).floorToDouble();
+    double percentageInitMax = ((initMax / height.floorToDouble()) * 100).floorToDouble();
+    double percentageTopWidgetHeight = ((topWidgetHeight / height.floorToDouble()) * 100).floorToDouble();
 
     // percentage to decimal
     percentageInitMax = (percentageInitMax / 100);
     percentageTopWidgetHeight = (percentageTopWidgetHeight / 100);
 
-    if (isLoading) {
-      return loadingku();
-    } else {
-      // set strExpired
-      setState(() {
-        var STRExpired = monthBetween(DateTime.parse(
-          _dokter['data']['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
-        ));
-        strExpired = STRExpired;
-      });
-
-      return DefaultTabController(
-        length: tabsHome.length,
-        child: DraggableHome(
-          title: Text(
-            tabsHome[selectedTab]['label'] as String,
-          ),
-          headerExpandedHeight: percentageTopWidgetHeight,
-          headerWidget: StatsHomeWidget(
-            dokter: _dokter,
-            metrics: metrics,
-            onTap: _changeSelectedNavBar,
-            widgetHeight: topWidgetHeight,
-          ),
-          body: [
-            Row(
-              children: [
-                const Spacer(),
-                Container(
-                  height: 3,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    color: Colors.grey,
-                  ),
+    return isLoading ?  loadingku() : DefaultTabController(
+      length: tabsHome.length,
+      child: DraggableHome(
+        title: Text(
+          tabsHome[selectedTab]['label'] as String,
+        ),
+        headerExpandedHeight: percentageTopWidgetHeight,
+        headerWidget: StatsHomeWidget(
+          dokter: _dokter,
+          metrics: metrics,
+          onTap: _changeSelectedNavBar,
+          widgetHeight: topWidgetHeight,
+        ),
+        body: [
+          Row(
+            children: [
+              const Spacer(),
+              Container(
+                height: 3,
+                width: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                  color: Colors.grey,
                 ),
-                const Spacer(),
-              ],
-            ),
-            tabsHome[selectedTab]['widget'] as Widget,
-          ],
-          fullyStretchable: false,
-          backgroundColor: Colors.white,
-          appBarColor: primaryColor,
-          bottomNavigationBar: Container(
-            color: primaryColor,
-            padding: const EdgeInsets.symmetric(vertical: 2),
-            child: TabBar(
-              onTap: _changeSelectedNavBar,
-              labelColor: textWhite,
-              indicatorColor: Colors.transparent,
-              unselectedLabelColor: textColor.withOpacity(.5),
-              tabs: tabsHome.map(
-                (e) {
-                  return Tab(
-                    child: Center(
-                      child: Text(
-                        e['label'] as String,
-                        style: TextStyle(
-                          fontSize: Helper.getFontSize(context, mobileCaption),
-                          fontWeight:
-                              e['label'] == tabsHome[selectedTab]['label']
-                                  ? fontSemiBold
-                                  : fontNormal,
-                          color: e['label'] == tabsHome[selectedTab]['label']
-                              ? textWhite
-                              : textColor.withOpacity(.5),
-                        ),
-                        textAlign: TextAlign.center,
+              ),
+              const Spacer(),
+            ],
+          ),
+          tabsHome[selectedTab]['widget'] as Widget,
+        ],
+        fullyStretchable: false,
+        backgroundColor: Colors.white,
+        appBarColor: primaryColor,
+        bottomNavigationBar: Container(
+          color: primaryColor,
+          padding: const EdgeInsets.symmetric(vertical: 2),
+          child: TabBar(
+            onTap: _changeSelectedNavBar,
+            labelColor: textWhite,
+            indicatorColor: Colors.transparent,
+            unselectedLabelColor: textColor.withOpacity(.5),
+            tabs: tabsHome.map(
+              (e) {
+                return Tab(
+                  child: Center(
+                    child: Text(
+                      e['label'] as String,
+                      style: TextStyle(
+                        fontSize: Helper.getFontSize(context, mobileCaption),
+                        fontWeight:
+                            e['label'] == tabsHome[selectedTab]['label']
+                                ? fontSemiBold
+                                : fontNormal,
+                        color: e['label'] == tabsHome[selectedTab]['label']
+                            ? textWhite
+                            : textColor.withOpacity(.5),
                       ),
+                      textAlign: TextAlign.center,
                     ),
-                  );
-                },
-              ).toList(),
-            ),
+                  ),
+                );
+              },
+            ).toList(),
           ),
         ),
-      );
-    }
+      ),
+    );
   }
 }
