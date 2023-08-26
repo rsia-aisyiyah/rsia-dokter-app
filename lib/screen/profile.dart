@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
@@ -36,6 +37,16 @@ class _ProfilePageState extends State<ProfilePage> {
     var body = json.decode(res.body);
 
     if (body['success']) {
+      await FirebaseMessaging.instance.unsubscribeFromTopic('dokter');
+      SharedPreferences.getInstance().then((prefs) async {
+        var spesialis = prefs.getString('spesialis')!.toLowerCase();
+        if (spesialis.contains('kandungan')) {
+          await FirebaseMessaging.instance.unsubscribeFromTopic('kandungan');
+        } else if (spesialis.contains('umum')) {
+          await FirebaseMessaging.instance.unsubscribeFromTopic('umum');
+        }
+      });
+
       SharedPreferences.getInstance().then((prefs) {
         prefs.remove('token');
         Msg.success(context, logoutSuccessMsg);
@@ -174,10 +185,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                           const SizedBox(height: 5),
                                           Text(
                                             data['data']['nm_dokter'],
+                                            maxLines: 2,
                                             style: TextStyle(
-                                              fontSize: 21,
+                                              fontSize: mobileSubTitle,
                                               fontWeight: fontBold,
                                               color: textWhite,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
                                           const SizedBox(height: 5),

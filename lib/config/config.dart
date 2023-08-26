@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/screen/home.dart';
 import 'package:rsiap_dokter/screen/menu.dart';
-import 'package:rsiap_dokter/screen/menu/jasa_medis.dart';
 import 'package:rsiap_dokter/screen/menu/otp_jasa_medis.dart';
 import 'package:rsiap_dokter/screen/menu/pasien_list.dart';
 import 'package:rsiap_dokter/screen/menu/pasien_operasi.dart';
