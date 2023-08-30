@@ -70,7 +70,7 @@ class JasaMedisState extends State<JasaMedis> {
 
   _initialSet() {
     title = "Jasa Medis";
-    url = "/dokter/jasamedis";
+    url = "/jasa-medis";
   }
 
   _setData(value) {
@@ -144,7 +144,7 @@ class JasaMedisState extends State<JasaMedis> {
 
     if (widget.ranap) {
       if (spesialis!.toLowerCase().contains('umum')) {
-        strUrl = '/dokter/jasamedis';
+        strUrl = '/jasa-medis';
       }
     }
 
@@ -195,7 +195,7 @@ class JasaMedisState extends State<JasaMedis> {
   }
 
   Future _fetchSearch(data) async {
-    var res = await Api().postData(data, '/dokter/pasien/search');
+    var res = await Api().postData(data, '/pasien/search');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;

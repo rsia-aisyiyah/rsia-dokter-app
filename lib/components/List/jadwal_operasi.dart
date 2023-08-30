@@ -48,7 +48,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
   }
 
   Future fetchPasien() async {
-    var res = await Api().getData('/dokter/jadwal/operasi/now');
+    var res = await Api().getData('/jadwal/operasi/now');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;

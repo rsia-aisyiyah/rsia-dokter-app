@@ -53,7 +53,7 @@ class _DetailPasienState extends State<DetailPasien> {
     var res = await Api().postData({
       "no_rawat": widget.noRawat,
       "stts_lanjut": "Ranap",
-    }, '/dokter/pasien/pemeriksaan/chart');
+    }, '/pasien/pemeriksaan/chart');
 
     var body = json.decode(res.body);
     return body;
@@ -62,7 +62,7 @@ class _DetailPasienState extends State<DetailPasien> {
   Future fetchPasien() async {
     var response = await Api().postData({
       "no_rawat": widget.noRawat,
-    }, '/dokter/pasien/pemeriksaan');
+    }, '/pasien/pemeriksaan');
 
     var body = json.decode(response.body);
     return body;
@@ -73,7 +73,7 @@ class _DetailPasienState extends State<DetailPasien> {
       'no_rawat': noRawat,
       'tgl_perawatan': tglPerawatan,
       'jam_rawat': jamRawat,
-    }, '/dokter/pasien/pemeriksaan/verify');
+    }, '/pasien/pemeriksaan/verify');
 
     var body = json.decode(response.body);
     return body;

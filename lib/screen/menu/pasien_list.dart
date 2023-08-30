@@ -72,13 +72,13 @@ class PasienListState extends State<PasienList> {
 
     if (widget.ralan == true) {
       title = "Pasien Rawat Jalan";
-      url = "/dokter/pasien/ralan/$tahun/$bulan";
+      url = "/pasien/ralan/$tahun/$bulan";
     } else if (widget.ranap == true) {
       title = "Pasien Rawat Inap";
-      url = "/dokter/pasien/ranap/$tahun/$bulan";
+      url = "/pasien/ranap/$tahun/$bulan";
     } else {
       title = "Pasien";
-      url = "/dokter/pasien";
+      url = "/pasien";
     }
   }
 
@@ -153,7 +153,7 @@ class PasienListState extends State<PasienList> {
 
     if (widget.ranap) {
       if (spesialis!.toLowerCase().contains('umum')) {
-        strUrl = '/dokter/pasien/ranap/all';
+        strUrl = '/pasien/ranap/all';
       }
     }
 
@@ -204,7 +204,7 @@ class PasienListState extends State<PasienList> {
   }
 
   Future _fetchSearch(data) async {
-    var res = await Api().postData(data, '/dokter/pasien/search');
+    var res = await Api().postData(data, '/pasien/search');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;

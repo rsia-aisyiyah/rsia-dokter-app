@@ -70,7 +70,7 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
   }
 
   Future fetchPasien() async {
-    var res = await Api().getData('/dokter/pasien/ralan/now');
+    var res = await Api().getData('/pasien/ralan/now');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;

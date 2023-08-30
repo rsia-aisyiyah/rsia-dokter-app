@@ -51,7 +51,7 @@ class OperasiDetailState extends State<OperasiDetail> {
 
   Future fetchDataOperasi() async {
     var res = await Api()
-        .postData({'no_rawat': widget.noRawat}, '/dokter/operasi/data');
+        .postData({'no_rawat': widget.noRawat}, '/pasien/operasi/data');
     var data = json.decode(res.body);
 
     if (data['success']) {

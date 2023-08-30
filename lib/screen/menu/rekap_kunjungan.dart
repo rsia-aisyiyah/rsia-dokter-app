@@ -52,7 +52,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
   }
 
   Future fetchPasien(data) async {
-    var res = await Api().postData(data, '/dokter/kunjungan/rekap');
+    var res = await Api().postData(data, '/kunjungan/rekap');
     return json.decode(res.body);
   }
 

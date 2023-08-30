@@ -79,9 +79,9 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
     var strUrl = "";
 
     if (spesialis!.toLowerCase().contains('umum')) {
-      strUrl = '/dokter/pasien/ranap/all';
+      strUrl = '/pasien/ranap/all';
     } else {
-      strUrl = '/dokter/pasien/ranap/now';
+      strUrl = '/pasien/ranap/now';
     }
 
     var res = await Api().getData(strUrl);
