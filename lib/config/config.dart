@@ -8,20 +8,19 @@ import 'package:rsiap_dokter/screen/menu/pasien_operasi.dart';
 import 'package:rsiap_dokter/screen/menu/rekap_kunjungan.dart';
 import 'package:rsiap_dokter/screen/profile.dart';
 
-// ==================== App Config ==================== //
+import 'api.dart';
 
-const String baseUrl = 'https://sim.rsiaaisyiyah.com/rsiap-api';
-// const String baseUrl = 'http://192.168.100.220/rsiapi';
-const String apiUrl = '$baseUrl/api';
-const String photoUrl = 'https://sim.rsiaaisyiyah.com/rsiap/file/pegawai/';
+// ==================== App Config ==================== //
+String baseUrl  = ApiConfig.burl;
+String apiUrl   = ApiConfig.aurl;
+String photoUrl = ApiConfig.purl;
 
 // App Content Config
 // ignore: non_constant_identifier_names
 double STRExpMin = 6;
 
 // App Config
-const String appName = 'RSIAP Dokter';
-const String appVersion = '1.0.0';
+const String appName = 'RSIAP Mobile Dokter';
 
 // =================== End App Config ================== //
 

@@ -1,16 +1,9 @@
-# rsiap_dokter
+# Mobile dokter RSIA
+Aplikasi mobile untuk dokter RSIA Aisyiyah Pekajangan.
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#### Config guide
+1. Clone this repo
+2. Run `flutter pub get`
+3. rename `example.api.dart` to `api.dart` inside `lib/config` folder
+4. change the value of required variable inside `api.dart` file
+5. Run `flutter run` to build and run the debug app on your emulator/phone

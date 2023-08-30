@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _getMetricsToday() async {
-    var res = await Api().getData('/dokter/pasien/metric/now');
+    var res = await Api().getData('/pasien/metric/now');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       if (mounted) {
