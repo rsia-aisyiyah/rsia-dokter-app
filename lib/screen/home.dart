@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
       var body = json.decode(res.body);
       if (mounted) {
         var STRExpired = monthBetween(DateTime.parse(
-          body['data']['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
+          body['data']['pegawai']['kualifikasi_staff_klinis']['tanggal_akhir_str'],
         ));
 
         setState(() {

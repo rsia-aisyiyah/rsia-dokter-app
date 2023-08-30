@@ -30,7 +30,7 @@ class StatsHomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var STRExpired = monthBetween(DateTime.parse(
-      dokter['data']['pegawai']['kualifikasi_staff']['tanggal_akhir_str'],
+      dokter['data']['pegawai']['kualifikasi_staff_klinis']['tanggal_akhir_str'],
     ));
     return Container(
       color: bgColor,
@@ -108,7 +108,7 @@ class StatsHomeWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        dokter['data']['pegawai']['kualifikasi_staff']['nomor_sip'],
+                        dokter['data']['pegawai']['kualifikasi_staff_klinis']['nomor_sip'],
                         style: TextStyle(
                           fontSize: Helper.getFontSize(context, mobileOverline),
                           fontWeight: fontNormal,

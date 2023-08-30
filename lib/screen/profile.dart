@@ -87,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void setSTR(dokter) {
-    var k_staff = dokter['pegawai']['kualifikasi_staff'];
+    var k_staff = dokter['pegawai']['kualifikasi_staff_klinis'];
     dataSTR = {
       "STR": k_staff['nomor_str'],
       "Tanggal STR": Helper.formatDate(k_staff['tanggal_str']),
@@ -110,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 setDataTbl(data['data']);
                 setSTR(data['data']);
                 var STRExpired = monthBetween(DateTime.parse(
-                  data['data']['pegawai']['kualifikasi_staff']
+                  data['data']['pegawai']['kualifikasi_staff_klinis']
                       ['tanggal_akhir_str'],
                 ));
                 return Stack(
@@ -196,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           const SizedBox(height: 5),
                                           Text(
                                             data['data']['pegawai']
-                                                    ['kualifikasi_staff']
+                                                    ['kualifikasi_staff_klinis']
                                                 ['nomor_sip'],
                                             style: TextStyle(
                                               fontSize: 12,

@@ -59,7 +59,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
   }
 
   Future fetchPasien() async {
-    var res = await Api().getData('/dokter/operasi');
+    var res = await Api().getData('/pasien/operasi');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;
@@ -67,7 +67,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
   }
 
   Future _fetchFilter(data) async {
-    var res = await Api().postData(data, '/dokter/operasi/filter');
+    var res = await Api().postData(data, '/pasien/operasi/filter');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;

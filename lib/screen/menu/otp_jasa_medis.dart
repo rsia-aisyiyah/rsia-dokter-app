@@ -115,7 +115,7 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
   }
 
   Future<void> _getSmtp() async {
-    var res = await Api().getData('/dokter/smtp');
+    var res = await Api().getData('/smtp');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       // print(body);
