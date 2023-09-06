@@ -145,7 +145,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: TextFormField(
                             maxLines: 1,
-                            initialValue: '1.101.1112',
                             decoration: InputDecoration(
                               hintText: labelUsername  ,
                               contentPadding: const EdgeInsets.all(10),
@@ -179,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             maxLines: 1,
                             obscureText: _secureText,
                             style: TextStyle(color: textColor),
-                            initialValue: 'dokter123',
+                            
                             decoration: InputDecoration(
                               hintText: labelPassword,
                               border: InputBorder.none,

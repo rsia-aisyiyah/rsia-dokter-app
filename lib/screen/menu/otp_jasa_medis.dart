@@ -313,10 +313,9 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
                                 ),
                                 onPressed: () {
                                   sendMail(
-                                      recipientEmail: _dokter['data']['pegawai']
-                                              ['npwp']
-                                          .toString(),
-                                      mailMessage: random.toString());
+                                      recipientEmail: _dokter['data']['pegawai']['npwp'].toString(),
+                                      mailMessage: random.toString(),
+                                  );
                                 },
                                 // child: const Text('Kirim Kode Verifikasi'),
                               ),
