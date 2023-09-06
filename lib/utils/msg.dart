@@ -13,7 +13,7 @@ class Msg {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message, style: TextStyle(color: textWhite)),
+        content: Expanded(child: Text(message, style: TextStyle(color: textWhite))),
         duration: const Duration(seconds: snackBarDuration),
         backgroundColor: primaryColor,
       ),
@@ -31,7 +31,7 @@ class Msg {
           children: [
             Icon(Icons.check_circle_outline_rounded, color: textWhite),
             const SizedBox(width: 10),
-            Text(message, style: TextStyle(color: textWhite)),
+            Expanded(child: Text(message, style: TextStyle(color: textWhite))),
           ],
         ),
         duration: const Duration(seconds: snackBarDuration),
@@ -51,7 +51,7 @@ class Msg {
           children: [
             Icon(Icons.info_outline_rounded, color: textWhite),
             const SizedBox(width: 10),
-            Text(message, style: TextStyle(color: textWhite)),
+            Expanded(child: Text(message, style: TextStyle(color: textWhite))),
           ],
         ),
         duration: const Duration(seconds: snackBarDuration),
@@ -71,7 +71,7 @@ class Msg {
           children: [
             Icon(Icons.warning_outlined, color: textWhite),
             const SizedBox(width: 10),
-            Text(message, style: TextStyle(color: textWhite)),
+            Expanded(child: Text(message, style: TextStyle(color: textWhite))),
           ],
         ),
         duration: const Duration(seconds: snackBarDuration),
@@ -91,7 +91,7 @@ class Msg {
           children: [
             Icon(Icons.error_outline_rounded, color: textWhite),
             const SizedBox(width: 10),
-            Text(message, style: TextStyle(color: textWhite)),
+            Expanded(child: Text(message, style: TextStyle(color: textWhite))),
           ],
         ),
         duration: const Duration(seconds: snackBarDuration),

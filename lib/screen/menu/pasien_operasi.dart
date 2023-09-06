@@ -10,6 +10,7 @@ import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/detail/operasi.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
+import 'package:rsiap_dokter/utils/msg.dart';
 
 class PasienOperasi extends StatefulWidget {
   const PasienOperasi({super.key});
@@ -63,6 +64,11 @@ class _PasienOperasiState extends State<PasienOperasi> {
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;
+    } else {
+      var body = json.decode(res.body);
+      Msg.error(context, body['message']);
+
+      return body;
     }
   }
 
@@ -70,6 +76,11 @@ class _PasienOperasiState extends State<PasienOperasi> {
     var res = await Api().postData(data, '/pasien/operasi/filter');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
+      return body;
+    } else {
+      var body = json.decode(res.body);
+      Msg.error(context, body['message']);
+
       return body;
     }
   }

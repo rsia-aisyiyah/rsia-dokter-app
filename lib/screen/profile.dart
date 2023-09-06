@@ -9,6 +9,7 @@ import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/login.dart';
+import 'package:rsiap_dokter/utils/box_message.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
@@ -106,7 +107,69 @@ class _ProfilePageState extends State<ProfilePage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var data = json.decode(json.encode(snapshot.data));
-              if (data['success']) {
+
+              if (data['success'] == null) {
+                return Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Container(
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.red.shade100,
+                      border: Border.all(
+                        width: 1.3,
+                        color: Colors.red.shade500,
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            "Nampaknya ada masalah",
+                            style: TextStyle(
+                              color: Colors.red.shade800,
+                              fontSize: 16,
+                              fontWeight: fontSemiBold,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          "Silahkan hubungi admin",
+                          style: TextStyle(
+                            color: Colors.red.shade800,
+                            fontSize: 14,
+                            fontWeight: fontMedium,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.red.shade50,
+                            border: Border.all(
+                              width: 1.3,
+                              color: Colors.red.shade300,
+                            ),
+                          ),
+                          child: Text(
+                            data['message'],
+                            style: TextStyle(
+                              color: Colors.red.shade800,
+                              fontSize: 14,
+                              fontWeight: fontMedium,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              } else if (data['success']) {
                 setDataTbl(data['data']);
                 setSTR(data['data']);
                 var STRExpired = monthBetween(DateTime.parse(
@@ -139,12 +202,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(100),
                                       child: CachedNetworkImage(
-                                        imageUrl: photoUrl + data['data']['pegawai']['photo'].toString(),
+                                        imageUrl: photoUrl +
+                                            data['data']['pegawai']['photo']
+                                                .toString(),
                                         width: 80,
                                         height: 80,
                                         fit: BoxFit.cover,
                                         alignment: Alignment.topCenter,
-                                        placeholder: (context, url) => Container(
+                                        placeholder: (context, url) =>
+                                            Container(
                                           width: 80,
                                           height: 80,
                                           color: Colors.grey[300],
@@ -154,7 +220,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                             ),
                                           ),
                                         ),
-                                        errorWidget: (context, url, error) => Container(
+                                        errorWidget: (context, url, error) =>
+                                            Container(
                                           width: 80,
                                           height: 80,
                                           color: Colors.grey[300],
@@ -250,31 +317,46 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     // positioned logout icon on top right
                     Positioned(
-                      top: 0,
-                      right: 0,
-                      child: InkWell(
-                        onTap: () => _logout(),
-                        child: Container(
-                          margin: const EdgeInsets.all(8),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          child: Icon(
-                            Icons.logout,
-                            color: textWhite,
+                        top: 0,
+                        right: 0,
+                        child: InkWell(
+                          onTap: () => _logout(),
+                          child: Container(
+                            margin: const EdgeInsets.all(8),
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(5),
+                            child: Icon(
+                              Icons.logout,
+                              color: textWhite,
+                            ),
                           ),
+                        )
+                        // child: IconButton(
+                        //   onPressed: () {
+                        //     _logout();
+                        //   },
+                        //   icon: Icon(
+                        //     Icons.logout,
+                        //     color: textWhite,
+                        //   ),
+                        // ),
                         ),
-                      )
-                      // child: IconButton(
-                      //   onPressed: () {
-                      //     _logout();
-                      //   },
-                      //   icon: Icon(
-                      //     Icons.logout,
-                      //     color: textWhite,
-                      //   ),
-                      // ),
-                    ),
                   ],
+                );
+              } else if (snapshot.hasError) {
+                return Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      Text(
+                        failedToFetchDataMsg,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: fontBold,
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               } else {
                 return Container(

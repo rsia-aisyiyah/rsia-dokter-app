@@ -15,6 +15,7 @@ import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
+import 'package:rsiap_dokter/utils/msg.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -66,7 +67,8 @@ class _HomePageState extends State<HomePage> {
       var body = json.decode(res.body);
       if (mounted) {
         var STRExpired = monthBetween(DateTime.parse(
-          body['data']['pegawai']['kualifikasi_staff_klinis']['tanggal_akhir_str'],
+          body['data']['pegawai']['kualifikasi_staff_klinis']
+              ['tanggal_akhir_str'],
         ));
 
         setState(() {
@@ -75,6 +77,9 @@ class _HomePageState extends State<HomePage> {
         });
       }
     } else {
+      var body = json.decode(res.body);
+      Msg.error(context, body['message']);
+
       if (mounted) {
         setState(() {
           _dokter = {};
@@ -92,6 +97,15 @@ class _HomePageState extends State<HomePage> {
           // _pasienNow = body;
           // dataPasien = body['data']['data'];
           metrics = body['data'];
+        });
+      }
+    } else {
+      var body = json.decode(res.body);
+      Msg.error(context, body['message']);
+
+      if (mounted) {
+        setState(() {
+          metrics = {};
         });
       }
     }
@@ -141,10 +155,12 @@ class _HomePageState extends State<HomePage> {
     double ph = strExpired <= STRExpMin ? 0.385 : .35;
     double height = MediaQuery.of(context).size.height;
 
-    double topWidgetHeight = (height.floorToDouble() * ph).floorToDouble(); // ganti 0.4 untuk mengatur tinggi top widget
+    double topWidgetHeight = (height.floorToDouble() * ph)
+        .floorToDouble(); // ganti 0.4 untuk mengatur tinggi top widget
     double initMax = (height.floorToDouble() - topWidgetHeight).floorToDouble();
 
-    double percentageInitMax = ((initMax / height.floorToDouble()) * 100).floorToDouble();
+    double percentageInitMax =
+        ((initMax / height.floorToDouble()) * 100).floorToDouble();
     double percentageTopWidgetHeight =
         ((topWidgetHeight / height.floorToDouble()) * 100).floorToDouble();
 
@@ -152,75 +168,83 @@ class _HomePageState extends State<HomePage> {
     percentageInitMax = (percentageInitMax / 100);
     percentageTopWidgetHeight = (percentageTopWidgetHeight / 100);
 
-    return isLoading ?  loadingku() : DefaultTabController(
-      length: tabsHome.length,
-      child: DraggableHome(
-        title: Text(
-          tabsHome[selectedTab]['label'] as String,
-        ),
-        headerExpandedHeight: percentageTopWidgetHeight,
-        headerWidget: _dokter.isEmpty ? BoxMessage(
-          title: "Data Dokter Tidak Ditemukan",
-          body: "Data dokter tidak ditemukan, hal ini bisa terjadi karena data dokter belum diinputkan oleh admin. Silahkan hubungi admin untuk menginputkan data dokter.",
-          backgroundColour: bgColor,
-        ) : StatsHomeWidget(
-          dokter: _dokter,
-          metrics: metrics,
-          onTap: _changeSelectedNavBar,
-          widgetHeight: topWidgetHeight,
-        ),
-        body: [
-          Row(
-            children: [
-              const Spacer(),
-              Container(
-                height: 3,
-                width: 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                  color: Colors.grey,
+    return isLoading
+        ? loadingku()
+        : DefaultTabController(
+            length: tabsHome.length,
+            child: DraggableHome(
+              title: Text(
+                tabsHome[selectedTab]['label'] as String,
+              ),
+              headerExpandedHeight: percentageTopWidgetHeight,
+              headerWidget: _dokter.isEmpty
+                  ? BoxMessage(
+                      title: "Data Dokter Tidak Ditemukan",
+                      body:
+                          "Data dokter tidak ditemukan, hal ini bisa terjadi karena data dokter belum diinputkan oleh admin. Silahkan hubungi admin untuk menginputkan data dokter.",
+                      backgroundColour: bgColor,
+                    )
+                  : StatsHomeWidget(
+                      dokter: _dokter,
+                      metrics: metrics,
+                      onTap: _changeSelectedNavBar,
+                      widgetHeight: topWidgetHeight,
+                    ),
+              body: [
+                Row(
+                  children: [
+                    const Spacer(),
+                    Container(
+                      height: 3,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.0),
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+                tabsHome[selectedTab]['widget'] as Widget,
+              ],
+              fullyStretchable: false,
+              backgroundColor: Colors.white,
+              appBarColor: primaryColor,
+              bottomNavigationBar: Container(
+                color: primaryColor,
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: TabBar(
+                  onTap: _changeSelectedNavBar,
+                  labelColor: textWhite,
+                  indicatorColor: Colors.transparent,
+                  unselectedLabelColor: textColor.withOpacity(.5),
+                  tabs: tabsHome.map(
+                    (e) {
+                      return Tab(
+                        child: Center(
+                          child: Text(
+                            e['label'] as String,
+                            style: TextStyle(
+                              fontSize:
+                                  Helper.getFontSize(context, mobileCaption),
+                              fontWeight:
+                                  e['label'] == tabsHome[selectedTab]['label']
+                                      ? fontSemiBold
+                                      : fontNormal,
+                              color:
+                                  e['label'] == tabsHome[selectedTab]['label']
+                                      ? textWhite
+                                      : textColor.withOpacity(.5),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      );
+                    },
+                  ).toList(),
                 ),
               ),
-              const Spacer(),
-            ],
-          ),
-          tabsHome[selectedTab]['widget'] as Widget,
-        ],
-        fullyStretchable: false,
-        backgroundColor: Colors.white,
-        appBarColor: primaryColor,
-        bottomNavigationBar: Container(
-          color: primaryColor,
-          padding: const EdgeInsets.symmetric(vertical: 2),
-          child: TabBar(
-            onTap: _changeSelectedNavBar,
-            labelColor: textWhite,
-            indicatorColor: Colors.transparent,
-            unselectedLabelColor: textColor.withOpacity(.5),
-            tabs: tabsHome.map(
-              (e) {
-                return Tab(
-                  child: Center(
-                    child: Text(
-                      e['label'] as String,
-                      style: TextStyle(
-                        fontSize: Helper.getFontSize(context, mobileCaption),
-                        fontWeight: e['label'] == tabsHome[selectedTab]['label']
-                              ? fontSemiBold
-                              : fontNormal,
-                        color: e['label'] == tabsHome[selectedTab]['label']
-                          ? textWhite
-                          : textColor.withOpacity(.5),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                );
-              },
-            ).toList(),
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

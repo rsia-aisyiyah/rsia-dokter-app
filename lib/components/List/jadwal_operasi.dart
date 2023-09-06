@@ -7,6 +7,7 @@ import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
+import 'package:rsiap_dokter/utils/msg.dart';
 import 'package:rsiap_dokter/utils/table.dart';
 
 class ListJadwalOperasi extends StatefulWidget {
@@ -52,6 +53,11 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;
+    } else {
+      var body = json.decode(res.body);
+      Msg.error(context, body['message']);
+
+      return body;
     }
   }
 
@@ -89,6 +95,13 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
           prevPageUrl = body['data']['prev_page_url'] ?? '';
           currentPage = body['data']['current_page'].toString();
           lastPage = body['data']['last_page'].toString();
+        });
+      } else {
+        var body = json.decode(res.body);
+        Msg.error(context, body['message']);
+
+        setState(() {
+          btnLoading = false;
         });
       }
     }
@@ -189,7 +202,8 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                                 ),
                                 const SizedBox(height: 15),
                                 GenTable(data: {
-                                  labelDates: Helper.formatDate(dataJdwl['tanggal']),
+                                  labelDates:
+                                      Helper.formatDate(dataJdwl['tanggal']),
                                   labelTime: dataJdwl['jam_mulai'] +
                                       " - " +
                                       dataJdwl['jam_selesai'],

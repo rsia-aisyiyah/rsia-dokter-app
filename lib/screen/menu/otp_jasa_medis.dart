@@ -10,6 +10,7 @@ import 'package:rsiap_dokter/screen/menu/jasa_medis.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
+import 'package:rsiap_dokter/utils/msg.dart';
 
 Color accentPurpleColor = Color(0xFF6A53A1);
 // Color primaryColor = Color(0xFF121212);
@@ -111,6 +112,14 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
         _dokter = body;
         // print(_dokter);
       });
+    } else {
+      var body = json.decode(res.body);
+      Msg.error(context, body['message']);
+
+      setState(() {
+        _dokter = {};
+        isLoading = false;
+      });
     }
   }
 
@@ -122,6 +131,14 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
       setState(() {
         _smtp = body;
         // print(_smtp['data']['email']);
+      });
+    } else {
+      var body = json.decode(res.body);
+      Msg.error(context, body['message']);
+
+      setState(() {
+        _smtp = {};
+        isLoading = false;
       });
     }
   }

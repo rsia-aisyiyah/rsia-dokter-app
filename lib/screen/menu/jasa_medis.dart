@@ -8,6 +8,7 @@ import 'package:rsiap_dokter/components/filter/bottom_sheet_filter.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
+import 'package:rsiap_dokter/utils/msg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class JasaMedis extends StatefulWidget {
@@ -152,6 +153,11 @@ class JasaMedisState extends State<JasaMedis> {
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;
+    } else {
+      var body = json.decode(res.body);
+      Msg.error(context, body['message']);
+
+      return body;
     }
   }
 
@@ -198,6 +204,11 @@ class JasaMedisState extends State<JasaMedis> {
     var res = await Api().postData(data, '/pasien/search');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
+      return body;
+    } else {
+      var body = json.decode(res.body);
+      Msg.error(context, body['message']);
+
       return body;
     }
   }

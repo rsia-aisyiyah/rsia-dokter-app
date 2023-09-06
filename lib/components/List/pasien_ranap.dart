@@ -7,6 +7,7 @@ import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/screen/detail/pasien.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
+import 'package:rsiap_dokter/utils/msg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ListPasienRanap extends StatefulWidget {
@@ -88,6 +89,10 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;
+    } else {
+      var body = json.decode(res.body);
+      Msg.error(context, body['message']);
+      return body;
     }
   }
 
@@ -105,6 +110,13 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
           currentPage = body['data']['current_page'].toString();
           lastPage = body['data']['last_page'].toString();
         });
+      } else {
+        var body = json.decode(res.body);
+        Msg.error(context, body['message']);
+
+        setState(() {
+          btnLoading = false;
+        }); 
       }
     }
   }

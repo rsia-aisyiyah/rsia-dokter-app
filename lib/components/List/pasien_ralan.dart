@@ -7,6 +7,7 @@ import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/screen/detail/pasien.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
+import 'package:rsiap_dokter/utils/msg.dart';
 
 class ListPasienRalan extends StatefulWidget {
   const ListPasienRalan({super.key});
@@ -64,6 +65,10 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
           isLoading = false;
 
           dataPasien = value['data']['data'] ?? [];
+          nextPageUrl = value['data']['next_page_url'] ?? '';
+          prevPageUrl = value['data']['prev_page_url'] ?? '';
+          currentPage = value['data']['current_page'].toString();
+          lastPage = value['data']['last_page'].toString();
         });
       }
     }
@@ -73,6 +78,11 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
     var res = await Api().getData('/pasien/ralan/now');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
+      return body;
+    } else {
+      var body = json.decode(res.body);
+      Msg.error(context, body['message']);
+
       return body;
     }
   }
@@ -90,6 +100,13 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
           prevPageUrl = body['data']['prev_page_url'] ?? '';
           currentPage = body['data']['current_page'].toString();
           lastPage = body['data']['last_page'].toString();
+        });
+      } else {
+        var body = json.decode(res.body);
+        Msg.error(context, body['message']);
+
+        setState(() {
+          btnLoading = false;
         });
       }
     }
@@ -129,7 +146,8 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
                     MaterialPageRoute(
                       builder: (context) => DetailPasien(
                         noRawat: dataPasien[index]['no_rawat'],
-                        kategori: Helper.getPenjab(dataPasien[index]['penjab']['png_jawab']),
+                        kategori: Helper.getPenjab(
+                            dataPasien[index]['penjab']['png_jawab']),
                       ),
                     ),
                   );
@@ -148,7 +166,7 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
               ),
               child: btnLoading
                   ? Center(
-                    child: Padding(
+                      child: Padding(
                         padding: const EdgeInsets.all(14),
                         child: SizedBox(
                           height: 20,
@@ -159,7 +177,7 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
                           ),
                         ),
                       ),
-                  )
+                    )
                   : IconButton(
                       onPressed: () async {
                         setState(() {
