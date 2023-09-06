@@ -430,12 +430,9 @@ class _DetailPasienState extends State<DetailPasien> {
               continue;
             }
 
-            // remove all character except number and dot and comma
-            var suhu = data[i]['suhu_tubuh']
-                .toString()
-                .replaceAll(RegExp(r'[^0-9.,]'), '');
-            var nadi =
-                data[i]['nadi'].toString().replaceAll(RegExp(r'[^0-9.,]'), '');
+            // remove all character except number and dot and replace comma with dot
+            var suhu = data[i]['suhu_tubuh'].toString().replaceAll(RegExp(r'[^0-9.,]'), '').replaceAll(',', '.');
+            var nadi =data[i]['nadi'].toString().replaceAll(RegExp(r'[^0-9.,]'), '').replaceAll(',', '.');
 
             chartData!.add(
               _ChartData(
