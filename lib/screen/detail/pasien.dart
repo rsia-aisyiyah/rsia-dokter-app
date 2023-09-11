@@ -33,20 +33,27 @@ class DetailPasien extends StatefulWidget {
 }
 
 class _DetailPasienState extends State<DetailPasien> {
-  TooltipBehavior suhuTubuhTooltipBehavior = TooltipBehavior(enable: true);
+  TooltipBehavior toolTip =
+      TooltipBehavior(enable: true, canShowMarker: false, header: '');
   TooltipBehavior nadiTooltipBehavior = TooltipBehavior(enable: true);
-  TooltipBehavior spo2TooltipBehavior = TooltipBehavior(enable: true);
-  TooltipBehavior respirasiTooltipBehavior = TooltipBehavior(enable: true);
 
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  late EmptyPointMode _selectedEmptyPointMode = EmptyPointMode.gap;
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
-  List<_ChartData>? chartData;
+  List<_ChartData>? suhuData;
+  List<_ChartData>? nadiData;
+
   bool chartIsLoaded = false;
 
   @override
   initState() {
+    _selectedEmptyPointMode = EmptyPointMode.gap;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Future _getChartData() async {
@@ -162,7 +169,6 @@ class _DetailPasienState extends State<DetailPasien> {
       );
 
       return SingleChildScrollView(
-        // padding: const EdgeInsets.all(15),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -406,7 +412,7 @@ class _DetailPasienState extends State<DetailPasien> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        _buildChart('Grafik Pemeriksaan', suhuTubuhTooltipBehavior),
+        _buildChart('Grafik Pemeriksaan', toolTip),
         const SizedBox(height: 10)
       ],
     );
@@ -418,34 +424,54 @@ class _DetailPasienState extends State<DetailPasien> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var data = snapshot.data['data'];
-          chartData = <_ChartData>[];
+          suhuData = <_ChartData>[];
+          nadiData = <_ChartData>[];
 
           for (var i = 0; i < data.length; i++) {
-            if (data[i]['suhu_tubuh'].toString().isEmpty ||
-                data[i]['suhu_tubuh'].toString() == '-' ||
-                data[i]['suhu_tubuh'].toString() == ' ' ||
-                data[i]['nadi'].toString().isEmpty ||
-                data[i]['nadi'].toString() == '-' ||
-                data[i]['nadi'].toString() == ' ') {
-              continue;
+            var suhu = data[i]['suhu_tubuh']
+                .toString()
+                .replaceAll(RegExp(r'[^0-9.,]'), '')
+                .replaceAll(',', '.');
+
+            var nadi = data[i]['nadi']
+                .toString()
+                .replaceAll(RegExp(r'[^0-9.,]'), '')
+                .replaceAll(',', '.');
+
+            if (nadi.isEmpty) {
+              nadiData!.add(
+                _ChartData(
+                  x: '${data[i]['tgl_perawatan']} ${data[i]['jam_rawat']}',
+                ),
+              );
+            } else {
+              nadiData!.add(
+                _ChartData(
+                  x: '${data[i]['tgl_perawatan']} ${data[i]['jam_rawat']}',
+                  y: double.parse(nadi),
+                ),
+              );
             }
-
-            // remove all character except number and dot and replace comma with dot
-            var suhu = data[i]['suhu_tubuh'].toString().replaceAll(RegExp(r'[^0-9.,]'), '').replaceAll(',', '.');
-            var nadi =data[i]['nadi'].toString().replaceAll(RegExp(r'[^0-9.,]'), '').replaceAll(',', '.');
-
-            chartData!.add(
-              _ChartData(
-                '${data[i]['tgl_perawatan']} ${data[i]['jam_rawat']}',
-                double.parse(suhu),
-                double.parse(nadi),
-              ),
-            );
+            
+            if (suhu.isEmpty) {
+              suhuData!.add(
+                _ChartData(
+                  x: '${data[i]['tgl_perawatan']} ${data[i]['jam_rawat']}',
+                ),
+              );
+            } else {
+              suhuData!.add(
+                _ChartData(
+                  x: '${data[i]['tgl_perawatan']} ${data[i]['jam_rawat']}',
+                  y: double.parse(suhu),
+                ),
+              );
+            }
           }
 
           return Container(
             padding: const EdgeInsets.only(top: 8, right: 8),
-            height: 250,
+            height: 320,
             decoration: BoxDecoration(
               color: bgWhite,
               borderRadius: BorderRadius.circular(10),
@@ -459,17 +485,27 @@ class _DetailPasienState extends State<DetailPasien> {
                 overflowMode: LegendItemOverflowMode.scroll,
                 position: LegendPosition.bottom,
               ),
-              tooltipBehavior: tooltipBehavior,
               primaryXAxis: CategoryAxis(
                 isVisible: false,
+                autoScrollingMode: AutoScrollingMode.start
               ),
               primaryYAxis: NumericAxis(
-                interval: 100,
                 labelFormat: '{value}',
                 axisLine: const AxisLine(width: 0),
                 majorTickLines: const MajorTickLines(color: Colors.transparent),
+                minimum: 35,
+                maximum: 42,
               ),
+              axes: [
+                NumericAxis(
+                  majorTickLines: const MajorTickLines(color: Colors.transparent),
+                  name: 'yAxis',
+                  minimum: 40,
+                  maximum: 180,
+                ),
+              ],
               series: _getDefaultLineSeries(),
+              tooltipBehavior: tooltipBehavior,
             ),
           );
         } else {
@@ -489,44 +525,43 @@ class _DetailPasienState extends State<DetailPasien> {
     );
   }
 
-  List<LineSeries<_ChartData, String>> _getDefaultLineSeries() {
-    return <LineSeries<_ChartData, String>>[
+  List<LineSeries> _getDefaultLineSeries() {
+    return <LineSeries>[
       LineSeries<_ChartData, String>(
         animationDuration: 2000,
-        dataSource: chartData!,
-        xValueMapper: (_ChartData data, _) => data.tanggal,
-        yValueMapper: (_ChartData data, _) => data.suhu,
+        dataSource: suhuData!,
+        emptyPointSettings: EmptyPointSettings(
+          mode: _selectedEmptyPointMode,
+        ),
+        xValueMapper: (_ChartData data, _) => data.x,
+        yValueMapper: (_ChartData data, _) => data.y,
         width: 2,
         name: "Suhu Tubuh",
-        dataLabelSettings: const DataLabelSettings(
-          isVisible: true,
-          labelAlignment: ChartDataLabelAlignment.bottom,
-        ),
-        markerSettings: const MarkerSettings(isVisible: true),
+        markerSettings: const MarkerSettings(isVisible: true, width: 3, height: 3),
         color: getColor("Suhu Tubuh"),
       ),
       LineSeries<_ChartData, String>(
         animationDuration: 2000,
-        dataSource: chartData!,
-        xValueMapper: (_ChartData data, _) => data.tanggal,
-        yValueMapper: (_ChartData data, _) => data.nadi,
+        dataSource: nadiData!,
+        emptyPointSettings: EmptyPointSettings(
+          mode: _selectedEmptyPointMode,
+        ),
+        xValueMapper: (_ChartData data, _) => data.x,
+        yValueMapper: (_ChartData data, _) => data.y,
         width: 2,
         name: "Nadi",
-        dataLabelSettings: const DataLabelSettings(
-          isVisible: true,
-          labelAlignment: ChartDataLabelAlignment.top,
-        ),
-        markerSettings: const MarkerSettings(isVisible: true),
+        markerSettings: const MarkerSettings(isVisible: true, width: 3, height: 3),
         color: getColor("Nadi"),
+        yAxisName: "yAxis",
       ),
     ];
   }
 
   Color getColor(String name) {
     if (name.toLowerCase().contains('suhu')) {
-      return Colors.pink;
-    } else if (name.toLowerCase().contains('nadi')) {
       return Colors.blue;
+    } else if (name.toLowerCase().contains('nadi')) {
+      return Colors.pink;
     } else {
       return dataColor[Random().nextInt(dataColor.length)];
     }
@@ -534,9 +569,22 @@ class _DetailPasienState extends State<DetailPasien> {
 }
 
 class _ChartData {
-  _ChartData(this.tanggal, this.suhu, this.nadi);
+  _ChartData({
+    this.x,
+    this.y,
+    this.xValue,
+    this.yValue,
+  });
 
-  final String tanggal;
-  final double suhu;
-  final double nadi;
+  /// Holds x value of the datapoint
+  final dynamic x;
+
+  /// Holds y value of the datapoint
+  final num? y;
+
+  /// Holds x value of the datapoint
+  final dynamic xValue;
+
+  /// Holds y value of the datapoint
+  final num? yValue;
 }
