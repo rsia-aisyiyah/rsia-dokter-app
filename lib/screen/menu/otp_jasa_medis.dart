@@ -193,7 +193,9 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
       // resetTimer();
       startTimer();
     } on MailerException catch (e) {
+      isLoadingButton = true;
       print('Message not sent.');
+      showSnackbar('Format email tidak sesuai ', 'alert');
       for (var p in e.problems) {
         print('Problem: ${p.code}: ${p.msg}');
       }
@@ -313,8 +315,10 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
                                 ),
                                 onPressed: () {
                                   sendMail(
-                                      recipientEmail: _dokter['data']['pegawai']['npwp'].toString(),
-                                      mailMessage: random.toString(),
+                                    recipientEmail: _dokter['data']['pegawai']
+                                            ['rsia_email_pegawai']['email']
+                                        .toString(),
+                                    mailMessage: random.toString(),
                                   );
                                 },
                                 // child: const Text('Kirim Kode Verifikasi'),
@@ -358,7 +362,9 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
           ),
           onPressed: () {
             sendMail(
-                recipientEmail: _dokter['data']['pegawai']['npwp'].toString(),
+                recipientEmail: _dokter['data']['pegawai']['rsia_email_pegawai']
+                        ['email']
+                    .toString(),
                 mailMessage: random.toString());
           },
           // child: const Text('Kirim Kode Verifikasi'),
