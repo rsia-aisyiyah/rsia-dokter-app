@@ -61,9 +61,7 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                 : bgGray,
             borderRadius: BorderRadius.circular(5),
             border: Border.all(
-              color: widget.filterData[key] == value
-                  ? primaryColor
-                  : borderGray,
+              color: widget.filterData[key] == value ? primaryColor : borderGray,
               width: 1.5,
             ),
           ),
@@ -71,11 +69,9 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: widget.filterData[key] == value
-                  ? primaryColor
-                  : borderGray,
-              fontSize: 14,
+              color: widget.filterData[key] == value ? primaryColor : borderGray,
               fontWeight: fontSemiBold,
+              fontSize: 14,
             ),
           ),
         ),
@@ -86,7 +82,7 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

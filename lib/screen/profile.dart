@@ -9,7 +9,6 @@ import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/login.dart';
-import 'package:rsiap_dokter/utils/box_message.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
