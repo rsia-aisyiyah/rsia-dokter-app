@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.2
+version: 1.0.3+3
 
 environment:
   sdk: '>=3.0.5 <4.0.0'
@@ -36,21 +36,22 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   http: ^1.1.0
   intl: ^0.18.1
+  mailer: ^6.0.0
   hexcolor: ^3.0.1
+  jwt_decoder: ^2.0.1
+  in_app_update: ^4.2.1
+  firebase_core: ^2.15.0
+  sticky_headers: ^0.3.0+2
   draggable_home: ^1.0.4
   cupertino_icons: ^1.0.2
   pull_to_refresh: ^2.0.0
   shared_preferences: ^2.1.2
-  calendar_date_picker2: ^0.5.2
-  syncfusion_flutter_charts: ^22.2.5
-  cached_network_image: ^3.2.3
-  jwt_decoder: ^2.0.1
-  sticky_headers: ^0.3.0+2
-  firebase_core: ^2.15.0
   firebase_messaging: ^14.6.5
-  flutter_local_notifications: ^15.1.0+1
-  mailer: ^6.0.0
+  cached_network_image: ^3.2.3
+  calendar_date_picker2: ^0.5.2
   flutter_otp_text_field: ^1.1.1
+  syncfusion_flutter_charts: ^22.2.5
+  flutter_local_notifications: ^15.1.0+1
 
 dev_dependencies:
   flutter_test:
@@ -59,22 +60,22 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
 
 flutter_launcher_icons:
-  image_path: "assets/images/logo.png"
+  image_path: "assets/images/new-logo-1.png"
   adaptive_icon_background: "#FFFFFF"
   android: "launcher_icon"
   ios: true
   web:
     generate: true
-    image_path: "assets/images/logo.png"
-    background_color: "#FFFFFF"
+    image_path: "assets/images/new-logo-1.png"
+    background_color: "F6D110"
     theme_color: "#23c799"
   windows:
     generate: true
-    image_path: "assets/images/logo.png"
-    icon_size: 256 # min:48, max:256, default: 48
+    image_path: "assets/images/new-logo-1.png"
+    icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/images/logo.png"
+    image_path: "assets/images/new-logo-1.png"
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -99,6 +100,9 @@ flutter:
   assets:
     - assets/images/
     - assets/images/logo.png
+    - assets/images/new-logo.png
+    - assets/images/new-logo-1.png
+    - assets/images/new-logo-1-nobg.png
     - assets/images/logoxx.png
     - assets/images/splash-bg.png
     - assets/images/logo-text-rsiap.png
