@@ -38,7 +38,8 @@ class _DetailPasienState extends State<DetailPasien> {
   TooltipBehavior nadiTooltipBehavior = TooltipBehavior(enable: true);
 
   late EmptyPointMode _selectedEmptyPointMode = EmptyPointMode.gap;
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   List<_ChartData>? suhuData;
   List<_ChartData>? nadiData;
@@ -287,7 +288,7 @@ class _DetailPasienState extends State<DetailPasien> {
   ) {
     return StickyHeader(
       header: Container(
-        height: 50.0,
+        height: 55.0,
         color: penjab.toLowerCase() == 'umum'
             ? Colors.orange.shade200
             : primaryShade,
@@ -297,55 +298,86 @@ class _DetailPasienState extends State<DetailPasien> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  tglPerawatan,
-                  style: TextStyle(fontWeight: fontBold),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        text: tglPerawatan,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: fontSemiBold,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: "  |  ",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: fontSemiBold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: "${pemeriksaan[index]['jam_rawat']}",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: fontSemiBold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      pemeriksaan[index]['petugas']['nama'],
+                      style: TextStyle(color: Colors.black, fontSize: 12),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 10),
-                Text(pemeriksaan[index]['jam_rawat'])
               ],
             ),
             // icon btton
             IconButton(
-                onPressed: () {
-                  if (pemeriksaan[index]['verifikasi'] != null) {
-                    Msg.withData(
-                        context,
-                        'success',
-                        "Data Sudah Diverifikasi",
-                        const Icon(
-                          Icons.verified,
-                          color: Colors.white,
-                        ),
-                        {
-                          "Petugas": pemeriksaan[index]['verifikasi']['petugas']
-                              ['nama'],
-                          "Tanggal": pemeriksaan[index]['verifikasi']
-                                  ['tgl_verif'] +
-                              " " +
-                              pemeriksaan[index]['verifikasi']['jam_verif']
-                        });
-                  } else {
-                    // verifySoap
-                    verifySoap(
-                      pemeriksaan[index]['no_rawat'],
-                      pemeriksaan[index]['tgl_perawatan'],
-                      pemeriksaan[index]['jam_rawat'],
-                    ).then((value) {
-                      setState(() {});
-                      Msg.success(context, "Data Berhasil Diverifikasi");
-                    });
-                  }
-                },
-                icon: pemeriksaan[index]['verifikasi'] != null
-                    ? const Icon(
-                        Icons.verified,
-                        color: Colors.blue,
-                      )
-                    : const Icon(
-                        Icons.verified_outlined,
-                      )),
+              onPressed: () {
+                if (pemeriksaan[index]['verifikasi'] != null) {
+                  Msg.withData(
+                    context,
+                    'success',
+                    "Data Sudah Diverifikasi",
+                    const Icon(
+                      Icons.verified,
+                      color: Colors.white,
+                    ),
+                    {
+                      "Petugas": pemeriksaan[index]['verifikasi']['petugas']['nama'],
+                      "Tanggal": pemeriksaan[index]['verifikasi']['tgl_verif'] + " " + pemeriksaan[index]['verifikasi']['jam_verif']
+                    },
+                  );
+                } else {
+                  // verifySoap
+                  verifySoap(
+                    pemeriksaan[index]['no_rawat'],
+                    pemeriksaan[index]['tgl_perawatan'],
+                    pemeriksaan[index]['jam_rawat'],
+                  ).then((value) {
+                    setState(() {});
+                    Msg.success(context, "Data Berhasil Diverifikasi");
+                  });
+                }
+              },
+              icon: pemeriksaan[index]['verifikasi'] != null
+                  ? const Icon(
+                      Icons.verified,
+                      color: Colors.blue,
+                    )
+                  : const Icon(
+                      Icons.verified_outlined,
+                    ),
+            ),
           ],
         ),
       ),
@@ -452,7 +484,7 @@ class _DetailPasienState extends State<DetailPasien> {
                 ),
               );
             }
-            
+
             if (suhu.isEmpty) {
               suhuData!.add(
                 _ChartData(
@@ -471,7 +503,7 @@ class _DetailPasienState extends State<DetailPasien> {
 
           return Container(
             padding: const EdgeInsets.only(top: 8, right: 8),
-            height: 320,
+            height: 345,
             decoration: BoxDecoration(
               color: bgWhite,
               borderRadius: BorderRadius.circular(10),
@@ -486,9 +518,7 @@ class _DetailPasienState extends State<DetailPasien> {
                 position: LegendPosition.bottom,
               ),
               primaryXAxis: CategoryAxis(
-                isVisible: false,
-                autoScrollingMode: AutoScrollingMode.start
-              ),
+                  isVisible: false, autoScrollingMode: AutoScrollingMode.start),
               primaryYAxis: NumericAxis(
                 labelFormat: '{value}',
                 axisLine: const AxisLine(width: 0),
@@ -498,7 +528,8 @@ class _DetailPasienState extends State<DetailPasien> {
               ),
               axes: [
                 NumericAxis(
-                  majorTickLines: const MajorTickLines(color: Colors.transparent),
+                  majorTickLines:
+                      const MajorTickLines(color: Colors.transparent),
                   name: 'yAxis',
                   minimum: 40,
                   maximum: 180,
@@ -537,7 +568,8 @@ class _DetailPasienState extends State<DetailPasien> {
         yValueMapper: (_ChartData data, _) => data.y,
         width: 2,
         name: "Suhu Tubuh",
-        markerSettings: const MarkerSettings(isVisible: true, width: 3, height: 3),
+        markerSettings:
+            const MarkerSettings(isVisible: true, width: 3, height: 3),
         color: getColor("Suhu Tubuh"),
       ),
       LineSeries<_ChartData, String>(
@@ -550,7 +582,8 @@ class _DetailPasienState extends State<DetailPasien> {
         yValueMapper: (_ChartData data, _) => data.y,
         width: 2,
         name: "Nadi",
-        markerSettings: const MarkerSettings(isVisible: true, width: 3, height: 3),
+        markerSettings:
+            const MarkerSettings(isVisible: true, width: 3, height: 3),
         color: getColor("Nadi"),
         yAxisName: "yAxis",
       ),

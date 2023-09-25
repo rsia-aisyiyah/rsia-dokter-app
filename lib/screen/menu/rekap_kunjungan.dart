@@ -10,6 +10,7 @@ import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RekapKunjunganPasien extends StatefulWidget {
    const RekapKunjunganPasien({super.key});
@@ -21,6 +22,8 @@ class RekapKunjunganPasien extends StatefulWidget {
 class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
   Map dataMetrics = {};
   Map filterData = {};
+  
+  bool isUmum = false;
 
   bool isLoading = true;
   bool isFilter = false;
@@ -52,7 +55,20 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
   }
 
   Future fetchPasien(data) async {
-    var res = await Api().postData(data, '/kunjungan/rekap');
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var spesialis = localStorage.getString('spesialis');
+    var strUrl = '';
+
+    if (spesialis!.toLowerCase().contains('umum')) {
+      setState(() {
+        isUmum = true;
+      });
+      strUrl = '/kunjungan/rekap/umum';
+    } else {
+      strUrl = '/kunjungan/rekap';
+    }
+
+    var res = await Api().postData(data, strUrl);
     return json.decode(res.body);
   }
 
@@ -404,6 +420,10 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: dataMetrics.entries.map((e) {
+          if (isUmum && e.key.toString().toLowerCase() == 'operasi') {
+            return Container();
+          }
+          
           return Container(
             margin:  const EdgeInsets.only(
               left: 10,

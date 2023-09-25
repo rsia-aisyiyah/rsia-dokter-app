@@ -65,9 +65,10 @@ class _LoginScreenState extends State<LoginScreen> {
           Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
 
           SharedPreferences.getInstance().then((prefs) {
+            prefs.setString('sub', json.encode(decodedToken['sub']));
             prefs.setString('token', json.encode(body['access_token']));
             prefs.setString('kd_sps', json.encode(decodedToken['sps']));
-            prefs.setString('spesialis', json.encode(decodedToken['spss']));
+            prefs.setString('spesialis', json.encode(decodedToken['nm_sps']));
 
             Navigator.pushReplacement(
               context,
@@ -149,6 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             child: TextFormField(
                               maxLines: 1,
+                              initialValue: '1.101.1112',
                               decoration: InputDecoration(
                                 hintText: labelUsername  ,
                                 contentPadding: const EdgeInsets.all(10),
@@ -182,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               maxLines: 1,
                               obscureText: _secureText,
                               style: TextStyle(color: textColor),
-                              
+                              initialValue: 'dokter123',
                               decoration: InputDecoration(
                                 hintText: labelPassword,
                                 border: InputBorder.none,

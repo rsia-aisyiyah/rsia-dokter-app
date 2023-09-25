@@ -24,7 +24,7 @@ class TablePemeriksaan extends StatelessWidget {
     );
 
     List tableContent = [
-      {"label": "Tanggal Pemerksaan", "value": tglPerawatan},
+      {"label": "Tanggal", "value": tglPerawatan},
       {"label": "Jam Rawat", "value": pasien['jam_rawat']},
       {"label": "Alergi", "value": pasien['alergi']},
       {"label": "Suhu (C)", "value": pasien['suhu_tubuh']},
@@ -56,13 +56,6 @@ class TablePemeriksaan extends StatelessWidget {
                 color: Helper.penjabColor(penjab!),
                 width: 1.2,
               ),
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: Helper.penjabOpacityColor(penjab!),
-              //     blurRadius: 2,
-              //     offset: const Offset(3, 3),
-              //   )
-              // ],
             ),
             child: Table(
               children: tableContent.map((item) {

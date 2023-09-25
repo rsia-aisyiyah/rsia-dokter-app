@@ -37,7 +37,7 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
   var _smtp = {};
   var random = Random().nextInt(8000) + 1000;
 
-  final TextEditingController _otp = TextEditingController();
+  // final TextEditingController _otp = TextEditingController();
 
   void initState() {
     super.initState();
