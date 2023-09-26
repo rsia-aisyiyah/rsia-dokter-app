@@ -27,6 +27,8 @@ class _ProfilePageState extends State<ProfilePage> {
   late Map<String, dynamic> dataTbl;
   late Map<String, dynamic> dataSTR;
 
+  String dokter_nama = "";
+
   @override
   void initState() {
     super.initState();
@@ -34,36 +36,57 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _logout() async {
     var res = await Api().postRequest('/auth/logout');
-    var body = json.decode(res.body);
 
-    if (body['success']) {
-      await FirebaseMessaging.instance.unsubscribeFromTopic('dokter');
-      SharedPreferences.getInstance().then((prefs) async {
-        var spesialis = prefs.getString('spesialis')!.toLowerCase();
-        if (spesialis.contains('kandungan')) {
-          await FirebaseMessaging.instance.unsubscribeFromTopic('kandungan');
-        } else if (spesialis.contains('umum')) {
-          await FirebaseMessaging.instance.unsubscribeFromTopic('umum');
-        }
-      });
-
-      SharedPreferences.getInstance().then((prefs) {
-        prefs.remove('token');
+    if (res.statusCode == 200) {
+      var body = json.decode(res.body);
+      if (body['success']) {
         Msg.success(context, logoutSuccessMsg);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginScreen(),
+
+        await FirebaseMessaging.instance.unsubscribeFromTopic('dokter');
+        SharedPreferences.getInstance().then((prefs) async {
+          var spesialis = prefs.getString('spesialis')!.toLowerCase();
+          var kd_dokter = prefs.getString('sub')!;
+
+          await FirebaseMessaging.instance.unsubscribeFromTopic("${kd_dokter.replaceAll('"', '')}");
+          if (spesialis.contains('kandungan')) {
+            await FirebaseMessaging.instance.unsubscribeFromTopic('kandungan');
+          } else if (spesialis.contains('umum')) {
+            await FirebaseMessaging.instance.unsubscribeFromTopic('umum');
+          }
+
+          prefs.remove('token');
+        }).then((value) => {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ),
           ),
-        );
-      });
+        });
+      }
+    } else {
+      var body = json.decode(res.body);
+      Msg.error(context, body['message']);
     }
   }
 
-  _getMe() async {
+  Future _getMe() async {
     var res = await Api().getData('/dokter');
-    var body = json.decode(res.body);
-    return body;
+
+    if (res.statusCode == 200) {
+      var body = json.decode(res.body);
+      if (body['success']) {
+        setNamaDokter(body['data']['nm_dokter']);
+      }
+
+      return body;
+    }
+  }
+
+  setNamaDokter(nm) {
+    setState(() {
+      dokter_nama = nm;
+    });
   }
 
   double monthBetween(DateTime endDate) {
@@ -105,8 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
           future: _getMe(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var data = json.decode(json.encode(snapshot.data));
-
+              var data = snapshot.data as Map<String, dynamic>;
               if (data['success'] == null) {
                 return Container(
                   padding: const EdgeInsets.all(20),
@@ -314,64 +336,54 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     ),
-                    // positioned logout icon on top right
                     Positioned(
-                        top: 0,
-                        right: 0,
-                        child: InkWell(
-                          onTap: () => _logout(),
-                          child: Container(
-                            margin: const EdgeInsets.all(8),
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.all(5),
-                            child: Icon(
-                              Icons.logout,
-                              color: textWhite,
+                      top: 0,
+                      right: 0,
+                      child: InkWell(
+                        onTap: () => showMenu(
+                          context: context,
+                          position: RelativeRect.fromLTRB(100, 70, 0, 0),
+                          items: [
+                            PopupMenuItem(
+                              child: InkWell(
+                                onTap: () => _logout(),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.logout,
+                                      color: textColor,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      "Logout",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: fontMedium,
+                                        color: textColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                        )
-                        // child: IconButton(
-                        //   onPressed: () {
-                        //     _logout();
-                        //   },
-                        //   icon: Icon(
-                        //     Icons.logout,
-                        //     color: textWhite,
-                        //   ),
-                        // ),
+                          ],
                         ),
+                        child: Container(
+                          margin: const EdgeInsets.all(8),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          child: Icon(
+                            // 3 dots icon
+                            Icons.more_vert_outlined,
+                            color: textWhite,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 );
-              } else if (snapshot.hasError) {
-                return Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      Text(
-                        failedToFetchDataMsg,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: fontBold,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
               } else {
-                return Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      Text(
-                        failedToFetchDataMsg,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: fontBold,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                return Container();
               }
             } else {
               return loadingku();
