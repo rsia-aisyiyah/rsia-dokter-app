@@ -52,6 +52,7 @@ dependencies:
   flutter_otp_text_field: ^1.1.1
   syncfusion_flutter_charts: ^22.2.5
   flutter_local_notifications: ^15.1.0+1
+  firebase_analytics: ^10.5.0
 
 dev_dependencies:
   flutter_test:

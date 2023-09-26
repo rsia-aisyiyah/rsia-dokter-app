@@ -52,6 +52,8 @@ class _ProfilePageState extends State<ProfilePage> {
             await FirebaseMessaging.instance.unsubscribeFromTopic('kandungan');
           } else if (spesialis.contains('umum')) {
             await FirebaseMessaging.instance.unsubscribeFromTopic('umum');
+          } else if (spesialis.contains('anak')) {
+            await FirebaseMessaging.instance.unsubscribeFromTopic('anak');
           }
 
           prefs.remove('token');
