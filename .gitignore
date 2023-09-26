@@ -46,5 +46,5 @@ app.*.map.json
 # Custom
 /lib/config/api.dart
 
-# exclude google-services.json from git
-/android/app/google-services.json
+# exclude google-services.json in every where location in the project
+**/google-services.json
