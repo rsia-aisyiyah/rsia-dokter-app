@@ -107,7 +107,7 @@ String ikTglPeriksa = "Tanggal Periksa";
 String umumText = "UMUM";
 String bpjsText = "BPJS";
 
-String kamarInalText = "Ruang";
+String kamarInapText = "Ruang";
 String poliklinikText = "Poliklinik";
 String checkUpResult = "Check up result";
 String rawatInapText = "Rawat Inap";

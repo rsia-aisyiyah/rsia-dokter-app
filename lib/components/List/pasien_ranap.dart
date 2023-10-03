@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/config/colors.dart';
-import 'package:rsiap_dokter/screen/detail/pasien.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
-import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -147,21 +145,8 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
                   body: "Tidak ada pasien hari ini yang dirawat",
                 );
               }
-
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailPasien(
-                          noRawat: dataPasien[index]['no_rawat'],
-                          kategori: Helper.getPenjab(
-                              dataPasien[index]['penjab']['png_jawab'])),
-                    ),
-                  );
-                },
-                child: createCardPasien(dataPasien[index]),
-              );
+              
+              return createCardPasien(dataPasien[index], context);
             },
           ),
           if (nextPageUrl.isNotEmpty)

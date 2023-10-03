@@ -33,13 +33,11 @@ class DetailPasien extends StatefulWidget {
 }
 
 class _DetailPasienState extends State<DetailPasien> {
-  TooltipBehavior toolTip =
-      TooltipBehavior(enable: true, canShowMarker: false, header: '');
+  TooltipBehavior toolTip = TooltipBehavior(enable: true, canShowMarker: false, header: '');
   TooltipBehavior nadiTooltipBehavior = TooltipBehavior(enable: true);
 
   late EmptyPointMode _selectedEmptyPointMode = EmptyPointMode.gap;
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   List<_ChartData>? suhuData;
   List<_ChartData>? nadiData;
@@ -242,7 +240,9 @@ class _DetailPasienState extends State<DetailPasien> {
             children: [
               index == 0
                   ? Padding(
-                      padding: const EdgeInsets.all(15),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 25,
+                      ),
                       child: _pasienDetails(pasien),
                     )
                   : const SizedBox(),
@@ -425,13 +425,27 @@ class _DetailPasienState extends State<DetailPasien> {
           ),
           const SizedBox(height: 8),
           GenTable(data: {
-            ikNoRawat: pasien['no_rawat'],
             ikNoRm: pasien['no_rkm_medis'],
+            ikNoRawat: pasien['no_rawat'],
             ikSttsLanjut: Helper.realStatusLanjut(pasien['status_lanjut']),
             poliklinikText: pasien['poliklinik']['nm_poli'],
+            
+            if (pasien['status_lanjut'].toLowerCase().contains("ranap"))
+              if (pasien['kamar_inap'] == null)
+                ikTglDaftar: Helper.formatDate2(pasien['tgl_registrasi'])
+              else
+                ikTglMasuk: "${Helper.formatDate2(pasien['kamar_inap']['tgl_masuk'])}   ( ${pasien['kamar_inap']['lama']} Hari )",
+            
+            if (pasien['status_lanjut'].toLowerCase().contains("ranap"))
+              if (pasien['kamar_inap'] == null)
+                poliklinikText: pasien['poliklinik']['nm_poli']
+              else
+                kamarInapText: pasien['kamar_inap']['kamar']['bangsal']['nm_bangsal'],
+            
             if (pasien['status_lanjut'].toLowerCase().contains("ranap"))
               if (pasien['kamar_inap'] != null)
-                statusPulangText: pasien['kamar_inap']['stts_pulang'],
+                "Diagnosa Awal": pasien['kamar_inap']['diagnosa_awal'],
+            
           }),
         ],
       ),

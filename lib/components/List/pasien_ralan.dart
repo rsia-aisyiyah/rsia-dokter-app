@@ -139,21 +139,7 @@ class _ListPasienRalanState extends State<ListPasienRalan> {
                 );
               }
 
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailPasien(
-                        noRawat: dataPasien[index]['no_rawat'],
-                        kategori: Helper.getPenjab(
-                            dataPasien[index]['penjab']['png_jawab']),
-                      ),
-                    ),
-                  );
-                },
-                child: createCardPasien(dataPasien[index]),
-              );
+              return createCardPasien(dataPasien[index], context);
             },
           ),
           if (nextPageUrl.isNotEmpty)

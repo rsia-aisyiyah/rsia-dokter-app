@@ -87,7 +87,7 @@ class _CreatePasienListState extends State<CreatePasienList> {
                     ],
                   ),
                 ),
-                createCardPasien(pasien[index])
+                createCardPasien(pasien[index], context)
               ],
             );
           }
@@ -97,7 +97,7 @@ class _CreatePasienListState extends State<CreatePasienList> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                createCardPasien(pasien[index]),
+                createCardPasien(pasien[index], context),
                 InkWell(
                   onTap: () => widget.loadMore(),
                   child: Container(
@@ -117,7 +117,7 @@ class _CreatePasienListState extends State<CreatePasienList> {
             );
           }
 
-          return createCardPasien(pasien[index]);
+          return createCardPasien(pasien[index],context);
         }
       },
     );

@@ -344,7 +344,7 @@ class PasienListState extends State<PasienList> {
                             ),
                           );
                         },
-                        child: createCardPasien(dataPasiens[index]),
+                        child: createCardPasien(dataPasiens[index], context),
                       );
                     } else {
                       return Container(
