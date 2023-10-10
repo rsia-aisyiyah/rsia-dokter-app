@@ -168,7 +168,6 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
   }) async {
     setState(() {
       isLoadingButton = false;
-      random = Random().nextInt(8000) + 1000;
     });
     // change your email here
     String username = _smtp['data']['email'].toString();
