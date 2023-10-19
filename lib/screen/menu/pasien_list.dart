@@ -389,7 +389,7 @@ class PasienListState extends State<PasienList> {
         child: Column(
           children: [
             Text(
-              "Pasien Operasi",
+              "Pasien ${widget.ralan ? 'Rawat Jalan' : 'Rawat Inap'}",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: fontSemiBold,

@@ -16,6 +16,7 @@ Color errorColor = Colors.red;
 Color infoColor = Colors.blue;
 
 Color textColor = HexColor("#020d0a");
+Color textColor2 = HexColor("#0d1a14");
 Color textWhite = HexColor("#ffffff");
 
 // BPJS & UMUM

@@ -17,8 +17,8 @@ class GenTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return Table(
       columnWidths: const {
-        0: FlexColumnWidth(1),
-        1: FlexColumnWidth(2),
+        0: IntrinsicColumnWidth(),
+        1: FlexColumnWidth(),
       },
       border: TableBorder(
         horizontalInside: BorderSide(
