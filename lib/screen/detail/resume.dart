@@ -48,18 +48,18 @@ class _ResumePasienRanapState extends State<ResumePasienRanap> {
   }
 
   Future fetchPasien() async {
-    var response =
-        await Api().getData('/pasien/ranap/resume?no_rawat=' + widget.noRawat);
+    var response = await Api().postData({
+      "no_rawat": widget.noRawat,
+    }, '/pasien/ranap/resume');
 
     var body = json.decode(response.body);
     return body;
   }
 
-  Future verifyResume(
-    noRawat,
-  ) async {
-    var response = await Api()
-        .postData({'no_rawat': noRawat}, '/pasien/ranap/resume/verify');
+  Future verifyResume(noRawat) async {
+    var response = await Api().postData({
+      'no_rawat': noRawat,
+    }, '/pasien/ranap/resume/verify');
 
     var body = json.decode(response.body);
     return body;
