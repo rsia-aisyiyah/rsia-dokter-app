@@ -14,8 +14,7 @@ class ResumePasienRanap extends StatefulWidget {
   final String noRawat;
   final String kategori;
 
-  const ResumePasienRanap(
-      {super.key, required this.noRawat, required this.kategori});
+  const ResumePasienRanap({super.key, required this.noRawat, required this.kategori});
 
   @override
   State<ResumePasienRanap> createState() => _ResumePasienRanapState();
@@ -153,20 +152,12 @@ class _ResumePasienRanapState extends State<ResumePasienRanap> {
                         ),
                         const SizedBox(height: 5),
                         GenTable(data: {
-                          "Ruang Rawat": pasien['reg_periksa']['kamar_inap']
-                              ['kamar']['bangsal']['nm_bangsal'],
-                          "Tanggal Masuk": Helper.formatDate2(
-                              pasien['reg_periksa']['kamar_inap']['tgl_masuk']),
-                          "Jam Masuk": pasien['reg_periksa']['kamar_inap']
-                              ['jam_masuk'],
-                          "Tanggal Keluar": Helper.formatDate2(
-                              pasien['reg_periksa']['kamar_inap']
-                                  ['tgl_keluar']),
-                          "Jam Keluar": pasien['reg_periksa']['kamar_inap']
-                              ['jam_keluar'],
-                          "Lama": pasien['reg_periksa']['kamar_inap']['lama']
-                                  .toString() +
-                              " Hari",
+                          "Ruang Rawat": pasien['reg_periksa']['kamar_inap'] != null ?  pasien['reg_periksa']['kamar_inap']['kamar']['bangsal']['nm_bangsal'] : "-",
+                          "Tanggal Masuk": pasien['reg_periksa']['kamar_inap'] != null ? Helper.formatDate2(pasien['reg_periksa']['kamar_inap']['tgl_masuk']) : "-",
+                          "Jam Masuk": pasien['reg_periksa']['kamar_inap'] != null ?  pasien['reg_periksa']['kamar_inap']['jam_masuk'] : "-",
+                          "Tanggal Keluar": pasien['reg_periksa']['kamar_inap'] != null ? Helper.formatDate2(pasien['reg_periksa']['kamar_inap']['tgl_keluar']) : "-",
+                          "Jam Keluar": pasien['reg_periksa']['kamar_inap'] != null ?  pasien['reg_periksa']['kamar_inap']['jam_keluar'] : "-",
+                          "Lama": pasien['reg_periksa']['kamar_inap'] != null ?  pasien['reg_periksa']['kamar_inap']['lama'].toString() : '-' + " Hari",
                         }),
                         const SizedBox(height: 15),
                         Text(
@@ -179,11 +170,9 @@ class _ResumePasienRanapState extends State<ResumePasienRanap> {
                         ),
                         const SizedBox(height: 5),
                         GenTable(data: {
-                          "Cara Bayar": pasien['reg_periksa']['penjab']
-                              ['png_jawab'],
+                          "Cara Bayar": pasien['reg_periksa']['penjab']['png_jawab'],
                           "Indikasi Awal": pasien['alasan'],
-                          "Diagnosa Awal": pasien['reg_periksa']['kamar_inap']
-                              ['diagnosa_awal'],
+                          "Diagnosa Awal": pasien['reg_periksa']['kamar_inap'] != null ?  pasien['reg_periksa']['kamar_inap']['diagnosa_awal'] : "-",
                           "DPJP": pasien['dokter']['nm_dokter']
                         }),
                         const SizedBox(height: 15),

@@ -4,6 +4,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rsiap_dokter/screen/detail/pasien.dart';
+import 'package:rsiap_dokter/screen/detail/resume.dart';
+import 'package:rsiap_dokter/screen/index.dart';
 
 late BuildContext ctx;
 FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -16,25 +18,61 @@ final _androidChannel = AndroidNotificationChannel(
 );
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  Navigator.of(ctx).push(
-    MaterialPageRoute(
-      builder: (context) => DetailPasien(
-        kategori: "Ranap",
-        noRawat: message.data['no_rawat'],
-      ),
-    ),
-  );
+  Map data = message.data;
+  if (data['action'] != null) {
+    if (data['action'] == 'resume') {
+      Navigator.of(ctx).push(
+        MaterialPageRoute(
+          builder: (context) => ResumePasienRanap(
+            noRawat: data['no_rawat'],
+            kategori: "Ranap",
+          ),
+        ),
+      );
+    } else if (data['action'] == 'detail') {
+      Navigator.of(ctx).push(
+        MaterialPageRoute(
+          builder: (context) => DetailPasien(
+            kategori: "Ranap",
+            noRawat: data['no_rawat'],
+          ),
+        ),
+      );
+    }
+  } else {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(builder: (context) => IndexScreen()),
+    );
+  }
 }
 
 Future<void> handleMessage(RemoteMessage message) async {
-  Navigator.of(ctx).push(
-    MaterialPageRoute(
-      builder: (context) => DetailPasien(
-        kategori: "Ranap",
-        noRawat: message.data['no_rawat'],
-      ),
-    ),
-  );
+  Map data = message.data;
+  if (data['action'] != null) {
+    if (data['action'] == 'resume') {
+      Navigator.of(ctx).push(
+        MaterialPageRoute(
+          builder: (context) => ResumePasienRanap(
+            noRawat: data['no_rawat'],
+            kategori: "Ranap",
+          ),
+        ),
+      );
+    } else if (data['action'] == 'detail') {
+      Navigator.of(ctx).push(
+        MaterialPageRoute(
+          builder: (context) => DetailPasien(
+            kategori: "Ranap",
+            noRawat: data['no_rawat'],
+          ),
+        ),
+      );
+    }
+  } else {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(builder: (context) => IndexScreen()),
+    );
+  }
 }
 
 Future initLocalNotification() async {
@@ -65,7 +103,7 @@ Future initPushNotification() async {
   FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
 
   FirebaseMessaging.instance.getInitialMessage().then((initialMessage) {
-  FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
     if (initialMessage != null) {
       handleMessage(initialMessage);
     }

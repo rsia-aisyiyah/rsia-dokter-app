@@ -83,43 +83,7 @@ createCardPasien(pasien, context) {
                       "Status Pulang": pasien['kamar_inap']['stts_pulang'],
                   }),
                   const SizedBox(height: 10),
-                  Wrap(
-                    spacing: 7,
-                    runSpacing: 10,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: pasien['resume_pasien_ranap'] != null ? Helper.penjabColor(penjab) : Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.assignment_outlined,
-                              color: pasien['resume_pasien_ranap'] != null ? textWhite : Colors.grey.shade500,
-                              size: 18,
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              "Resume Medis",
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: fontSemiBold,
-                                color: pasien['resume_pasien_ranap'] != null ? textWhite : Colors.grey.shade500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  badgeResume(pasien, penjab),
                 ],
               ),
             ),
@@ -203,6 +167,8 @@ createCardPasien(pasien, context) {
                         ikNoRm: rg['reg_periksa']['no_rkm_medis'],
                         ikNoRawat: rg['reg_periksa']['no_rawat'],
                       }),
+                      const SizedBox(height: 10),
+                      badgeResume(rg['reg_periksa'], penjab),
                     ],
                   ),
                 ),
@@ -240,6 +206,46 @@ createCardPasien(pasien, context) {
             ],
           ),
       const SizedBox(height: 15),
+    ],
+  );
+}
+
+Wrap badgeResume(pasien, String penjab) {
+  return Wrap(
+    spacing: 7,
+    runSpacing: 10,
+    children: [
+      Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 5,
+        ),
+        decoration: BoxDecoration(
+          color: pasien['resume_pasien_ranap'] != null ? Helper.penjabColor(penjab) : Colors.grey.shade300,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.assignment_outlined,
+              color: pasien['resume_pasien_ranap'] != null ? textWhite : Colors.grey.shade500,
+              size: 18,
+            ),
+            const SizedBox(width: 5),
+            Text(
+              "Resume Medis",
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: fontSemiBold,
+                color: pasien['resume_pasien_ranap'] != null ? textWhite : Colors.grey.shade500,
+              ),
+            ),
+          ],
+        ),
+      ),
     ],
   );
 }
