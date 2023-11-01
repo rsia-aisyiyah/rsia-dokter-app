@@ -149,9 +149,11 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                       Stack(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 15,
-                              horizontal: 10,
+                            padding: EdgeInsets.only(
+                              top: 15,
+                              left: 15,
+                              right: 15,
+                              bottom: 25,
                             ),
                             decoration: BoxDecoration(
                               color: bgWhite,

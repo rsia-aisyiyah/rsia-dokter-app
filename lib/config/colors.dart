@@ -21,10 +21,10 @@ Color textWhite = HexColor("#ffffff");
 
 // BPJS & UMUM
 Color bpjsColor = primaryColor;
-Color umumColor = Colors.amber.shade600;
+Color umumColor = HexColor("#4CA9EE");
 
 Color bgBPJS = bgColor;
-Color bgUMUM = Colors.amber.shade100;
+Color bgUMUM = HexColor("#EDF6FD");
 
 // gray
 Color grayColor = Colors.grey;

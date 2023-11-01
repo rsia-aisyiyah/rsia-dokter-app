@@ -69,6 +69,30 @@ class Helper {
 
   // ====================  //
 
+  static String calculateAge(String birthDate) {
+    // kalkulasi umur sampai hari ini
+    var today = DateTime.now();
+    var birth = DateTime.parse(birthDate);
+
+    var age = today.year - birth.year;
+    var month = today.month - birth.month;
+    var day = today.day - birth.day;
+
+    // misal 1 tahun 3 bulan 4 hari
+
+    if (month < 0) {
+      age--;
+      month += 12;
+    }
+
+    if (day < 0) {
+      month--;
+      day += 30;
+    }
+
+    return "$age tahun $month bulan $day hari";
+  }
+
   static String formatDate(String date) {
     return DateFormat(
       'EEEE, dd MMMM yyyy',
@@ -79,6 +103,13 @@ class Helper {
   static String formatDate2(String date) {
     return DateFormat(
       'EEE, dd MMM yyyy',
+      'id_ID',
+    ).format(DateTime.parse(date));
+  }
+
+  static String formatDate3(String date) {
+    return DateFormat(
+      'dd MMM yyyy',
       'id_ID',
     ).format(DateTime.parse(date));
   }
