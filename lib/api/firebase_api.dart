@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rsiap_dokter/screen/detail/pasien.dart';
+import 'package:rsiap_dokter/screen/detail/radiologi.dart';
 import 'package:rsiap_dokter/screen/detail/resume.dart';
 import 'package:rsiap_dokter/screen/index.dart';
 
@@ -38,6 +39,18 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
           ),
         ),
       );
+    } else if (data['action'] == 'radiologi') {
+      print(data);
+      Navigator.of(ctx).push(
+        MaterialPageRoute(
+          builder: (context) => DetailRadiologi(
+            penjab: data['penjab'],
+            noRawat: data['no_rawat'],
+            tanggal: data['tanggal'],
+            jam: data['jam']
+          ),
+        ),
+      );
     }
   } else {
     Navigator.of(ctx).push(
@@ -64,6 +77,18 @@ Future<void> handleMessage(RemoteMessage message) async {
           builder: (context) => DetailPasien(
             kategori: "Ranap",
             noRawat: data['no_rawat'],
+          ),
+        ),
+      );
+    } else if (data['action'] == 'radiologi') {
+      print(data);
+      Navigator.of(ctx).push(
+        MaterialPageRoute(
+          builder: (context) => DetailRadiologi(
+            penjab: data['penjab'] ?? "UMUM",
+            noRawat: data['no_rawat'],
+            tanggal: data['tanggal'],
+            jam: data['jam']
           ),
         ),
       );

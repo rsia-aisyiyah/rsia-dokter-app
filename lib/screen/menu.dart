@@ -4,6 +4,7 @@ import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -13,8 +14,27 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
+  String spesialis = "";
+
+  @override
+  initState() {
+    super.initState();
+
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() {
+        spesialis = prefs.getString('spesialis')!;
+      });
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    List filteredTabs = menuScreenItems.where((tab) {
+        final showOn = tab['show_on'] as Set;
+        return showOn.contains(spesialis.toLowerCase().replaceAll('"', ''));
+      }).toList();
+
     return Scaffold(
       backgroundColor: bgColor,
       body: SafeArea(
@@ -45,7 +65,7 @@ class _MenuPageState extends State<MenuPage> {
                   ),
                 ),
                 GridView.builder(
-                  itemCount: menuScreenItems.length,
+                  itemCount: filteredTabs.length,
                   padding: const EdgeInsets.only(
                     left: 10,
                     right: 10,
@@ -63,13 +83,13 @@ class _MenuPageState extends State<MenuPage> {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
-                        if (menuScreenItems[index]['disabled'] == true) {
+                        if (filteredTabs[index]['disabled'] == true) {
                           Msg.warning(
                             context,
                             featureNotAvailableMsg,
                           );
                         } else {
-                          if (menuScreenItems[index]['widget'] == "") {
+                          if (filteredTabs[index]['widget'] == "") {
                             Msg.warning(
                               context,
                               featureNotAvailableMsg,
@@ -78,8 +98,7 @@ class _MenuPageState extends State<MenuPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    menuScreenItems[index]['widget'] as Widget,
+                                builder: (context) => filteredTabs[index]['widget'] as Widget,
                               ),
                             );
                           }
@@ -88,7 +107,7 @@ class _MenuPageState extends State<MenuPage> {
                       child: Container(
                         clipBehavior: Clip.hardEdge,
                         decoration: BoxDecoration(
-                          color: menuScreenItems[index]['disabled'] == true
+                          color: filteredTabs[index]['disabled'] == true
                               ? Colors.grey[300]
                               : bgWhite,
                           borderRadius: BorderRadius.circular(10),
@@ -100,7 +119,7 @@ class _MenuPageState extends State<MenuPage> {
                             ),
                           ],
                           border: Border.all(
-                            color: menuScreenItems[index]['disabled'] == true
+                            color: filteredTabs[index]['disabled'] == true
                                 ? Colors.grey[400]!
                                 : accentColor.withOpacity(0.8),
                             // color: primaryColor.withOpacity(0.5),
@@ -115,13 +134,11 @@ class _MenuPageState extends State<MenuPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    menuScreenItems[index]['label'].toString(),
+                                    filteredTabs[index]['label'].toString(),
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: fontSemiBold,
-                                      color: menuScreenItems[index]
-                                                  ['disabled'] ==
-                                              true
+                                      color: filteredTabs[index]['disabled'] == true
                                           ? Colors.grey[600]
                                           : textColor,
                                     ),
@@ -141,9 +158,7 @@ class _MenuPageState extends State<MenuPage> {
                                     child: Image.network(
                                       "https://raw.githubusercontent.com/hungps/flutter_pokedex/master/assets/images/pokeball.png",
                                       fit: BoxFit.cover,
-                                      color: menuScreenItems[index]
-                                                  ['disabled'] ==
-                                              true
+                                      color: filteredTabs[index]['disabled'] == true
                                           ? Colors.grey[400]
                                           : accentColor.withOpacity(0.3),
                                       // color: primaryColor.withOpacity(0.3),

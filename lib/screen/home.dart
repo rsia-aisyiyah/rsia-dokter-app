@@ -1,21 +1,19 @@
 import 'dart:convert';
 
 import 'package:draggable_home/draggable_home.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:rsiap_dokter/api/request.dart';
-import 'package:rsiap_dokter/components/List/jadwal_operasi.dart';
-import 'package:rsiap_dokter/components/List/pasien_ralan.dart';
-import 'package:rsiap_dokter/components/List/pasien_ranap.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/components/others/stats_home.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/config.dart';
-import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +25,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool isLoading = true;
   int selectedTab = 0;
+  String spesialis = '';
 
   List dataPasien = [];
 
@@ -38,6 +37,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() {
+        spesialis = prefs.getString('spesialis')!;
+      });
+    });
+
     if (mounted) {
       fetchAllData().then((value) {
         if (mounted) {
@@ -89,9 +94,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _getMetricsToday() async {
-    var res = await Api().getData('/pasien/metric/now');
+    await Future.delayed(const Duration(seconds: 2));
+
+    var url = spesialis.toLowerCase().contains('radiologi')
+        ? '/pasien/metric/radiologi/now'
+        : '/pasien/metric/now';
+    
+    var res = await Api().getData(url);
+
+    // var res = spesialis.toLowerCase().contains('radiologi')
+    //     ? await Api().getData('/pasien/metric/radiologi/now')
+    //     : await Api().getData('/pasien/metric/now');
+
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
+
       if (mounted) {
         setState(() {
           // _pasienNow = body;
@@ -123,24 +140,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  List tabsHome = [
-    {
-      "label": rawatInapText,
-      "icon": Icons.close,
-      "widget": const ListPasienRanap()
-    },
-    {
-      "label": rawatJalanText,
-      "icon": Icons.close,
-      "widget": const ListPasienRalan()
-    },
-    {
-      "label": jadwalOperasiText,
-      "icon": Icons.close,
-      "widget": const ListJadwalOperasi()
-    },
-  ];
-
   // ---------------------- End Tab Home
 
   double monthBetween(DateTime endDate) {
@@ -155,96 +154,208 @@ class _HomePageState extends State<HomePage> {
     double ph = strExpired <= STRExpMin ? 0.385 : .35;
     double height = MediaQuery.of(context).size.height;
 
-    double topWidgetHeight = (height.floorToDouble() * ph)
-        .floorToDouble(); // ganti 0.4 untuk mengatur tinggi top widget
+    // ganti 0.4 untuk mengatur tinggi top widget
+    double topWidgetHeight = (height.floorToDouble() * ph).floorToDouble();
     double initMax = (height.floorToDouble() - topWidgetHeight).floorToDouble();
 
-    double percentageInitMax =
-        ((initMax / height.floorToDouble()) * 100).floorToDouble();
-    double percentageTopWidgetHeight =
-        ((topWidgetHeight / height.floorToDouble()) * 100).floorToDouble();
+    double percentageInitMax = ((initMax / height.floorToDouble()) * 100).floorToDouble();
+    double percentageTopWidgetHeight = ((topWidgetHeight / height.floorToDouble()) * 100).floorToDouble();
 
     // percentage to decimal
     percentageInitMax = (percentageInitMax / 100);
     percentageTopWidgetHeight = (percentageTopWidgetHeight / 100);
 
-    return isLoading
-        ? loadingku()
-        : DefaultTabController(
-            length: tabsHome.length,
-            child: DraggableHome(
-              title: Text(
-                tabsHome[selectedTab]['label'] as String,
-              ),
-              headerExpandedHeight: percentageTopWidgetHeight,
-              headerWidget: _dokter.isEmpty
-                  ? BoxMessage(
-                      title: "Data Dokter Tidak Ditemukan",
-                      body:
-                          "Data dokter tidak ditemukan, hal ini bisa terjadi karena data dokter belum diinputkan oleh admin. Silahkan hubungi admin untuk menginputkan data dokter.",
-                      backgroundColour: bgColor,
-                    )
-                  : StatsHomeWidget(
-                      dokter: _dokter,
-                      metrics: metrics,
-                      onTap: _changeSelectedNavBar,
-                      widgetHeight: topWidgetHeight,
-                    ),
-              body: [
-                Row(
-                  children: [
-                    const Spacer(),
-                    Container(
-                      height: 3,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.0),
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const Spacer(),
-                  ],
-                ),
-                tabsHome[selectedTab]['widget'] as Widget,
-              ],
-              fullyStretchable: false,
-              backgroundColor: Colors.white,
-              appBarColor: primaryColor,
-              bottomNavigationBar: Container(
-                color: primaryColor,
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: TabBar(
-                  onTap: _changeSelectedNavBar,
-                  labelColor: textWhite,
-                  indicatorColor: Colors.transparent,
-                  unselectedLabelColor: textColor.withOpacity(.5),
-                  tabs: tabsHome.map(
-                    (e) {
-                      return Tab(
-                        child: Center(
-                          child: Text(
-                            e['label'] as String,
-                            style: TextStyle(
-                              fontSize:
-                                  Helper.getFontSize(context, mobileCaption),
-                              fontWeight:
-                                  e['label'] == tabsHome[selectedTab]['label']
-                                      ? fontSemiBold
-                                      : fontNormal,
-                              color:
-                                  e['label'] == tabsHome[selectedTab]['label']
-                                      ? textWhite
-                                      : textColor.withOpacity(.5),
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      );
-                    },
-                  ).toList(),
-                ),
+    List filteredTabs = tabsHome.where((tab) {
+      final showOn = tab['show_on'] as Set;
+      return showOn.contains(spesialis.toLowerCase().replaceAll('"', ''));
+    }).toList();
+
+    if (isLoading) {
+      return loadingku();
+    } else {
+      return renderHome(
+        filteredTabs,
+        percentageTopWidgetHeight,
+        topWidgetHeight,
+        context,
+      );
+    }
+  }
+
+  DraggableHome renderHomeRadiologi(
+    List<dynamic> filteredTabs,
+    double percentageTopWidgetHeight,
+    double topWidgetHeight,
+    BuildContext context,
+  ) {
+    return DraggableHome(
+      leading: const Icon(Icons.arrow_back_ios),
+      title: const Text("Pasien Radiologi"),
+      actions: [
+        IconButton(onPressed: () {}, icon: const Icon(Icons.settings)),
+      ],
+      headerWidget: dokterStats(filteredTabs),
+      headerBottomBar: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.settings,
+            color: Colors.white,
+          ),
+        ],
+      ),
+      body: [
+        Row(
+          children: [
+            const Spacer(),
+            Container(
+              height: 3,
+              width: 60,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.0),
+                color: Colors.grey,
               ),
             ),
-          );
+            const Spacer(),
+          ],
+        ),
+      ],
+      fullyStretchable: true,
+      backgroundColor: Colors.white,
+      appBarColor: Colors.teal,
+    );
+  }
+
+  DefaultTabController renderHome(
+    List<dynamic> filteredTabs,
+    double percentageTopWidgetHeight,
+    double topWidgetHeight,
+    BuildContext context,
+  ) {
+    return DefaultTabController(
+      length: filteredTabs.length,
+      child: DraggableHome(
+        title: Text(
+          filteredTabs[selectedTab]['label'] as String,
+        ),
+        headerExpandedHeight: percentageTopWidgetHeight,
+        headerWidget: dokterStats(filteredTabs),
+        floatingActionButton: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.grey.shade100,
+              width: 3,
+              style: BorderStyle.solid,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(.2),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          width: 55,
+          height: 55,
+          child: FloatingActionButton(
+            backgroundColor: primaryColor,
+            elevation: 0,
+            onPressed: () {
+              setState(() {
+                isLoading = true;
+              });
+              fetchAllData().then((value) {
+                if (mounted) {
+                  setState(() {
+                    isLoading = false;
+                  });
+                }
+              });
+            },
+            child: const Icon(Icons.refresh),
+          ),
+        ),
+        body: [
+          Row(
+            children: [
+              const Spacer(),
+              Container(
+                height: 3,
+                width: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                  color: Colors.grey,
+                ),
+              ),
+              const Spacer(),
+            ],
+          ),
+          filteredTabs[selectedTab]['widget'] as Widget,
+        ],
+        fullyStretchable: false,
+        backgroundColor: Colors.white,
+        appBarColor: primaryColor,
+        bottomNavigationBar: Container(
+          color: primaryColor,
+          padding: const EdgeInsets.symmetric(vertical: 2),
+          child: TabBar(
+            onTap: _changeSelectedNavBar,
+            labelColor: textWhite,
+            indicatorColor: Colors.transparent,
+            unselectedLabelColor: textColor.withOpacity(.5),
+            tabs: filteredTabs.map((e) {
+              return Tab(
+                child: Center(
+                  child: Text(
+                    e['label'] as String,
+                    style: TextStyle(
+                      fontSize: Helper.getFontSize(context, mobileCaption),
+                      fontWeight: getFontWeight(e, filteredTabs),
+                      color: getFontColor(e, filteredTabs),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  StatelessWidget dokterStats(
+    List<dynamic> filteredTabs,
+  ) {
+    if (_dokter.isEmpty) {
+      return BoxMessage(
+        title: "Data Dokter Tidak Ditemukan",
+        body:
+            "Data dokter tidak ditemukan, hal ini bisa terjadi karena data dokter belum diinputkan oleh admin. Silahkan hubungi admin untuk menginputkan data dokter.",
+        backgroundColour: bgColor,
+      );
+    } else {
+      return StatsHomeWidget(
+        dokter: _dokter,
+        metrics: metrics,
+        onTap: _changeSelectedNavBar,
+        filteredTabs: filteredTabs,
+      );
+    }
+  }
+
+  Color getFontColor(e, List<dynamic> filteredTabs) {
+    return e['label'] == filteredTabs[selectedTab]['label']
+        ? textWhite
+        : textColor.withOpacity(.5);
+  }
+
+  FontWeight getFontWeight(e, List<dynamic> filteredTabs) {
+    return e['label'] == filteredTabs[selectedTab]['label']
+        ? fontSemiBold
+        : fontNormal;
   }
 }

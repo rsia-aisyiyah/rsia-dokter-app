@@ -11,13 +11,14 @@ class StatsHomeWidget extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   final dokter, metrics;
   final Function onTap;
-  final double widgetHeight;
+  final List filteredTabs;
+
   const StatsHomeWidget({
     super.key,
     this.dokter,
     this.metrics,
     required this.onTap,
-    required this.widgetHeight,
+    this.filteredTabs = const [],
   });
 
   double monthBetween(DateTime endDate) {
@@ -29,9 +30,38 @@ class StatsHomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> cards = [];
+
+    if (filteredTabs.isNotEmpty) {
+      for (var i = 0; i < filteredTabs.length; i++) {
+        final index = i;
+        final label = filteredTabs[i]['label'];
+
+        cards.add(
+          Expanded(
+            child: InkWell(
+              onTap: () => onTap(index),
+              child: cardStats(
+                context,
+                label,
+                metrics[label.toLowerCase().replaceAll(" ", "_")].toString(),
+              ),
+            ),
+          ),
+        );
+
+        if (i < filteredTabs.length - 1) {
+          cards.add(const SizedBox(width: 10));
+        }
+      }
+    }
+
     var STRExpired = monthBetween(DateTime.parse(
       dokter['data']['pegawai']['kualifikasi_staff_klinis']['tanggal_akhir_str'],
     ));
+
+    String photoFile = dokter['data']['pegawai']['photo'].toString();
+
     return Container(
       color: bgColor,
       padding: const EdgeInsets.all(15),
@@ -54,8 +84,8 @@ class StatsHomeWidget extends StatelessWidget {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: CachedNetworkImage(
-                      imageUrl: photoUrl + dokter['data']['pegawai']['photo'].toString(),
+                    child: photoFile.isNotEmpty ? CachedNetworkImage(
+                      imageUrl: photoUrl + photoFile,
                       width: 80,
                       height: 80,
                       fit: BoxFit.cover,
@@ -73,9 +103,14 @@ class StatsHomeWidget extends StatelessWidget {
                       errorWidget: (context, url, error) => Container(
                         width: 80,
                         height: 80,
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.error),
+                        color: Colors.grey[400],
+                        child: const Icon(Icons.image_not_supported_outlined),
                       ),
+                    ) : Container(
+                      width: 80,
+                      height: 80,
+                      color: Colors.grey[400],
+                      child: const Icon(Icons.image_not_supported_outlined),
                     ),
                   ),
                 ),
@@ -121,44 +156,13 @@ class StatsHomeWidget extends StatelessWidget {
               ],
             ),
             _STRCheck(context, STRExpired, dokter),
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () => onTap(0),
-                      child: cardStats(
-                        context,
-                        rawatInapText,
-                        metrics['pasien_ranap'].toString(),
-                      ),
-                    ),
+            filteredTabs.isNotEmpty
+              ? Expanded(
+                  child: Row(
+                    children: cards,
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () => onTap(1),
-                      child: cardStats(
-                        context,
-                        rawatJalanText,
-                        metrics['pasien_ralan'].toString(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () => onTap(2),
-                      child: cardStats(
-                        context,
-                        jadwalOperasiText,
-                        metrics['jadwal_operasi'].toString(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )
+                )
+              : const SizedBox(),
           ],
         ),
       ),
@@ -168,8 +172,9 @@ class StatsHomeWidget extends StatelessWidget {
   Container _STRCheck(BuildContext context, double STRExpired, data) {
     return Container(
       margin: EdgeInsets.only(
-          top: STRExpired <= STRExpMin ? 10 : 10,
-          bottom: STRExpired <= STRExpMin ? 10 : 10),
+        top: STRExpired <= STRExpMin ? 10 : 10,
+        bottom: STRExpired <= STRExpMin ? 10 : 10,
+      ),
       padding: STRExpired <= STRExpMin
           ? const EdgeInsets.symmetric(
               horizontal: 12,
@@ -188,14 +193,14 @@ class StatsHomeWidget extends StatelessWidget {
               text: TextSpan(
                 text: strExpiredIn,
                 style: TextStyle(
-                  fontSize: Helper.getFontSize(context, mobileCaption),
+                  fontSize: Helper.getFontSize(context, mobileOverline),
                   color: textColor,
                 ),
                 children: [
                   TextSpan(
                     text: " ${STRExpired.toStringAsFixed(1)} $labelBulan",
                     style: TextStyle(
-                      fontSize: Helper.getFontSize(context, mobileCaption),
+                      fontSize: Helper.getFontSize(context, mobileOverline),
                       color: textColor,
                       fontWeight: fontSemiBold,
                     ),
@@ -203,7 +208,7 @@ class StatsHomeWidget extends StatelessWidget {
                   TextSpan(
                     text: ". $strRenewText",
                     style: TextStyle(
-                      fontSize: Helper.getFontSize(context, mobileCaption),
+                      fontSize: Helper.getFontSize(context, mobileOverline),
                       color: textColor,
                     ),
                   ),
