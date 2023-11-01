@@ -318,7 +318,6 @@ class JasaMedisState extends State<JasaMedis> {
                   itemCount: dataJasaMedis.isEmpty ? 1 : dataJasaMedis.length,
                   itemBuilder: (context, index) {
                     if (dataJasaMedis.isNotEmpty) {
-                      // print(dataJasaMedis[index]);
                       return InkWell(
                         onTap: () {},
                         child: createCardJasaMedis(

@@ -17,6 +17,7 @@ class IndexScreen extends StatefulWidget {
 class _IndexScreenState extends State<IndexScreen> {
   int _selectedNavbar = 0;
   final navigatorKey = GlobalKey<NavigatorState>();
+  String spesialis = '';
 
   @override
   void initState() {

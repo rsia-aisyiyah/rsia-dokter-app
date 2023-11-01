@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <!-- pastel colors -->
+    <color name="pastel_red">#FF6961</color>
+    <color name="pastel_orange">#FFB347</color>
+    <color name="pastel_yellow">#FFFFE0</color>
+    <color name="pastel_green">#77DD77</color>
+    <color name="pastel_blue">#AEC6CF</color>
+    <color name="pastel_purple">#B19CD9</color>
+    <!-- dark colors -->
+    <color name="dark_red">#8B0000</color>
+    <color name="dark_orange">#FF8C00</color>
+    <color name="dark_yellow">#FFD700</color>
+    <color name="dark_green">#006400</color>
+    <color name="dark_blue">#00008B</color>
+    <color name="dark_purple">#4B0082</color>
+</resources>

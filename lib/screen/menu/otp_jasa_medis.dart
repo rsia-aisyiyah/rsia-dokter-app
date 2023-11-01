@@ -107,10 +107,8 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
     var res = await Api().getData('/dokter');
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
-      // print(body);
       setState(() {
         _dokter = body;
-        // print(_dokter);
       });
     } else {
       var body = json.decode(res.body);
