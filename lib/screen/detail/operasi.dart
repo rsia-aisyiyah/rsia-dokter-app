@@ -11,7 +11,7 @@ import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/table.dart';
 
-class OperasiDetail extends StatefulWidget {
+class DetailOperasi extends StatefulWidget {
   final Map pasien;
 
   final String noRawat;
@@ -19,7 +19,7 @@ class OperasiDetail extends StatefulWidget {
   final String rm;
   final String statusLanjut;
 
-  const OperasiDetail({
+  const DetailOperasi({
     super.key,
     required this.noRawat,
     required this.pasien,
@@ -29,10 +29,10 @@ class OperasiDetail extends StatefulWidget {
   });
 
   @override
-  State<OperasiDetail> createState() => OperasiDetailState();
+  State<DetailOperasi> createState() => DetailOperasiState();
 }
 
-class OperasiDetailState extends State<OperasiDetail> {
+class DetailOperasiState extends State<DetailOperasi> {
   bool isLoading = true;
   bool hasData = false;
 
@@ -107,7 +107,7 @@ class OperasiDetailState extends State<OperasiDetail> {
                       children: [
                         _pasienDetails(widget.pasien),
                         const SizedBox(height: 10),
-                        _operasiDetails(response['data']),
+                        _DetailOperasis(response['data']),
                       ],
                     ),
                   ),
@@ -140,7 +140,7 @@ class OperasiDetailState extends State<OperasiDetail> {
     );
   }
 
-  _operasiDetails(response) {
+  _DetailOperasis(response) {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

@@ -273,7 +273,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => OperasiDetail(
+                              builder: (context) => DetailOperasi(
                                 noRawat: dataOperasi['no_rawat'],
                                 pasien: dataOperasi['pasien'],
                                 penjab: Helper.getRealPenjab(dataOperasi['penjab']['png_jawab']),
