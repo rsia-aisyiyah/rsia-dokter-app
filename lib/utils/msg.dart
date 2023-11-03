@@ -100,6 +100,41 @@ class Msg {
     );
   }
 
+  static withTitle(BuildContext context, String title, String message) {
+    if (ScaffoldMessenger.of(context).mounted) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: Helper.getFontSize(context, 18),
+                fontWeight: fontBold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: Helper.getFontSize(context, 16),
+              ),
+            ),
+          ],
+        ),
+        duration: const Duration(seconds: snackBarDuration),
+        backgroundColor: primaryColor,
+      ),
+    );
+  }
+
   static withData(
     BuildContext context,
     String category,

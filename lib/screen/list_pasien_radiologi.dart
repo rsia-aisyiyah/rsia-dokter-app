@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
-import 'package:rsiap_dokter/components/cards/card_list_pasien_radiologi.dart';
+import 'package:rsiap_dokter/components/cards/card_list_permintaan_pasien_radiologi.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/screen/detail/radiologi.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
@@ -74,7 +74,7 @@ class _ListPasienRadiologiState extends State<ListPasienRadiologi> {
   }
 
   Future fetchPasien() async {
-    var res = await Api().getData("/pasien/radiologi");
+    var res = await Api().getData("/pasien/radiologi/now");
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       return body;
@@ -158,7 +158,7 @@ class _ListPasienRadiologiState extends State<ListPasienRadiologi> {
                     ),
                   ),
                 ),
-                child: CardListPasienRadiologi(
+                child: CardListPermintaanPasienRadiologi(
                   penjab: penjab,
                   pasien: pasien,
                 ),

@@ -255,38 +255,38 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
               ),
               const SizedBox(height: 15),
               widget.isRanap
-                  ? Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Tanggal Sebagai",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: fontSemiBold,
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Tanggal Sebagai",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: fontSemiBold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Flex(
+                        direction: Axis.horizontal,
+                        children: [
+                          _customCapsuleFilter(
+                            "Tanggal Masuk",
+                            'dateby',
+                            'masuk',
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        Flex(
-                          direction: Axis.horizontal,
-                          children: [
-                            _customCapsuleFilter(
-                              "Tanggal Masuk",
-                              'dateby',
-                              'masuk',
-                            ),
-                            const SizedBox(width: 10),
-                            _customCapsuleFilter(
-                              "Tanggal Pulang",
-                              'dateby',
-                              'pulang',
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                      ],
-                    )
-                  : Container(),
+                          const SizedBox(width: 10),
+                          _customCapsuleFilter(
+                            "Tanggal Pulang",
+                            'dateby',
+                            'pulang',
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                    ],
+                  )
+                : Container(),
               Text(
                 labelSelectkategori,
                 style: TextStyle(
