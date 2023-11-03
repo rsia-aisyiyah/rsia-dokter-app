@@ -11,6 +11,7 @@ import 'package:rsiap_dokter/screen/menu.dart';
 import 'package:rsiap_dokter/screen/menu/otp_jasa_medis.dart';
 import 'package:rsiap_dokter/screen/menu/pasien_list.dart';
 import 'package:rsiap_dokter/screen/menu/pasien_operasi.dart';
+import 'package:rsiap_dokter/screen/menu/pasien_radiologi_list.dart';
 import 'package:rsiap_dokter/screen/menu/rekap_kunjungan.dart';
 import 'package:rsiap_dokter/screen/profile.dart';
 
@@ -53,6 +54,18 @@ List menuScreenItems = [
     'label': 'Pasien Operasi',
     'widget': const PasienOperasi(),
     "show_on" : {"spesialis anak", "kebidanan dan kandungan"},
+    'disabled': false
+  },
+  {
+    'label': 'Pasien Rawat Jalan',
+    'widget': const PasienRadiologiList(ralan: true),
+    "show_on" : {"spesialis radiologi"},
+    'disabled': false
+  },
+  {
+    'label': 'Pasien Rawat Inap',
+    'widget': const PasienRadiologiList(ranap: true),
+    "show_on" : {"spesialis radiologi"},
     'disabled': false
   },
   {

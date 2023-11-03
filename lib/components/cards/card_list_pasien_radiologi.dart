@@ -64,10 +64,10 @@ class CardListPasienRadiologi extends StatelessWidget {
                   GenTable(data: {
                     ikNoRm: pasien['reg_periksa']['no_rkm_medis'],
                     ikNoRawat: pasien['no_rawat'],
-                    "Permintaan": "${Helper.formatDate3(pasien['tgl_permintaan'])} | ${pasien['jam_permintaan']}",
-                    "Pemeriksaan": pasien['tgl_sampel'] != "0000-00-00" ? "${Helper.formatDate3(pasien['tgl_sampel'])} | ${pasien['jam_sampel']}": '-',
-                    "Info Klinis": pasien['informasi_tambahan'] ?? '-',
-                    "Diagnosa Klinis": pasien['diagnosa_klinis'] ?? '-',
+                    'Permintaan': "${Helper.formatDate3(pasien['permintaan']['tgl_permintaan'])} | ${pasien['permintaan']['jam_permintaan']}",
+                    "Pemeriksaan": pasien['permintaan']['tgl_sampel'] != "0000-00-00" ? "${Helper.formatDate3(pasien['permintaan']['tgl_sampel'])} | ${pasien['permintaan']['jam_sampel']}": '-',
+                    "Info Klinis": pasien['permintaan']['informasi_tambahan'] ?? '-',
+                    "Diagnosa Klinis": pasien['permintaan']['diagnosa_klinis'] ?? '-',
                   }),
                   const SizedBox(height: 10),
                   Wrap(
@@ -80,7 +80,7 @@ class CardListPasienRadiologi extends StatelessWidget {
                           vertical: 5,
                         ),
                         decoration: BoxDecoration(
-                          color: pasien['hasil'] != null ? Helper.penjabColor(penjab) : Colors.grey.shade300,
+                          color: pasien['hasil'] != null && pasien['hasil'].isNotEmpty ? Helper.penjabColor(penjab) : Colors.grey.shade300,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(
@@ -90,7 +90,7 @@ class CardListPasienRadiologi extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.assignment_outlined,
-                              color: pasien['hasil'] != null ? textWhite : Colors.grey.shade500,
+                              color: pasien['hasil'] != null && pasien['hasil'].isNotEmpty ? textWhite : Colors.grey.shade500,
                               size: 18,
                             ),
                             const SizedBox(width: 5),
@@ -99,7 +99,7 @@ class CardListPasienRadiologi extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: fontSemiBold,
-                                color: pasien['hasil'] != null ? textWhite : Colors.grey.shade500,
+                                color: pasien['hasil'] != null && pasien['hasil'].isNotEmpty ? textWhite : Colors.grey.shade500,
                               ),
                             ),
                           ],
