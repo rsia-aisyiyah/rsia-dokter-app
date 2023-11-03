@@ -130,6 +130,10 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                         GenTable(data: {
                           "Permintaan": Helper.formatDate3(pasien['tgl_permintaan']) + " ~ " + pasien['jam_permintaan'],
                           "Pemeriksaan": Helper.formatDate3(pasien['tgl_sampel']) + " ~ " + pasien['jam_sampel'],
+                        }),
+                        const SizedBox(height: 10),
+                        GenTable(data: {
+                          "Jenis Pemeriksaan": pasien['periksa']['jenis']['nm_perawatan'],
                           "Informasi Klinis": pasien['informasi_tambahan'],
                           "Diagnosa Klinis": pasien['diagnosa_klinis'],
                         }),
