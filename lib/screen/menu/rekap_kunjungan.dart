@@ -28,6 +28,8 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
   bool isLoading = true;
   bool isFilter = false;
 
+  String tglFilter = "tgl_registrasi";
+
   TextEditingController dateinput = TextEditingController();
   // ignore: prefer_final_fields
   RefreshController _refreshController = RefreshController(
@@ -64,6 +66,12 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
         isUmum = true;
       });
       strUrl = '/kunjungan/rekap/umum';
+    } else if (spesialis.toLowerCase().contains('radiologi')) {
+      setState(() {
+        isUmum = true;
+        tglFilter = "tgl";
+      });
+      strUrl = '/kunjungan/rekap/radiologi';
     } else {
       strUrl = '/kunjungan/rekap';
     }
@@ -74,10 +82,18 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
 
   void _setData(value) {
     if (value['success']) {
-      setState(() {
-        dataMetrics = value['data'];
-        isLoading = false;
-      });
+      // if value data not empty
+      if (value['data'].length > 0) {
+        setState(() {
+          dataMetrics = value['data'];
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          dataMetrics = {};
+          isLoading = false;
+        });
+      }
     } else {
       Msg.error(context, value['message']);
       setState(() {
@@ -139,7 +155,20 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
             ),
           ],
         ),
-        body: _buildBody(),
+        body: dataMetrics.isNotEmpty ? _buildBody() : Container(
+          padding: const EdgeInsets.all(20),
+          child: Center(
+            child: Text(
+              "Data tidak ditemukan. \nHal ini bisa terjadi karena belum ada data pemeriksaan pasien.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: fontSemiBold,
+                color: Colors.grey.shade500,
+              ),
+            ),
+          ),
+        ),
       );
     }
   }
@@ -225,14 +254,11 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: primaryColor, width: 2),
-                        borderRadius:
-                             const BorderRadius.all(Radius.circular(10)),
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.grey[400]!, width: 2),
-                        borderRadius:
-                             const BorderRadius.all(Radius.circular(10)),
+                        borderSide: BorderSide(color: Colors.grey[400]!, width: 2),
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -274,7 +300,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
 
                         setState(() {
                           dateinput.text = "$startDate - $endDate";
-                          filterData['tgl_registrasi'] = {
+                          filterData[tglFilter] = {
                             "start": startDate,
                             "end": endDate
                           };
@@ -284,7 +310,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                   ),
                 ],
               ),
-               const Spacer(),
+              const Spacer(),
               Flex(
                 direction: Axis.horizontal,
                 children: [
@@ -350,30 +376,21 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(5),
-        child: dataMetrics.isNotEmpty
-            ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                metricsTitleWidget(),
-                metricsWidgets(),
-              ],
-            )
-            : Text(
-                belumAdaPasien,
-                style:  TextStyle(
-                  color: textWhite,
-                  fontSize: 18,
-                  fontWeight: fontSemiBold,
-                ),
-              ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            metricsTitleWidget(),
+            metricsWidgets(),
+          ],
+        )
       ),
     );
   }
 
   Widget metricsTitleWidget() {
-    if (filterData.containsKey('tgl_registrasi')) {
+    if (filterData.containsKey(tglFilter)) {
       return Container(
         margin:  const EdgeInsets.only(
           left: 10,
@@ -398,7 +415,7 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
             ),
              const SizedBox(height: 5),
             Text(
-              "Periode ${filterData['tgl_registrasi']['start']} s/d ${filterData['tgl_registrasi']['end']}",
+              "Periode ${filterData[tglFilter]['start']} s/d ${filterData[tglFilter]['end']}",
               style:  TextStyle(
                 fontSize: 14,
                 fontWeight: fontSemiBold,
