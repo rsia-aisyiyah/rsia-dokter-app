@@ -72,7 +72,7 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
           return Scaffold(
             backgroundColor: Helper.penjabBgColor(widget.penjab),
             appBar: AppBar(
-              title: Text("Detail Radiologi"),
+              title: Text("Detail Pasien Radiologi"),
               backgroundColor: Helper.penjabColor(widget.penjab),
               actions: [
                 // hasil.isNotEmpty ? IconButton(
@@ -128,14 +128,16 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                         }),
                         const SizedBox(height: 10),
                         GenTable(data: {
-                          "Permintaan": Helper.formatDate3(pasien['tgl_permintaan']) + " ~ " + pasien['jam_permintaan'],
-                          "Pemeriksaan": Helper.formatDate3(pasien['tgl_sampel']) + " ~ " + pasien['jam_sampel'],
-                        }),
-                        const SizedBox(height: 10),
-                        GenTable(data: {
                           "Jenis Pemeriksaan": pasien['periksa']['jenis']['nm_perawatan'],
                           "Informasi Klinis": pasien['informasi_tambahan'],
                           "Diagnosa Klinis": pasien['diagnosa_klinis'],
+                          "Dirujuk Oleh": pasien['periksa']['dokter']['nm_dokter'],
+                        }),
+                        const SizedBox(height: 10),
+                        GenTable(data: {
+                          "Permintaan": Helper.formatDate3(pasien['tgl_permintaan']) + " ~ " + pasien['jam_permintaan'],
+                          "Pemeriksaan": Helper.formatDate3(pasien['tgl_sampel']) + " ~ " + pasien['jam_sampel'],
+                          "Oleh": pasien['periksa']['petugas']['nama'],
                         }),
                       ],
                     ),
