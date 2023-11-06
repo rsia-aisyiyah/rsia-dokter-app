@@ -68,6 +68,7 @@ class CardListPasienRadiologi extends StatelessWidget {
                     "Pemeriksaan": pasien['permintaan']['tgl_sampel'] != "0000-00-00" ? "${Helper.formatDate3(pasien['permintaan']['tgl_sampel'])} | ${pasien['permintaan']['jam_sampel']}": '-',
                     "Info Klinis": pasien['permintaan']['informasi_tambahan'] ?? '-',
                     "Diagnosa Klinis": pasien['permintaan']['diagnosa_klinis'] ?? '-',
+                    "Jenis Perawatan": pasien['jenis']['nm_perawatan']
                   }),
                   const SizedBox(height: 10),
                   Wrap(

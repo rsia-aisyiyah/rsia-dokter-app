@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/config/colors.dart';
-import 'package:rsiap_dokter/screen/detail/pasien.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
-import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
 
 class ListPasienRalan extends StatefulWidget {

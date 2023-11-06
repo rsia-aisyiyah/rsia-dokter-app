@@ -175,21 +175,21 @@ class _ListPermintaanRadiologiState extends State<ListPermintaanRadiologi> {
                       ),
                     )
                   : IconButton(
-                      onPressed: () async {
-                        setState(() {
-                          btnLoading = true;
-                        });
+                    onPressed: () async {
+                      setState(() {
+                        btnLoading = true;
+                      });
 
-                        await loadMore();
-                        setState(() {
-                          btnLoading = false;
-                        });
-                      },
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        color: textColor,
-                      ),
+                      await loadMore();
+                      setState(() {
+                        btnLoading = false;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: textColor,
                     ),
+                  ),
             ),
         ],
       );

@@ -13,6 +13,7 @@ class BottomSheetFilter extends StatefulWidget {
   bool isLoding;
   bool isFilter;
   bool isRanap;
+  bool isRadiologi;
 
   Function fetchPasien;
   Function setData;
@@ -31,6 +32,7 @@ class BottomSheetFilter extends StatefulWidget {
     required this.isLoding,
     required this.isFilter,
     this.isRanap = false,
+    this.isRadiologi = false,
     required this.fetchPasien,
     required this.setData,
     required this.doFilter,
@@ -254,7 +256,7 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
                 },
               ),
               const SizedBox(height: 15),
-              widget.isRanap
+              widget.isRanap && !widget.isRadiologi
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,

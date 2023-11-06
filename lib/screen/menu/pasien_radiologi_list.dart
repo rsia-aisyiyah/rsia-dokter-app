@@ -219,6 +219,8 @@ class PasienListSRadiologitate extends State<PasienRadiologiList> {
       filterData['keywords'] = searchController.text.toString();
     }
 
+    print(filterData);
+
     _fetchSearch(filterData).then((value) {
       _setData(value);
     });
@@ -365,7 +367,7 @@ class PasienListSRadiologitate extends State<PasienRadiologiList> {
   }
 
   Widget _filterTitle() {
-    if (filterData.containsKey('tgl_periksa')) {
+    if (filterData.containsKey('tgl')) {
       return Container(
         margin: const EdgeInsets.only(
           left: 10,
@@ -400,7 +402,7 @@ class PasienListSRadiologitate extends State<PasienRadiologiList> {
                 : const SizedBox(),
             const SizedBox(height: 5),
             Text(
-              "Periode ${filterData['tgl_periksa']['start']} s/d ${filterData['tgl_periksa']['end']}",
+              "Periode ${filterData['tgl']['start']} s/d ${filterData['tgl']['end']}",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: fontSemiBold,
@@ -425,13 +427,14 @@ class PasienListSRadiologitate extends State<PasienRadiologiList> {
           isLoding: isLoding,
           isFilter: isFilter,
           isRanap: widget.ranap,
+          isRadiologi: true,
           fetchPasien: fetchPasien,
           setData: _setData,
           doFilter: doFilter,
           onClearAndCancel: _onClearCancel,
           filterData: filterData,
           selectedCategory: filterData['penjab'] ?? '',
-          tglFilterKey: "tgl_periksa",
+          tglFilterKey: "tgl",
         );
       },
     );
