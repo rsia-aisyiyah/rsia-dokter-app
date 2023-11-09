@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,6 +8,7 @@ import 'package:rsiap_dokter/screen/detail/resume.dart';
 import 'package:rsiap_dokter/screen/index.dart';
 
 late BuildContext ctx;
+
 FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 final _localNotification = FlutterLocalNotificationsPlugin();
 final _androidChannel = AndroidNotificationChannel(
@@ -18,40 +18,44 @@ final _androidChannel = AndroidNotificationChannel(
   importance: Importance.defaultImportance,
 );
 
+Future<void> handleNotificationAction(String action, Map<String, dynamic> data) async {
+  if (action == 'resume') {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (context) => ResumePasienRanap(
+          noRawat: data['no_rawat'],
+          kategori: "Ranap",
+        ),
+      ),
+    );
+  } else if (action == 'detail') {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (context) => DetailPasien(
+          kategori: "Ranap",
+          noRawat: data['no_rawat'],
+        ),
+      ),
+    );
+  } else if (action == 'radiologi') {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (context) => DetailRadiologi(
+          penjab: data['penjab'] ?? "UMUM",
+          noRawat: data['no_rawat'],
+          tanggal: data['tanggal'],
+          jam: data['jam'],
+        ),
+      ),
+    );
+  }
+}
+
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  Map data = message.data;
-  if (data['action'] != null) {
-    if (data['action'] == 'resume') {
-      Navigator.of(ctx).push(
-        MaterialPageRoute(
-          builder: (context) => ResumePasienRanap(
-            noRawat: data['no_rawat'],
-            kategori: "Ranap",
-          ),
-        ),
-      );
-    } else if (data['action'] == 'detail') {
-      Navigator.of(ctx).push(
-        MaterialPageRoute(
-          builder: (context) => DetailPasien(
-            kategori: "Ranap",
-            noRawat: data['no_rawat'],
-          ),
-        ),
-      );
-    } else if (data['action'] == 'radiologi') {
-      print(data);
-      Navigator.of(ctx).push(
-        MaterialPageRoute(
-          builder: (context) => DetailRadiologi(
-            penjab: data['penjab'],
-            noRawat: data['no_rawat'],
-            tanggal: data['tanggal'],
-            jam: data['jam']
-          ),
-        ),
-      );
-    }
+  final data = message.data;
+  final action = data['action'];
+  if (action != null) {
+    handleNotificationAction(action, data);
   } else {
     Navigator.of(ctx).push(
       MaterialPageRoute(builder: (context) => IndexScreen()),
@@ -60,39 +64,10 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
 }
 
 Future<void> handleMessage(RemoteMessage message) async {
-  Map data = message.data;
-  if (data['action'] != null) {
-    if (data['action'] == 'resume') {
-      Navigator.of(ctx).push(
-        MaterialPageRoute(
-          builder: (context) => ResumePasienRanap(
-            noRawat: data['no_rawat'],
-            kategori: "Ranap",
-          ),
-        ),
-      );
-    } else if (data['action'] == 'detail') {
-      Navigator.of(ctx).push(
-        MaterialPageRoute(
-          builder: (context) => DetailPasien(
-            kategori: "Ranap",
-            noRawat: data['no_rawat'],
-          ),
-        ),
-      );
-    } else if (data['action'] == 'radiologi') {
-      print(data);
-      Navigator.of(ctx).push(
-        MaterialPageRoute(
-          builder: (context) => DetailRadiologi(
-            penjab: data['penjab'] ?? "UMUM",
-            noRawat: data['no_rawat'],
-            tanggal: data['tanggal'],
-            jam: data['jam']
-          ),
-        ),
-      );
-    }
+  final data = message.data;
+  final action = data['action'];
+  if (action != null) {
+    handleNotificationAction(action, data);
   } else {
     Navigator.of(ctx).push(
       MaterialPageRoute(builder: (context) => IndexScreen()),
@@ -144,10 +119,12 @@ Future initPushNotification() async {
       notification.body,
       NotificationDetails(
         android: AndroidNotificationDetails(
-            _androidChannel.id, _androidChannel.name,
-            channelDescription: _androidChannel.description,
-            importance: _androidChannel.importance,
-            icon: "@drawable/launcher_icon"),
+          _androidChannel.id,
+          _androidChannel.name,
+          channelDescription: _androidChannel.description,
+          importance: _androidChannel.importance,
+          icon: "@drawable/launcher_icon",
+        ),
       ),
       payload: jsonEncode(message.toMap()),
     );
@@ -166,9 +143,9 @@ class FirebaseApi {
       criticalAlert: false,
       provisional: false,
     );
+    await FirebaseMessaging.instance.setDeliveryMetricsExportToBigQuery(true);
     final fCMToken = await _firebaseMessaging.getToken();
     print('FCM Token: $fCMToken');
-    print(ctx);
     initPushNotification();
     initLocalNotification();
   }

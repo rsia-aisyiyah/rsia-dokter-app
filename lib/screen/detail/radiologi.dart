@@ -236,6 +236,7 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                         const SizedBox(height: 13),
                         GridView.builder(
                           shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
                           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                             maxCrossAxisExtent: (MediaQuery.of(context).size.width - 40) / 2, // Maksimal 2 kolom
                             mainAxisSpacing: 5, // Spasi vertikal antara elemen dalam grid
