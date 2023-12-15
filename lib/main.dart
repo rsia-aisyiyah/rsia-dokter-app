@@ -67,6 +67,9 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     }
 
+    // unsubscribe from topics
+    await unsubscribeFromTopic();
+    
     return false; // Tidak ada token atau request code bukan 200, arahkan ke halaman login.
   }
 
