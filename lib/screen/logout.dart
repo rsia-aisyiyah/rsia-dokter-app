@@ -51,6 +51,9 @@ class LogoutScreen extends StatelessWidget {
         debugPrint("Unsubscribed from topic: $key");
       });
 
+      firebaseMessaging.deleteToken();
+      await FirebaseMessaging.instance.deleteToken();
+
       return true;
     } else {
       return false;

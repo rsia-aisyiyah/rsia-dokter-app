@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/screen/menu.dart';
@@ -11,6 +15,7 @@ import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
 
 import 'api/request.dart';
+import 'config/api.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,6 +68,35 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     return false; // Tidak ada token atau request code bukan 200, arahkan ke halaman login.
+  }
+
+  Future unsubscribeFromTopic() async {
+    String token;
+    var firebaseMessaging = await FirebaseMessaging.instance;
+    token = (await firebaseMessaging.getToken())!;
+
+    String url = "https://iid.googleapis.com/iid/info/" + token + "?details=true";
+    var res = await http.get(Uri.parse(url), headers: {
+      "Authorization": "Bearer ${ApiConfig.fsk}",
+    });
+
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      Map<String, dynamic> subscribedTopics = body['rel']['topics'];
+
+      subscribedTopics.forEach((key, value) async {
+        await Future.delayed(Duration(milliseconds: 10));
+        await FirebaseMessaging.instance.unsubscribeFromTopic(key);
+        debugPrint("Unsubscribed from topic: $key");
+      });
+
+      firebaseMessaging.deleteToken();
+      await FirebaseMessaging.instance.deleteToken();
+
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override

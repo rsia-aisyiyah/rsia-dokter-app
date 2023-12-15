@@ -82,6 +82,8 @@ class _IndexScreenState extends State<IndexScreen> {
         await FirebaseMessaging.instance.subscribeToTopic('umum');
       } else if (spesialis.contains('anak')) {
         await FirebaseMessaging.instance.subscribeToTopic('anak');
+      } else if (spesialis.contains('radiologi')) {
+        await FirebaseMessaging.instance.subscribeToTopic('radiologi');
       }
     });
   }
