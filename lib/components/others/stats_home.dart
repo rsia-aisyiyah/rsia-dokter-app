@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:rsiap_dokter/components/blur.dart';
 import 'package:rsiap_dokter/components/cards/card_stats.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/config.dart';
@@ -142,12 +143,15 @@ class StatsHomeWidget extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 5),
-                      Text(
-                        dokter['data']['pegawai']['kualifikasi_staff_klinis']['nomor_sip'],
-                        style: TextStyle(
-                          fontSize: Helper.getFontSize(context, mobileOverline),
-                          fontWeight: fontNormal,
-                          color: textColor,
+                      BlurWidget(
+                        applyBlur: false,
+                        child: Text(
+                          dokter['data']['pegawai']['kualifikasi_staff_klinis']['nomor_sip'],
+                          style: TextStyle(
+                            fontSize: Helper.getFontSize(context, mobileOverline),
+                            fontWeight: fontNormal,
+                            color: textColor,
+                          ),
                         ),
                       ),
                     ],

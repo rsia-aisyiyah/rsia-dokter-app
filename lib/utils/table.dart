@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rsiap_dokter/components/blur.dart';
 
 // ignore: must_be_immutable
 class GenTable extends StatelessWidget {
@@ -44,10 +45,13 @@ class GenTable extends StatelessWidget {
             TableCell(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Text(
-                  e.value,
-                  textAlign: textAlign ?? TextAlign.right,
-                  style: textStyle,
+                child: BlurWidget(
+                  applyBlur: false,
+                  child: Text(
+                    e.value,
+                    textAlign: textAlign ?? TextAlign.right,
+                    style: textStyle,
+                  ),
                 ),
               ),
             ),

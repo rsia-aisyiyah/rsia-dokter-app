@@ -1,21 +1,18 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
+import 'package:rsiap_dokter/components/blur.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
-import 'package:rsiap_dokter/screen/login.dart';
 import 'package:rsiap_dokter/screen/logout.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
-import 'package:rsiap_dokter/utils/msg.dart';
 import 'package:rsiap_dokter/utils/section_title.dart';
 import 'package:rsiap_dokter/utils/table.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -35,43 +32,43 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
   }
 
-  void _logout() async {
-    var res = await Api().postRequest('/auth/logout');
-
-    if (res.statusCode == 200) {
-      var body = json.decode(res.body);
-      if (body['success']) {
-        Msg.success(context, logoutSuccessMsg);
-
-        await FirebaseMessaging.instance.unsubscribeFromTopic('dokter');
-        SharedPreferences.getInstance().then((prefs) async {
-          var spesialis = prefs.getString('spesialis')!.toLowerCase();
-          var kd_dokter = prefs.getString('sub')!;
-
-          await FirebaseMessaging.instance.unsubscribeFromTopic("${kd_dokter.replaceAll('"', '')}");
-          if (spesialis.contains('kandungan')) {
-            await FirebaseMessaging.instance.unsubscribeFromTopic('kandungan');
-          } else if (spesialis.contains('umum')) {
-            await FirebaseMessaging.instance.unsubscribeFromTopic('umum');
-          } else if (spesialis.contains('anak')) {
-            await FirebaseMessaging.instance.unsubscribeFromTopic('anak');
-          }
-
-          prefs.remove('token');
-        }).then((value) => {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LoginScreen(),
-            ),
-          ),
-        });
-      }
-    } else {
-      var body = json.decode(res.body);
-      Msg.error(context, body['message']);
-    }
-  }
+  // void _logout() async {
+  //   var res = await Api().postRequest('/auth/logout');
+  //
+  //   if (res.statusCode == 200) {
+  //     var body = json.decode(res.body);
+  //     if (body['success']) {
+  //       Msg.success(context, logoutSuccessMsg);
+  //
+  //       await FirebaseMessaging.instance.unsubscribeFromTopic('dokter');
+  //       SharedPreferences.getInstance().then((prefs) async {
+  //         var spesialis = prefs.getString('spesialis')!.toLowerCase();
+  //         var kd_dokter = prefs.getString('sub')!;
+  //
+  //         await FirebaseMessaging.instance.unsubscribeFromTopic("${kd_dokter.replaceAll('"', '')}");
+  //         if (spesialis.contains('kandungan')) {
+  //           await FirebaseMessaging.instance.unsubscribeFromTopic('kandungan');
+  //         } else if (spesialis.contains('umum')) {
+  //           await FirebaseMessaging.instance.unsubscribeFromTopic('umum');
+  //         } else if (spesialis.contains('anak')) {
+  //           await FirebaseMessaging.instance.unsubscribeFromTopic('anak');
+  //         }
+  //
+  //         prefs.remove('token');
+  //       }).then((value) => {
+  //         Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(
+  //             builder: (context) => const LoginScreen(),
+  //           ),
+  //         ),
+  //       });
+  //     }
+  //   } else {
+  //     var body = json.decode(res.body);
+  //     Msg.error(context, body['message']);
+  //   }
+  // }
 
   Future _getMe() async {
     var res = await Api().getData('/dokter');
@@ -224,12 +221,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
                                         ),
                                         const SizedBox(height: 5),
-                                        Text(
-                                          data['data']['pegawai']['kualifikasi_staff_klinis']['nomor_sip'],
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: fontNormal,
-                                            color: textWhite,
+                                        BlurWidget(
+                                          applyBlur: false,
+                                          child: Text(
+                                            data['data']['pegawai']['kualifikasi_staff_klinis']['nomor_sip'],
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: fontNormal,
+                                              color: textWhite,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -259,7 +259,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           child: SingleChildScrollView(
                             padding: const EdgeInsets.all(20),
-                            child: Column( crossAxisAlignment: CrossAxisAlignment.stretch,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
                                 const SectionTitle(title: "Detail Dokter"),
                                 const SizedBox(height: 5),
