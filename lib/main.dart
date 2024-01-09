@@ -1,14 +1,15 @@
 import 'dart:convert';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/screen/menu.dart';
 import 'package:rsiap_dokter/screen/profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:rsiap_dokter/screen/login.dart';
 import 'package:rsiap_dokter/screen/index.dart';
 import 'package:rsiap_dokter/config/config.dart';
@@ -19,6 +20,7 @@ import 'config/api.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await initializeDateFormatting('id_ID', null).then(
     (_) => runApp(
       const MainApp(),
@@ -69,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // unsubscribe from topics
     await unsubscribeFromTopic();
-    
+
     return false; // Tidak ada token atau request code bukan 200, arahkan ke halaman login.
   }
 
@@ -85,19 +87,26 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
-      Map<String, dynamic> subscribedTopics = body['rel']['topics'];
 
-      subscribedTopics.forEach((key, value) async {
-        await Future.delayed(Duration(milliseconds: 10));
-        await FirebaseMessaging.instance.unsubscribeFromTopic(key);
-        debugPrint("Unsubscribed from topic: $key");
-      });
+      if (body['rel'] != null && body['rel']['topics']) {
+        Map<String, dynamic> subscribedTopics = body['rel']['topics'];
+        print("LOG FAISAL : ${subscribedTopics}");
 
-      firebaseMessaging.deleteToken();
-      await FirebaseMessaging.instance.deleteToken();
+        subscribedTopics.forEach((key, value) async {
+          await Future.delayed(Duration(milliseconds: 10));
+          await FirebaseMessaging.instance.unsubscribeFromTopic(key);
+          debugPrint("Unsubscribed from topic: $key");
+        });
 
-      return true;
+        firebaseMessaging.deleteToken();
+        await FirebaseMessaging.instance.deleteToken();
+
+        return true;
     } else {
+        return false;
+    }
+    } else {
+      print("LOG FAISAL : INI YANG ERROR ${res.statusCode}");
       return false;
     }
   }
@@ -110,10 +119,8 @@ class _SplashScreenState extends State<SplashScreen> {
           future: checkToken(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              // Tampilkan widget loading ketika sedang menunggu hasil.
               return loadingku();
             } else if (snapshot.hasError) {
-              // Handle error jika ada kesalahan.
               // return Text('Error: ${snapshot.error}');
               return Msg.error(context, 'Error: ${snapshot.error}');
             } else {

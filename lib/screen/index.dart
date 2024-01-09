@@ -1,4 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
@@ -66,7 +66,7 @@ class _IndexScreenState extends State<IndexScreen> {
   }
 
   void firebaseInit() async {
-    await Firebase.initializeApp();
+    // await Firebase.initializeApp();
     await FirebaseApi().initNotif(context);
     await FirebaseMessaging.instance.subscribeToTopic('dokter');
 
