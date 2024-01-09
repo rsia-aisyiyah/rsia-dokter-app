@@ -69,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
             prefs.setString('token', json.encode(body['access_token']));
             prefs.setString('kd_sps', json.encode(decodedToken['sps']));
             prefs.setString('spesialis', json.encode(decodedToken['nm_sps']));
+            prefs.setString('isDemo', json.encode(decodedToken['isDemo']));
 
             Navigator.pushReplacement(
               context,

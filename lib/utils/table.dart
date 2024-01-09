@@ -46,7 +46,6 @@ class GenTable extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: BlurWidget(
-                  applyBlur: false,
                   child: Text(
                     e.value,
                     textAlign: textAlign ?? TextAlign.right,

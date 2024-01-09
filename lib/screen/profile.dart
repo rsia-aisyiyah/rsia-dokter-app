@@ -222,7 +222,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ),
                                         const SizedBox(height: 5),
                                         BlurWidget(
-                                          applyBlur: false,
                                           child: Text(
                                             data['data']['pegawai']['kualifikasi_staff_klinis']['nomor_sip'],
                                             style: TextStyle(

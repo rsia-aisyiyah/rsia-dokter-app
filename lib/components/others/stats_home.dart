@@ -144,7 +144,6 @@ class StatsHomeWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       BlurWidget(
-                        applyBlur: false,
                         child: Text(
                           dokter['data']['pegawai']['kualifikasi_staff_klinis']['nomor_sip'],
                           style: TextStyle(
