@@ -60,10 +60,11 @@ class _SplashScreenState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
 
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
 
     if (token != null) {
       final res = await Api().postRequest('/auth/me');
+
       if (res.statusCode == 200) {
         return true; // Token valid, arahkan ke halaman indeks.
       }
@@ -88,7 +89,8 @@ class _SplashScreenState extends State<SplashScreen> {
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
 
-      if (body['rel'] != null && body['rel']['topics']) {
+      
+      if (body['rel'] != null) {
         Map<String, dynamic> subscribedTopics = body['rel']['topics'];
         print("LOG FAISAL : ${subscribedTopics}");
 
@@ -102,9 +104,9 @@ class _SplashScreenState extends State<SplashScreen> {
         await FirebaseMessaging.instance.deleteToken();
 
         return true;
-    } else {
+      } else {
         return false;
-    }
+      }
     } else {
       print("LOG FAISAL : INI YANG ERROR ${res.statusCode}");
       return false;
@@ -121,10 +123,8 @@ class _SplashScreenState extends State<SplashScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return loadingku();
             } else if (snapshot.hasError) {
-              // return Text('Error: ${snapshot.error}');
-              return Msg.error(context, 'Error: ${snapshot.error}');
+              return Msg.error(context, 'Unauthorized, please login again.');
             } else {
-              // Redirect sesuai hasil pengecekan token.
               if (snapshot.data == true) {
                 return IndexScreen();
               } else {
