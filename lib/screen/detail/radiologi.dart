@@ -11,7 +11,6 @@ import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/screen/detail/radiologi-image.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
-import 'package:rsiap_dokter/utils/msg.dart';
 import 'package:rsiap_dokter/utils/table.dart';
 
 class DetailRadiologi extends StatefulWidget {
@@ -79,6 +78,7 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
             }
 
             var pasien = data['data'].isNotEmpty ? data['data'][0] : {};
+            print(pasien['gambar']);
 
             return Scaffold(
                 backgroundColor: Helper.penjabBgColor(widget.penjab),
@@ -250,9 +250,7 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                                     ),
                                   ),
                                   Text(
-                                    Helper.formatDate(pasien['tgl_hasil']) +
-                                        " ~ " +
-                                        pasien['jam_hasil'],
+                                    Helper.formatDate(pasien['tgl_hasil']) +" ~ " +pasien['jam_hasil'],
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.grey.shade700,
@@ -281,8 +279,7 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 RadiologiImage(
-                                                    downloadUrl: radiologiUrl +
-                                                        e['lokasi_gambar']),
+                                                    downloadUrl: radiologiUrl + e['lokasi_gambar']),
                                           ),
                                         ),
                                         child: Container(
