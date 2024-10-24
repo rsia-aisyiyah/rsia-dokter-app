@@ -98,6 +98,7 @@ class _ListPasienRanapState extends State<ListPasienRanap> {
   Future<void> loadMore() async {
     if (nextPageUrl.isNotEmpty) {
       var res = await Api().getDataUrl(nextPageUrl);
+
       if (res.statusCode == 200) {
         var body = json.decode(res.body);
         setState(() {

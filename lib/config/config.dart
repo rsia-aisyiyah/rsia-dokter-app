@@ -41,57 +41,63 @@ List menuScreenItems = [
   {
     'label': 'Pasien Rawat Jalan',
     'widget': const PasienList(ralan: true),
-    "show_on" : {"spesialis anak", "kebidanan dan kandungan", "dokter umum"},
-    'disabled': false
+    'show_on': {"spesialis anak", "kebidanan dan kandungan", "dokter umum"},
+    'disabled': false,
+    'icon': Icons.directions_walk_rounded
   },
   {
     'label': 'Pasien Rawat Inap',
     'widget': const PasienList(ranap: true),
-    "show_on" : {"spesialis anak", "kebidanan dan kandungan", "dokter umum"},
-    'disabled': false
+    'show_on': {"spesialis anak", "kebidanan dan kandungan", "dokter umum"},
+    'disabled': false,
+    'icon': Icons.bed_rounded
   },
   {
     'label': 'Pasien Operasi',
     'widget': const PasienOperasi(),
-    "show_on" : {"spesialis anak", "kebidanan dan kandungan"},
-    'disabled': false
+    'show_on': {"spesialis anak", "kebidanan dan kandungan"},
+    'disabled': false,
+    'icon': Icons.medical_services_rounded
   },
   {
     'label': 'Pasien Rawat Jalan',
     'widget': const PasienRadiologiList(ralan: true),
-    "show_on" : {"spesialis radiologi"},
-    'disabled': false
+    'show_on': {"spesialis radiologi"},
+    'disabled': false,
+    'icon': Icons.directions_walk_rounded
   },
   {
     'label': 'Pasien Rawat Inap',
     'widget': const PasienRadiologiList(ranap: true),
-    "show_on" : {"spesialis radiologi"},
-    'disabled': false
+    'show_on': {"spesialis radiologi"},
+    'disabled': false,
+    'icon': Icons.bed_rounded
   },
   {
     'label': 'Rekap Kunjungan Pasien',
     'widget': const RekapKunjunganPasien(),
-    "show_on" : {"spesialis anak", "kebidanan dan kandungan", "dokter umum", "spesialis radiologi"},
-    'disabled': false
-  },
-  {
-    'label': 'Jasa Medis',
-    'widget': OtpJasaMedis(),
-    "show_on" : {"spesialis anak", "kebidanan dan kandungan", "dokter umum", "spesialis radiologi"},
+    'show_on': {"spesialis anak", "kebidanan dan kandungan", "dokter umum", "spesialis radiologi"},
     'disabled': false,
+    'icon': Icons.bar_chart_rounded
   },
-  {
-    'label': 'Cuti', 
-    'widget': "", 
-    "show_on" : {"spesialis anak", "kebidanan dan kandungan", "dokter umum", "spesialis radiologi"},
-    'disabled': true
-  },
-  {
-    'label': 'Undangan', 
-    'widget': "", 
-    "show_on" : {"spesialis anak", "kebidanan dan kandungan", "dokter umum", "spesialis radiologi"},
-    'disabled': true
-  }
+  // {
+  //   'label': 'Jasa Medis',
+  //   'widget': OtpJasaMedis(),
+  //   "show_on" : {"spesialis anak", "kebidanan dan kandungan", "dokter umum", "spesialis radiologi"},
+  //   'disabled': false,
+  // },
+  // {
+  //   'label': 'Cuti',
+  //   'widget': "",
+  //   "show_on" : {"spesialis anak", "kebidanan dan kandungan", "dokter umum", "spesialis radiologi"},
+  //   'disabled': true
+  // },
+  // {
+  //   'label': 'Undangan',
+  //   'widget': "",
+  //   "show_on" : {"spesialis anak", "kebidanan dan kandungan", "dokter umum", "spesialis radiologi"},
+  //   'disabled': true
+  // }
 ];
 // ============== End Menu Screen Content ============== //
 

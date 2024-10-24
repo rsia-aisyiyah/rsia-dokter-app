@@ -31,33 +31,26 @@ class LogoutScreen extends StatelessWidget {
   }
 
   Future unsubscribeFromTopic() async {
-    String token;
-    var firebaseMessaging = await FirebaseMessaging.instance;
-    token = (await firebaseMessaging.getToken())!;
+    SharedPreferences.getInstance().then((prefs) async {
+      var kd_dokter = prefs.getString('sub')!;
+      var spesialis = prefs.getString('spesialis')!.toLowerCase();
 
-    String url = "https://iid.googleapis.com/iid/info/" + token + "?details=true";
-    var res = await http.get(Uri.parse(url), headers: {
-      "Authorization": "Bearer ${ApiConfig.fsk}",
+      await FirebaseMessaging.instance.unsubscribeFromTopic("${kd_dokter.replaceAll('"', '')}");
+
+      if (spesialis.contains('kandungan')) {
+        await FirebaseMessaging.instance.unsubscribeFromTopic('kandungan');
+      } else if (spesialis.contains('umum')) {
+        await FirebaseMessaging.instance.unsubscribeFromTopic('umum');
+      } else if (spesialis.contains('anak')) {
+        await FirebaseMessaging.instance.unsubscribeFromTopic('anak');
+      } else if (spesialis.contains('radiologi')) {
+        await FirebaseMessaging.instance.unsubscribeFromTopic('radiologi');
+      }
     });
 
+    await FirebaseMessaging.instance.unsubscribeFromTopic('dokter');
 
-    if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
-      Map<String, dynamic> subscribedTopics = body['rel']['topics'];
-
-      subscribedTopics.forEach((key, value) async {
-        await Future.delayed(Duration(milliseconds: 10));
-        await FirebaseMessaging.instance.unsubscribeFromTopic(key);
-        debugPrint("Unsubscribed from topic: $key");
-      });
-
-      firebaseMessaging.deleteToken();
-      await FirebaseMessaging.instance.deleteToken();
-
-      return true;
-    } else {
-      return false;
-    }
+    return true;
   }
 
   @override

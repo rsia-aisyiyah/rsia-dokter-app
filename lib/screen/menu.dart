@@ -128,6 +128,58 @@ class _MenuPageState extends State<MenuPage> {
                         ),
                         child: Stack(
                           children: [
+                            Positioned(
+                              bottom: -25,
+                              right: -10,
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.22,
+                                child: Transform(
+                                  transform: Matrix4.rotationZ(-0.2),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    // icon from filteredTabs[index]['icon']
+                                    child: Icon(
+                                      filteredTabs[index]['icon'] as IconData,
+                                      size: 80,
+                                      color: filteredTabs[index]['disabled'] == true
+                                          ? Colors.grey[400]
+                                          : accentColor.withOpacity(0.3),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // circle on background
+                            Positioned(
+                              top: -45,
+                              left: -45,
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: filteredTabs[index]['disabled'] == true
+                                      ? Colors.grey[400]
+                                      : accentColor.withOpacity(0.1),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: -45,
+                              left: -45,
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: filteredTabs[index]['disabled'] == true
+                                      ? Colors.grey[400]
+                                      : accentColor.withOpacity(0.1),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+
                             Padding(
                               padding: const EdgeInsets.all(20),
                               child: Column(
@@ -144,27 +196,6 @@ class _MenuPageState extends State<MenuPage> {
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                            Positioned(
-                              bottom: -15,
-                              right: -20,
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.22,
-                                child: Transform(
-                                  transform: Matrix4.rotationZ(0.2),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      "https://raw.githubusercontent.com/hungps/flutter_pokedex/master/assets/images/pokeball.png",
-                                      fit: BoxFit.cover,
-                                      color: filteredTabs[index]['disabled'] == true
-                                          ? Colors.grey[400]
-                                          : accentColor.withOpacity(0.3),
-                                      // color: primaryColor.withOpacity(0.3),
-                                    ),
-                                  ),
-                                ),
                               ),
                             ),
                           ],

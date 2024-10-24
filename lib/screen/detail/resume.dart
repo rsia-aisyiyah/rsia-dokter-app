@@ -1,10 +1,13 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
+import 'package:rsiap_dokter/config/api.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/screen/detail/radiologi-image.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
@@ -211,6 +214,98 @@ class _ResumePasienRanapState extends State<ResumePasienRanap> {
                         Text(pasien['pemeriksaan_penunjang']),
                         const SizedBox(height: 15),
                         Text(
+                          'PEMERIKSAAN RADIOLOGI',
+                          style: TextStyle(
+                            color: primaryColor,
+                            fontSize: 18,
+                            fontWeight: fontBold,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        // loop the pasien['radiologi']
+                        for (var i = 0; i < pasien['radiologi'].length; i++) ...[
+                          Container(
+                            padding: EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.grey.shade300,
+                                  width: 1,
+                                ),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text("- " + pasien['radiologi'][i]['periksa']['jenis']['nm_perawatan'], style: TextStyle(fontSize: 16, fontWeight: fontSemiBold)),
+                                const SizedBox(height: 5),
+                                GridView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: (MediaQuery.of(context).size.width - 40) / 2,
+                                    mainAxisSpacing: 5,
+                                    crossAxisSpacing: 5,
+                                  ),
+                                  itemCount: pasien['radiologi'][i]['periksa']['gambar'].length,
+                                  itemBuilder: (context, index) {
+                                    final e = pasien['radiologi'][i]['periksa']['gambar'][index];
+                                    return GestureDetector(
+                                      onTap: () => Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => RadiologiImage(downloadUrl: ApiConfig.rau + e['lokasi_gambar']),
+                                        ),
+                                      ),
+                                      child: Container(
+                                        clipBehavior: Clip.antiAlias,
+                                        decoration: BoxDecoration(
+                                          borderRadius:BorderRadius.circular(10),
+                                          border: Border.all(
+                                            color: Colors.grey.shade300,
+                                            width: 1.2,
+                                          ),
+                                        ),
+                                        child: CachedNetworkImage(
+                                          imageUrl: "${ApiConfig.rau}${e['lokasi_gambar']}",
+                                          placeholder: (context, url) => Container(
+                                            height: 130,
+                                            child: Center(
+                                              child:CircularProgressIndicator(
+                                                color: primaryColor,
+                                              ),
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) => Container(
+                                            height: 130,
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.image_not_supported_outlined,
+                                              ),
+                                            ),
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(height: 5  ),
+                                Text(
+                                  pasien['radiologi'][i]['periksa']['hasil']['hasil'],
+                                  softWrap: true, // Mengaktifkan pembungkusan teks
+                                  overflow: TextOverflow.visible, // Teks yang melampaui batas widget tetap terlihat
+                                  style: TextStyle(fontSize: 14), // Contoh styling teks
+                                ),
+                              ],
+                            ),
+                          )
+
+                        ],
+                        const SizedBox(height: 15),
+                        Text(
                           'DIAGNOSA AKHIR',
                           style: TextStyle(
                             color: primaryColor,
@@ -331,7 +426,7 @@ class _ResumePasienRanapState extends State<ResumePasienRanap> {
                           ),
                         ),
                         const SizedBox(height: 5),
-                        GenTable(data: {pasien['shk']: pasien['shk_keterangan']}),
+                        GenTable(data: {pasien['shk'] ?? "-": pasien['shk_keterangan'] ?? "-"}),
                         const SizedBox(height: 15),
                         Text(
                           'INSTRUKSI TINDAK LANJUT',

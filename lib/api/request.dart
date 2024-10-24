@@ -47,7 +47,7 @@ class Api {
   getFullUrl(fullUrl) async {
     await _getToken();
     return await http.get(
-      Uri.parse(fullUrl),
+      Uri.parse(fullUrl.replaceAll('http', 'https')),
       headers: _setHeaders(),
     );
   }
@@ -55,7 +55,7 @@ class Api {
   postFullUrl(data, fullUrl) async {
     await _getToken();
     return await http.post(
-      Uri.parse(fullUrl),
+      Uri.parse(fullUrl.replaceAll('http', 'https')),
       body: jsonEncode(data),
       headers: _setHeaders(),
     );
@@ -64,14 +64,14 @@ class Api {
   getDataUrl(String url) async {
     await _getToken();
     return await http.get(
-      Uri.parse(url),
+      Uri.parse(url.replaceAll('http', 'https')),
       headers: _setHeaders(),
     );
   }
 
   _setHeaders() => {
-        'Content-type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      };
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': 'Bearer $token',
+  };
 }

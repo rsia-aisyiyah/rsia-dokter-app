@@ -27,7 +27,6 @@ class _IndexScreenState extends State<IndexScreen> {
     checkForUpdate();
   }
 
-  // on resume
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -66,7 +65,6 @@ class _IndexScreenState extends State<IndexScreen> {
   }
 
   void firebaseInit() async {
-    // await Firebase.initializeApp();
     await FirebaseApi().initNotif(context);
     await FirebaseMessaging.instance.subscribeToTopic('dokter');
 
@@ -86,6 +84,8 @@ class _IndexScreenState extends State<IndexScreen> {
         await FirebaseMessaging.instance.subscribeToTopic('radiologi');
       }
     });
+
+    await FirebaseMessaging.instance.unsubscribeFromTopic('dokter');
   }
 
   void _changeSelectedNavBar(int index) {
@@ -96,16 +96,8 @@ class _IndexScreenState extends State<IndexScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (_selectedNavbar != 0) {
-          setState(() {
-            _selectedNavbar = 0;
-          });
-          return false; // Block the default back button behavior
-        }
-        return true; // Allow the default back button behavior
-      },
+    return PopScope(
+      canPop: _selectedNavbar != 0,
       child: Scaffold(
         body: navigationItems[_selectedNavbar]['widget'] as Widget,
         bottomNavigationBar: BottomNavigationBar(

@@ -29,7 +29,8 @@ cardStats(BuildContext context, String title, String value) {
           title,
           maxLines: 2,
           style: TextStyle(
-            fontSize: Helper.getFontSize(context, mobileCaption),
+            fontSize: Helper.getFontSize(context, mobileSubTitle),
+            height: 1,
             fontWeight: fontNormal,
             color: textWhite,
             overflow: TextOverflow.ellipsis,
@@ -38,10 +39,12 @@ cardStats(BuildContext context, String title, String value) {
         const Spacer(),
         Text(
           valFormat,
+          maxLines: 1,
           style: TextStyle(
-            fontSize: Helper.getFontSize(context, mobileBody),
+            fontSize: Helper.getFontSize(context, mobileTitle),
             fontWeight: fontBold,
             color: textWhite,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],

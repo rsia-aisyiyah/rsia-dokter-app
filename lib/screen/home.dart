@@ -72,8 +72,7 @@ class _HomePageState extends State<HomePage> {
       var body = json.decode(res.body);
       if (mounted) {
         var STRExpired = monthBetween(DateTime.parse(
-          body['data']['pegawai']['kualifikasi_staff_klinis']
-              ['tanggal_akhir_str'],
+          body['data']['pegawai']['kualifikasi_staff_klinis']['tanggal_akhir_str'],
         ));
 
         setState(() {
@@ -243,39 +242,24 @@ class _HomePageState extends State<HomePage> {
         headerExpandedHeight: percentageTopWidgetHeight,
         headerWidget: dokterStats(filteredTabs),
         floatingActionButton: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: Colors.grey.shade100,
-              width: 3,
-              style: BorderStyle.solid,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(.2),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
-          width: 55,
-          height: 55,
+          width: 46,
+          height: 46,
           child: FloatingActionButton(
             backgroundColor: primaryColor,
             elevation: 0,
+            // shape circle
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(50.0)),
+            ),
             onPressed: () {
-              setState(() {
-                isLoading = true;
-              });
+              setState(() => isLoading = true);
               fetchAllData().then((value) {
                 if (mounted) {
-                  setState(() {
-                    isLoading = false;
-                  });
+                  setState(() => isLoading = false);
                 }
               });
             },
-            child: const Icon(Icons.refresh),
+            child: const Icon(Icons.refresh, color: Colors.white),
           ),
         ),
         body: [
@@ -300,7 +284,6 @@ class _HomePageState extends State<HomePage> {
         appBarColor: primaryColor,
         bottomNavigationBar: Container(
           color: primaryColor,
-          padding: const EdgeInsets.symmetric(vertical: 2),
           child: TabBar(
             onTap: _changeSelectedNavBar,
             labelColor: textWhite,
@@ -327,14 +310,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  StatelessWidget dokterStats(
-    List<dynamic> filteredTabs,
-  ) {
+  StatelessWidget dokterStats(List<dynamic> filteredTabs) {
     if (_dokter.isEmpty) {
       return BoxMessage(
         title: "Data Dokter Tidak Ditemukan",
-        body:
-            "Data dokter tidak ditemukan, hal ini bisa terjadi karena data dokter belum diinputkan oleh admin. Silahkan hubungi admin untuk menginputkan data dokter.",
+        body: "Data dokter tidak ditemukan, hal ini bisa terjadi karena data dokter belum diinputkan oleh admin. Silahkan hubungi admin untuk menginputkan data dokter.",
         backgroundColour: bgColor,
       );
     } else {

@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,7 +13,6 @@ import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
 
 import 'api/request.dart';
-import 'config/api.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,40 +73,26 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future unsubscribeFromTopic() async {
-    String token;
-    var firebaseMessaging = await FirebaseMessaging.instance;
-    token = (await firebaseMessaging.getToken())!;
+    SharedPreferences.getInstance().then((prefs) async {
+      var kd_dokter = prefs.getString('sub');
+      var spesialis = prefs.getString('spesialis');
 
-    String url = "https://iid.googleapis.com/iid/info/" + token + "?details=true";
-    var res = await http.get(Uri.parse(url), headers: {
-      "Authorization": "Bearer ${ApiConfig.fsk}",
-    });
-
-    if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
-
-      
-      if (body['rel'] != null) {
-        Map<String, dynamic> subscribedTopics = body['rel']['topics'];
-        print("LOG FAISAL : ${subscribedTopics}");
-
-        subscribedTopics.forEach((key, value) async {
-          await Future.delayed(Duration(milliseconds: 10));
-          await FirebaseMessaging.instance.unsubscribeFromTopic(key);
-          debugPrint("Unsubscribed from topic: $key");
-        });
-
-        firebaseMessaging.deleteToken();
-        await FirebaseMessaging.instance.deleteToken();
-
-        return true;
-      } else {
-        return false;
+      if (kd_dokter != null) {
+        await FirebaseMessaging.instance.unsubscribeFromTopic(kd_dokter);
       }
-    } else {
-      print("LOG FAISAL : INI YANG ERROR ${res.statusCode}");
-      return false;
-    }
+
+      if (spesialis != null) {
+        if (spesialis.contains('kandungan')) {
+          await FirebaseMessaging.instance.unsubscribeFromTopic('kandungan');
+        } else if (spesialis.contains('umum')) {
+          await FirebaseMessaging.instance.unsubscribeFromTopic('umum');
+        } else if (spesialis.contains('anak')) {
+          await FirebaseMessaging.instance.unsubscribeFromTopic('anak');
+        } else if (spesialis.contains('radiologi')) {
+          await FirebaseMessaging.instance.unsubscribeFromTopic('radiologi');
+        }
+      }
+    });
   }
 
   @override

@@ -44,7 +44,7 @@ class StatsHomeWidget extends StatelessWidget {
               onTap: () => onTap(index),
               child: cardStats(
                 context,
-                label,
+                label.replaceAll(" ", "\n"),
                 metrics[label.toLowerCase().replaceAll(" ", "_")].toString(),
               ),
             ),
