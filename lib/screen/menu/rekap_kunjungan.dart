@@ -469,8 +469,8 @@ class _RekapKunjunganPasienState extends State<RekapKunjunganPasien> {
                     _getTitle(e.key),
                     style: TextStyle(
                       color: textColor,
-                      fontSize: 18,
-                      fontWeight: fontSemiBold,
+                      fontSize: 24,
+                      fontWeight: fontBold,
                     ),
                   ),
                 ),

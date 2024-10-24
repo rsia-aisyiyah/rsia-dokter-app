@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:rsiap_dokter/api/request.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
@@ -33,7 +32,9 @@ class DetailRadiologi extends StatefulWidget {
 }
 
 class _DetailRadiologiState extends State<DetailRadiologi> {
-  final Uri _ermUrl = Uri.parse('https://sim.rsiaaisyiyah.com/erm');
+  final TextEditingController _hasilController = TextEditingController();
+
+  // final Uri _ermUrl = Uri.parse('https://sim.rsiaaisyiyah.com/erm');
   Future fetchHasil() async {
     var data = {
       'no_rawat': widget.noRawat,
@@ -47,12 +48,44 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
     return body;
   }
 
-  Future<void> _launchInBrowser() async {
-    if (await canLaunchUrl(_ermUrl)) {
-      await launchUrl(_ermUrl, mode: LaunchMode.externalApplication);
-    } else {
-      throw 'Could not launch $_ermUrl';
-    }
+  // Future<void> _launchInBrowser() async {
+  //   if (await canLaunchUrl(_ermUrl)) {
+  //     await launchUrl(_ermUrl, mode: LaunchMode.externalApplication);
+  //   } else {
+  //     throw 'Could not launch $_ermUrl';
+  //   }
+  // }
+
+  void _onSaveHasil() {
+    var data = {
+      'no_rawat': widget.noRawat,
+      'tgl_periksa': widget.tanggal,
+      'jam': widget.jam,
+      'hasil': _hasilController.text,
+    };
+
+    Api().postData(data, '/pasien/radiologi/hasil/store').then((res) {
+      var body = json.decode(res.body);
+      if (body['success']) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Berhasil menyimpan hasil pemeriksaan"),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        // reload state
+        setState(() {});
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Gagal menyimpan hasil pemeriksaan"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
   }
 
   @override
@@ -78,20 +111,16 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
             }
 
             var pasien = data['data'].isNotEmpty ? data['data'][0] : {};
-            print(pasien['gambar']);
+
+            if (pasien['hasil'] != null) {
+              _hasilController.text = pasien['hasil']['hasil'];
+            }
 
             return Scaffold(
                 backgroundColor: Helper.penjabBgColor(widget.penjab),
                 appBar: AppBar(
                   title: Text("Detail Pasien Radiologi"),
                   backgroundColor: Helper.penjabColor(widget.penjab),
-                  actions: [
-                    // hasil.isNotEmpty ? IconButton(
-                    //     onPressed: () => Msg.info(context, "Edit Hasil Radiologi Belum Tersedia"),
-                    //     icon: Icon(Icons.edit_note_sharp),
-                    //   )
-                    // : Container(),
-                  ],
                 ),
                 body: SingleChildScrollView(
                   padding: EdgeInsets.all(15),
@@ -132,34 +161,23 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                             ),
                             const SizedBox(height: 8),
                             GenTable(data: {
-                              "No. Rekam Medis": pasien['reg_periksa']
-                                  ['no_rkm_medis'],
+                              "No. Rekam Medis": pasien['reg_periksa']['no_rkm_medis'],
                               "No. Rawat": widget.noRawat,
-                              "Tanggal Lahir": Helper.formatDate(
-                                  pasien['reg_periksa']['pasien']['tgl_lahir']),
-                              "Usia": Helper.calculateAge(
-                                  pasien['reg_periksa']['pasien']['tgl_lahir']),
+                              "Tanggal Lahir": Helper.formatDate(pasien['reg_periksa']['pasien']['tgl_lahir']),
+                              "Usia": Helper.calculateAge(pasien['reg_periksa']['pasien']['tgl_lahir']),
                             }),
                             const SizedBox(height: 10),
                             GenTable(data: {
-                              "Jenis Pemeriksaan": pasien['periksa']['jenis']
-                                  ['nm_perawatan'],
+                              "Jenis Pemeriksaan": pasien['periksa']['jenis']['nm_perawatan'],
                               "Informasi Klinis": pasien['informasi_tambahan'],
                               "Diagnosa Klinis": pasien['diagnosa_klinis'],
-                              "Dirujuk Oleh": pasien['periksa']['dokter']
-                                  ['nm_dokter'],
+                              "Dirujuk Oleh": pasien['periksa']['dokter']['nm_dokter'],
                             }),
                             const SizedBox(height: 10),
                             GenTable(data: {
-                              "Permintaan":
-                                  Helper.formatDate3(pasien['tgl_permintaan']) +
-                                      " ~ " +
-                                      pasien['jam_permintaan'],
-                              "Pemeriksaan":
-                                  Helper.formatDate3(pasien['tgl_sampel']) +
-                                      " ~ " +
-                                      pasien['jam_sampel'],
-                              "Oleh": pasien['periksa']['petugas']['nama'],
+                              "Permintaan": "${Helper.formatDate3(pasien['tgl_permintaan'])} ${pasien['jam_permintaan']}",
+                              "Pemeriksaan": "${Helper.formatDate3(pasien['tgl_sampel'])} ${pasien['jam_sampel']}",
+                              "Oleh": "${pasien['periksa']['petugas']['nama']}",
                             }),
                           ],
                         ),
@@ -195,12 +213,8 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                                   fontWeight: fontSemiBold,
                                 ),
                               ),
-                              Text(
-                                Helper.formatDate(pasien['tgl_hasil']) +
-                                    " ~ " +
-                                    pasien['jam_hasil'],
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.grey.shade700),
+                              Text("${Helper.formatDate(pasien['tgl_hasil'])} ${pasien['jam_hasil']}",
+                                style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
                               ),
                               const SizedBox(height: 13),
                               Text(
@@ -226,8 +240,7 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                                 borderRadius: BorderRadius.circular(15),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Helper.penjabOpacityColor(
-                                        widget.penjab),
+                                    color: Helper.penjabOpacityColor(widget.penjab),
                                     offset: const Offset(0, 3),
                                     blurRadius: 5,
                                   ),
@@ -250,7 +263,7 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                                     ),
                                   ),
                                   Text(
-                                    Helper.formatDate(pasien['tgl_hasil']) +" ~ " +pasien['jam_hasil'],
+                                    "${Helper.formatDate(pasien['tgl_hasil'])} ${pasien['jam_hasil']}",
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.grey.shade700,
@@ -260,16 +273,10 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                                   GridView.builder(
                                     shrinkWrap: true,
                                     physics: NeverScrollableScrollPhysics(),
-                                    gridDelegate:
-                                        SliverGridDelegateWithMaxCrossAxisExtent(
-                                      maxCrossAxisExtent:
-                                          (MediaQuery.of(context).size.width -
-                                                  40) /
-                                              2, // Maksimal 2 kolom
-                                      mainAxisSpacing:
-                                          5, // Spasi vertikal antara elemen dalam grid
-                                      crossAxisSpacing:
-                                          5, // Spasi horizontal antara elemen dalam grid
+                                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                      maxCrossAxisExtent: (MediaQuery.of(context).size.width - 40) / 2,
+                                      mainAxisSpacing: 5,
+                                      crossAxisSpacing: 5,
                                     ),
                                     itemCount: pasien['gambar'].length,
                                     itemBuilder: (context, index) {
@@ -277,42 +284,35 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                                       return GestureDetector(
                                         onTap: () => Navigator.of(context).push(
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                RadiologiImage(
-                                                    downloadUrl: radiologiUrl + e['lokasi_gambar']),
+                                            builder: (context) => RadiologiImage(downloadUrl: radiologiUrl + e['lokasi_gambar']),
                                           ),
                                         ),
                                         child: Container(
+                                          clipBehavior: Clip.antiAlias,
                                           decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            borderRadius:BorderRadius.circular(10),
                                             border: Border.all(
                                               color: Colors.grey.shade300,
                                               width: 1.2,
                                             ),
                                           ),
                                           child: CachedNetworkImage(
-                                            imageUrl: radiologiUrl +
-                                                e['lokasi_gambar'],
-                                            placeholder: (context, url) =>
-                                                Container(
+                                            imageUrl: "${radiologiUrl}${e['lokasi_gambar']}",
+                                            placeholder: (context, url) => Container(
                                               height: 130,
                                               child: Center(
-                                                child:
-                                                    CircularProgressIndicator(
+                                                child:CircularProgressIndicator(
                                                   color: Helper.penjabColor(
-                                                      widget.penjab),
+                                                      widget.penjab,
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Container(
+                                            errorWidget: (context, url, error) => Container(
                                               height: 130,
                                               child: Center(
                                                 child: Icon(
-                                                  Icons
-                                                      .image_not_supported_outlined,
+                                                  Icons.image_not_supported_outlined,
                                                 ),
                                               ),
                                             ),
@@ -330,11 +330,58 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                   ),
                 ),
                 floatingActionButton: FloatingActionButton(
-                  onPressed: () => _launchInBrowser(),
+                  onPressed: () => _showDialog(),
                   backgroundColor: Helper.penjabColor(widget.penjab),
                   child: Icon(Icons.edit_document),
-                ));
+                ),
+            );
           }
-        });
+        },
+    );
+  }
+
+  // dialog to fill / edit hasil pemeriksaan
+  void _showDialog() {
+    showDialog(
+      context: context,
+      useSafeArea: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Hasil Pemeriksaan"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _hasilController,
+                maxLines: 8,
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Helper.penjabColor(widget.penjab),
+                    ),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Helper.penjabColor(widget.penjab),
+                    ),
+                  ),
+                  hintText: "Hasil bacaan radiologi",
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("Batal", style: TextStyle(color: Colors.red)),
+            ),
+            TextButton(
+              onPressed: () => _onSaveHasil(),
+              child: Text("Simpan", style: TextStyle(color: Colors.green)),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

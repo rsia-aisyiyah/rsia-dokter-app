@@ -35,6 +35,7 @@ class _RadiologiImageState extends State<RadiologiImage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: PhotoView(
         imageProvider: CachedNetworkImageProvider(
