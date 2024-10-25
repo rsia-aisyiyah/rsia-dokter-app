@@ -9,6 +9,7 @@ import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/logout.dart';
+import 'package:rsiap_dokter/utils/extensions/sensor.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/section_title.dart';
@@ -31,44 +32,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
   }
-
-  // void _logout() async {
-  //   var res = await Api().postRequest('/auth/logout');
-  //
-  //   if (res.statusCode == 200) {
-  //     var body = json.decode(res.body);
-  //     if (body['success']) {
-  //       Msg.success(context, logoutSuccessMsg);
-  //
-  //       await FirebaseMessaging.instance.unsubscribeFromTopic('dokter');
-  //       SharedPreferences.getInstance().then((prefs) async {
-  //         var spesialis = prefs.getString('spesialis')!.toLowerCase();
-  //         var kd_dokter = prefs.getString('sub')!;
-  //
-  //         await FirebaseMessaging.instance.unsubscribeFromTopic("${kd_dokter.replaceAll('"', '')}");
-  //         if (spesialis.contains('kandungan')) {
-  //           await FirebaseMessaging.instance.unsubscribeFromTopic('kandungan');
-  //         } else if (spesialis.contains('umum')) {
-  //           await FirebaseMessaging.instance.unsubscribeFromTopic('umum');
-  //         } else if (spesialis.contains('anak')) {
-  //           await FirebaseMessaging.instance.unsubscribeFromTopic('anak');
-  //         }
-  //
-  //         prefs.remove('token');
-  //       }).then((value) => {
-  //         Navigator.pushReplacement(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) => const LoginScreen(),
-  //           ),
-  //         ),
-  //       });
-  //     }
-  //   } else {
-  //     var body = json.decode(res.body);
-  //     Msg.error(context, body['message']);
-  //   }
-  // }
 
   Future _getMe() async {
     var res = await Api().getData('/dokter');
@@ -93,19 +56,19 @@ class _ProfilePageState extends State<ProfilePage> {
     dataTbl = {
       "Spesialis": detailDokter['spesialis']['nm_sps'],
       "Jabatan": detailDokter['pegawai']['jbtn'],
-      "NIK": detailDokter['pegawai']['nik'],
+      "NIK": (detailDokter['pegawai']['nik'] as String).sensor(3),
       "Agama": detailDokter['agama'],
       "Tempat Lahir": detailDokter['tmp_lahir'],
-      "Tanggal Lahir": Helper.formatDate(detailDokter['tgl_lahir']),
-      "Alamat": detailDokter['pegawai']['alamat'],
-      "Kota": detailDokter['pegawai']['kota'],
+      "Tanggal Lahir": (Helper.formatDate(detailDokter['tgl_lahir'])).sensor(8),
+      "Alamat": (detailDokter['pegawai']['alamat'] as String).sensor(8),
+      "Kota": (detailDokter['pegawai']['kota'] as String).sensor(4),
     };
   }
 
   void setSTR(dokter) {
     var k_staff = dokter['pegawai']['kualifikasi_staff_klinis'];
     dataSTR = {
-      "STR": k_staff['nomor_str'],
+      "STR": (k_staff['nomor_str'] as String).sensor(3),
       "Tanggal STR": Helper.formatDate(k_staff['tanggal_str']),
       "Akhir STR": Helper.formatDate(k_staff['tanggal_akhir_str']),
       "Kategori Profesi": k_staff['kategori_profesi'],
@@ -220,17 +183,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
-                                        const SizedBox(height: 5),
-                                        BlurWidget(
-                                          child: Text(
-                                            data['data']['pegawai']['kualifikasi_staff_klinis']['nomor_sip'],
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: fontNormal,
-                                              color: textWhite,
-                                            ),
-                                          ),
-                                        ),
+                                        // const SizedBox(height: 5),
+                                        // BlurWidget(
+                                        //   child: Text(
+                                        //     data['data']['pegawai']['kualifikasi_staff_klinis']['nomor_sip'],
+                                        //     style: TextStyle(
+                                        //       fontSize: 12,
+                                        //       fontWeight: fontNormal,
+                                        //       color: textWhite,
+                                        //     ),
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
                                   ),

@@ -333,11 +333,7 @@ class PasienListState extends State<PasienList> {
                             MaterialPageRoute(
                               builder: (context) => DetailPasien(
                                 noRawat: dataPasiens[index]['no_rawat'],
-                                kategori: dataPasiens[index]['penjab']
-                                            ['png_jawab']
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains("umum")
+                                kategori: dataPasiens[index]['penjab']['png_jawab'].toString().toLowerCase().contains("umum")
                                     ? "umum"
                                     : "bpjs",
                               ),

@@ -1,68 +1,67 @@
-String welcomeText = "Welcome";
+String welcomeText = "Assalamualaikum";
 
-String todayText = "Today";
-String yesterdayText = "Yesterday";
-String tomorrowText = "Tomorrow";
-String morningText = "Morning";
-String afternoonText = "Afternoon";
-String eveningText = "Evening";
-String nightText = "Night";
+String todayText = "Hari Ini";
+String yesterdayText = "Kemarin";
+String tomorrowText = "Besok";
+String morningText = "Pagi";
+String afternoonText = "Siang";
+String eveningText = "Sore";
+String nightText = "Malam";
 
-String morningGreeting = "Good Morning";
-String afternoonGreeting = "Good Afternoon";
-String eveningGreeting = "Good Evening";
-String nightGreeting = "Good Night";
+String morningGreeting = "Selamat Pagi";
+String afternoonGreeting = "Selamat Siang";
+String eveningGreeting = "Selamat Sore";
+String nightGreeting = "Selamat Malam";
 
 String labelTime = "Jam";
 String labelName = "Nama";
 String labelDates = "Tanggal";
-String labelBulan = "Month";
+String labelBulan = "Bulan";
 String labelUsername = "Username";
 String labelPassword = "Password";
-String labelSelectDate = "Select Date";
-String labelSelectkategori = "Select Kategori";
+String labelSelectDate = "Pilih Tanggal";
+String labelSelectkategori = "Pilih Kategori";
 
 String loginText = "Login";
 String logoutText = "Logout";
-String forgotText = "Forgot Password?";
+String forgotText = "Lupa Password?";
 
 String processingText = "Processing...";
 String loadingText = "Loading...";
 
-String loginSuccessMsg = "Login success";
-String logoutSuccessMsg = "Logout success";
+String loginSuccessMsg = "Login sukses";
+String logoutSuccessMsg = "Logout sukses";
 
-String strExpired = "STR has expired";
-String strExpiredIn = "STR will expire in";
-String strExpiredSoon = "STR will expire soon";
-String strRenewText = "Please renew your STR immediately";
+String strExpired = "STR telah kedaluwarsa";
+String strExpiredIn = "STR akan kedaluwarsa dalam";
+String strExpiredSoon = "STR akan segera kedaluwarsa";
+String strRenewText = "Silakan perbarui STR Anda segera";
 
-String emptyDataMsg = "Data is empty";
-String noInternetMsg = "No internet connection";
-String noDataAvailableMsg = "No data available";
-String failedToFetchDataMsg = "Failed to fetch data";
-String sessionExpiredMsg = "Your session has expired, please login again";
-String featureNotAvailableMsg = "Feature not available yet";
+String emptyDataMsg = "Data kosong";
+String noInternetMsg = "Tidak ada koneksi internet";
+String noDataAvailableMsg = "Data tidak tersedia";
+String failedToFetchDataMsg = "Gagal mengambil data";
+String sessionExpiredMsg = "Sesi Anda telah kedaluwarsa, silakan login kembali";
+String featureNotAvailableMsg = "Fitur belum tersedia";
 
 String filterText = "Filter";
 String resetText = "Reset";
-String submitText = "Submit";
-String closeText = "Close";
-String resetAndCloseText = "Reset & Close";
+String submitText = "Kirim";
+String closeText = "Tutup";
+String resetAndCloseText = "Reset & Tutup";
 String filterPasienText = "Filter Pasien";
 
-String searchText = "Search";
-String searchPasienText = "Search Pasien";
-String searchKeywordText = "Enter keyword to search";
+String searchText = "Cari";
+String searchPasienText = "Cari Pasien";
+String searchKeywordText = "Masukkan kata kunci untuk mencari";
 
-String usernameEmpty = "Username cannot be empty";
-String passwordEmpty = "Password cannot be empty";
-String wrongCredentials = "Username or password is wrong, please try again";
+String usernameEmpty = "Username tidak boleh kosong";
+String passwordEmpty = "Password tidak boleh kosong";
+String wrongCredentials = "Username atau password salah, silakan coba lagi";
 
-String forgotPasswordMsg =
-    "Please contact your administrator to reset your password";
-String pasienBelumPeriksa = "Patient has not been examined";
-String belumAdaPasien = "There are no patients yet";
+String forgotPasswordMsg = "Silakan hubungi administrator Anda untuk mengatur ulang kata sandi Anda";
+String pasienBelumPeriksa = "Pasien belum diperiksa atau belum ada data pemeriksaan";
+String belumAdaPasien = "Belum ada pasien";
 
 String titlePasienDetail = "Detail Pasien";
 String titleOpDetail = "Detail Operasi";

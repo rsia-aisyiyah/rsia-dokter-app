@@ -359,8 +359,7 @@ class _OtpJasaMedisState extends State<OtpJasaMedis> {
           ),
           onPressed: () {
             sendMail(
-                recipientEmail: _dokter['data']['pegawai']['rsia_email_pegawai']
-                        ['email']
+                recipientEmail: _dokter['data']['pegawai']['rsia_email_pegawai']['email']
                     .toString(),
                 mailMessage: random.toString());
           },

@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rsiap_dokter/api/request.dart';
+import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/components/filter/bottom_sheet_filter.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/detail/operasi.dart';
+import 'package:rsiap_dokter/utils/extensions/sensor.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
@@ -312,7 +314,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        dataOperasi['pasien']['nm_pasien'],
+                                        (dataOperasi['pasien']['nm_pasien'] as String).sensor(8) ?? '-',
                                         style: TextStyle(
                                           fontWeight: fontBold,
                                           fontSize: 18,
@@ -465,7 +467,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Text(
-                  dataOperasi['no_rawat'],
+                  (dataOperasi['no_rawat'] as String).sensor(8) ?? '-',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -492,7 +494,7 @@ class _PasienOperasiState extends State<PasienOperasi> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Text(
-                  dataOperasi['no_rkm_medis'],
+                  (dataOperasi['no_rkm_medis'] as String).sensor(4) ?? '-',
                   style: const TextStyle(
                     fontSize: 14,
                   ),

@@ -53,17 +53,29 @@ class Helper {
   static double getFontSize(BuildContext context, double size) {
     var width = MediaQuery.of(context).size.width;
 
-    // Mobile
-    if (width < 768) {
+    print("Width: $width");
+
+    // small mobile
+    if (width < 320) {
+      return size - 2;
+    }
+
+    // medium mobile
+    if (width < 375) {
       return size;
     }
 
-    // Tablet
-    if (width < 1024) {
+    // large mobile
+    if (width < 425) {
+      return size;
+    }
+
+    // tablet
+    if (width < 768) {
       return size + 2;
     }
 
-    // Desktop
+    // desktop
     return size + 4;
   }
 

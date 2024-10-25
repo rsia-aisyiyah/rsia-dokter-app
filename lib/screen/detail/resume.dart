@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
+import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/api.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/screen/detail/radiologi-image.dart';
+import 'package:rsiap_dokter/utils/extensions/sensor.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
@@ -137,12 +139,12 @@ class _ResumePasienRanapState extends State<ResumePasienRanap> {
                         ),
                         const SizedBox(height: 5),
                         GenTable(data: {
-                          ikNoRkmMedis: pasien['reg_periksa']['no_rkm_medis'],
-                          ikName: pasien['reg_periksa']['pasien']['nm_pasien'],
+                          ikNoRkmMedis: (pasien['reg_periksa']['no_rkm_medis'] as String).sensor(4),
+                          ikName: (pasien['reg_periksa']['pasien']['nm_pasien'] as String).sensor(8),
                           "Umur": "${pasien['reg_periksa']['umurdaftar'].toString()} ${pasien['reg_periksa']['sttsumur']}",
                           ikBirthDate: Helper.formatDate2(pasien['reg_periksa']['pasien']['tgl_lahir']),
                           ikAddress: pasien['reg_periksa']['pasien']['alamat'],
-                          'No HP': pasien['reg_periksa']['pasien']['no_tlp'],
+                          'No HP': (pasien['reg_periksa']['pasien']['no_tlp'] as String).sensor(4),
                         }),
                         const SizedBox(height: 15),
                         Text(

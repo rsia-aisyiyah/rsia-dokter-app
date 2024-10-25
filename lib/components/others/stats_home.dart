@@ -136,6 +136,7 @@ class StatsHomeWidget extends StatelessWidget {
                         dokter['data']['nm_dokter'],
                         maxLines: 2,
                         style: TextStyle(
+                          height: 1,
                           fontSize: Helper.getFontSize(context, mobileTitle),
                           overflow: TextOverflow.ellipsis,
                           fontWeight: fontBold,
@@ -143,16 +144,16 @@ class StatsHomeWidget extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 5),
-                      BlurWidget(
-                        child: Text(
-                          dokter['data']['pegawai']['kualifikasi_staff_klinis']['nomor_sip'],
-                          style: TextStyle(
-                            fontSize: Helper.getFontSize(context, mobileOverline),
-                            fontWeight: fontNormal,
-                            color: textColor,
-                          ),
-                        ),
-                      ),
+                      // BlurWidget(
+                      //   child: Text(
+                      //     dokter['data']['pegawai']['kualifikasi_staff_klinis']['nomor_sip'],
+                      //     style: TextStyle(
+                      //       fontSize: Helper.getFontSize(context, mobileOverline),
+                      //       fontWeight: fontNormal,
+                      //       color: textColor,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 )

@@ -27,6 +27,8 @@ String radiologiUrl = ApiConfig.rau;
 // ignore: non_constant_identifier_names
 double STRExpMin = 6;
 
+bool isDemo = true;
+
 // App Config
 const String appName = 'RSIAP Mobile Dokter';
 

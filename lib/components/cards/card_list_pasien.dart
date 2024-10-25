@@ -5,6 +5,7 @@ import 'package:rsiap_dokter/screen/detail/pasien.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/table.dart';
+import '../../utils/extensions/sensor.dart';
 
 import 'package:rsiap_dokter/screen/detail/resume.dart';
 
@@ -56,7 +57,7 @@ createCardPasien(pasien, context) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    pasien['pasien']['nm_pasien'],
+                    (pasien['pasien']['nm_pasien'] as String).sensor(8) ?? "-",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: fontSemiBold,
@@ -64,23 +65,27 @@ createCardPasien(pasien, context) {
                   ),
                   const SizedBox(height: 8),
                   GenTable(data: {
-                    ikNoRm: pasien['no_rkm_medis'],
-                    ikNoRawat: pasien['no_rawat'],
-                    if (pasien['kamar_inap'] == null)
+                    ikNoRm: (pasien['no_rkm_medis'] as String).sensor(4),
+                    ikNoRawat: (pasien['no_rawat'] as String).sensor(8),
+                    if (pasien['kamar_inap'] == null) ...{
                       ikTglDaftar: Helper.formatDate2(pasien['tgl_registrasi'])
-                    else
+                    } else ...{
                       ikTglMasuk: "${Helper.formatDate2(pasien['kamar_inap']['tgl_masuk'])} ( ${pasien['kamar_inap']['lama']} Hari )",
-                    
-                    if (pasien['kamar_inap'] != null)
+                    },
+
+                    if (pasien['kamar_inap'] != null) ...{
                       "Diagnosa Awal": pasien['kamar_inap']['diagnosa_awal'],
-                    
-                    if (pasien['kamar_inap'] == null)
+                    },
+
+                    if (pasien['kamar_inap'] == null) ...{
                       poliklinikText: pasien['poliklinik']['nm_poli']
-                    else
+                    } else ...{
                       kamarInapText: pasien['kamar_inap']['kamar']['bangsal']['nm_bangsal'],
-                    
-                    if (pasien['kamar_inap'] != null)
+                    },
+
+                    if (pasien['kamar_inap'] != null) ...{
                       "Status Pulang": pasien['kamar_inap']['stts_pulang'],
+                    }
                   }),
                   const SizedBox(height: 10),
                   badgeResume(pasien, penjab),
@@ -125,7 +130,6 @@ createCardPasien(pasien, context) {
                   if (rg['reg_periksa']['penjab'] == null) {
                     rg['reg_periksa']['penjab'] = pasien['penjab'];
                   }
-
                   menuPasienCards(context, rg['reg_periksa']);
                 },
                 child: Container(
@@ -317,9 +321,9 @@ Future<dynamic> menuPasienCards(BuildContext context, pasien) {
               ),
               const SizedBox(height: 20),
               GenTable(data: {
-                ikName: pasien['pasien']['nm_pasien'],
-                ikNoRm: pasien['no_rkm_medis'],
-                ikNoRawat: pasien['no_rawat'],
+                ikName: (pasien['pasien']['nm_pasien'] as String).sensor(8),
+                ikNoRm: (pasien['no_rkm_medis'] as String).sensor(4),
+                ikNoRawat: (pasien['no_rawat'] as String).sensor(8),
               }),
               const SizedBox(height: 20),
               Text(

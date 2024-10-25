@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
+import 'package:rsiap_dokter/utils/extensions/sensor.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
@@ -333,7 +334,7 @@ class _DetailPasienState extends State<DetailPasien> {
                       ),
                     ),
                     Text(
-                      pemeriksaan[index]['petugas']['nama'],
+                      (pemeriksaan[index]['petugas']['nama'] as String).sensor(8) ?? "-",
                       style: TextStyle(color: Colors.black, fontSize: 12),
                     ),
                   ],
@@ -353,7 +354,7 @@ class _DetailPasienState extends State<DetailPasien> {
                       color: Colors.white,
                     ),
                     {
-                      "Petugas": pemeriksaan[index]['verifikasi']['petugas']['nama'],
+                      "Petugas": (pemeriksaan[index]['verifikasi']['petugas']['nama'] as String).sensor(8) ?? "-",
                       "Tanggal": pemeriksaan[index]['verifikasi']['tgl_verif'] + " " + pemeriksaan[index]['verifikasi']['jam_verif']
                     },
                   );
@@ -417,7 +418,7 @@ class _DetailPasienState extends State<DetailPasien> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            pasien['pasien']['nm_pasien'],
+            (pasien['pasien']['nm_pasien'] as String).sensor(8) ?? "-",
             style: TextStyle(
               fontSize: 20,
               fontWeight: fontBold,
@@ -425,27 +426,35 @@ class _DetailPasienState extends State<DetailPasien> {
           ),
           const SizedBox(height: 8),
           GenTable(data: {
-            ikNoRm: pasien['no_rkm_medis'],
-            ikNoRawat: pasien['no_rawat'],
+            ikNoRm: (pasien['no_rkm_medis'] as String).sensor(4),
+            ikNoRawat: (pasien['no_rawat'] as String).sensor(8),
             ikSttsLanjut: Helper.realStatusLanjut(pasien['status_lanjut']),
             poliklinikText: pasien['poliklinik']['nm_poli'],
             
-            if (pasien['status_lanjut'].toLowerCase().contains("ranap"))
-              if (pasien['kamar_inap'] == null)
+            if (pasien['status_lanjut'].toLowerCase().contains("ranap")) ... {
+              if (pasien['kamar_inap'] == null) ...{
                 ikTglDaftar: Helper.formatDate2(pasien['tgl_registrasi'])
-              else
+              }
+              else ...{
                 ikTglMasuk: "${Helper.formatDate2(pasien['kamar_inap']['tgl_masuk'])}   ( ${pasien['kamar_inap']['lama']} Hari )",
-            
-            if (pasien['status_lanjut'].toLowerCase().contains("ranap"))
-              if (pasien['kamar_inap'] == null)
+              }
+            },
+
+            if (pasien['status_lanjut'].toLowerCase().contains("ranap")) ... {
+              if (pasien['kamar_inap'] == null) ...{
                 poliklinikText: pasien['poliklinik']['nm_poli']
-              else
+              }
+              else ...{
                 kamarInapText: pasien['kamar_inap']['kamar']['bangsal']['nm_bangsal'],
-            
-            if (pasien['status_lanjut'].toLowerCase().contains("ranap"))
-              if (pasien['kamar_inap'] != null)
+              }
+            },
+
+            if (pasien['status_lanjut'].toLowerCase().contains("ranap")) ...{
+              if (pasien['kamar_inap'] != null) ...{
                 "Diagnosa Awal": pasien['kamar_inap']['diagnosa_awal'],
-            
+              }
+            }
+
           }),
         ],
       ),

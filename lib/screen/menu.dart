@@ -6,6 +6,8 @@ import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utils/helper.dart';
+
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
 
@@ -188,7 +190,7 @@ class _MenuPageState extends State<MenuPage> {
                                   Text(
                                     filteredTabs[index]['label'].toString(),
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: Helper.getFontSize(context, mobileBody),
                                       fontWeight: fontSemiBold,
                                       color: filteredTabs[index]['disabled'] == true
                                           ? Colors.grey[600]

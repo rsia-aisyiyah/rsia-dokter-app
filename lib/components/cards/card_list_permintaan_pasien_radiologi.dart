@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
+import 'package:rsiap_dokter/utils/extensions/sensor.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/table.dart';
@@ -54,7 +56,7 @@ class CardListPermintaanPasienRadiologi extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    pasien['reg_periksa']['pasien']['nm_pasien'],
+                    (pasien['reg_periksa']['pasien']['nm_pasien'] as String).sensor(8) ?? '-',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: fontSemiBold,
@@ -62,8 +64,8 @@ class CardListPermintaanPasienRadiologi extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   GenTable(data: {
-                    ikNoRm: pasien['reg_periksa']['no_rkm_medis'],
-                    ikNoRawat: pasien['no_rawat'],
+                    ikNoRm: (pasien['reg_periksa']['no_rkm_medis'] as String).sensor(4),
+                    ikNoRawat: (pasien['no_rawat'] as String).sensor(8),
                     "Permintaan": "${Helper.formatDate3(pasien['tgl_permintaan'])} | ${pasien['jam_permintaan']}",
                     "Pemeriksaan": pasien['tgl_sampel'] != "0000-00-00" ? "${Helper.formatDate3(pasien['tgl_sampel'])} | ${pasien['jam_sampel']}": '-',
                     "Info Klinis": pasien['informasi_tambahan'] ?? '-',

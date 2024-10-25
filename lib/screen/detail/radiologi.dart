@@ -4,10 +4,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:rsiap_dokter/api/request.dart';
+import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/components/loadingku.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/config.dart';
 import 'package:rsiap_dokter/screen/detail/radiologi-image.dart';
+import 'package:rsiap_dokter/utils/extensions/sensor.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/table.dart';
@@ -153,7 +155,7 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              pasien['reg_periksa']['pasien']['nm_pasien'],
+                              (pasien['reg_periksa']['pasien']['nm_pasien'] as String).sensor(8) ?? "-",
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: fontSemiBold,
@@ -161,8 +163,8 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                             ),
                             const SizedBox(height: 8),
                             GenTable(data: {
-                              "No. Rekam Medis": pasien['reg_periksa']['no_rkm_medis'],
-                              "No. Rawat": widget.noRawat,
+                              "No. Rekam Medis": (pasien['reg_periksa']['no_rkm_medis'] as String).sensor(4),
+                              "No. Rawat": widget.noRawat.sensor(8),
                               "Tanggal Lahir": Helper.formatDate(pasien['reg_periksa']['pasien']['tgl_lahir']),
                               "Usia": Helper.calculateAge(pasien['reg_periksa']['pasien']['tgl_lahir']),
                             }),
@@ -177,7 +179,7 @@ class _DetailRadiologiState extends State<DetailRadiologi> {
                             GenTable(data: {
                               "Permintaan": "${Helper.formatDate3(pasien['tgl_permintaan'])} ${pasien['jam_permintaan']}",
                               "Pemeriksaan": "${Helper.formatDate3(pasien['tgl_sampel'])} ${pasien['jam_sampel']}",
-                              "Oleh": "${pasien['periksa']['petugas']['nama']}",
+                              "Oleh": "${pasien['periksa']['petugas']['nama']}".sensor(8),
                             }),
                           ],
                         ),

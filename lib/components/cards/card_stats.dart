@@ -29,7 +29,7 @@ cardStats(BuildContext context, String title, String value) {
           title,
           maxLines: 2,
           style: TextStyle(
-            fontSize: Helper.getFontSize(context, mobileSubTitle),
+            fontSize: Helper.getFontSize(context, mobileBody),
             height: 1,
             fontWeight: fontNormal,
             color: textWhite,

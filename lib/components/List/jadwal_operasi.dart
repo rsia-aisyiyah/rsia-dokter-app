@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:rsiap_dokter/api/request.dart';
+import 'package:rsiap_dokter/components/cards/card_list_pasien.dart';
 import 'package:rsiap_dokter/config/colors.dart';
 import 'package:rsiap_dokter/config/strings.dart';
 import 'package:rsiap_dokter/utils/box_message.dart';
+import 'package:rsiap_dokter/utils/extensions/sensor.dart';
 import 'package:rsiap_dokter/utils/fonts.dart';
 import 'package:rsiap_dokter/utils/helper.dart';
 import 'package:rsiap_dokter/utils/msg.dart';
@@ -175,8 +177,7 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  dataJdwl['reg_periksa']['pasien']
-                                      ['nm_pasien'],
+                                  (dataJdwl['reg_periksa']['pasien']['nm_pasien'] as String).sensor(8) ?? "-",
                                   style: TextStyle(
                                     fontWeight: fontBold,
                                     fontSize: 18,
@@ -187,14 +188,14 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                                   direction: Axis.horizontal,
                                   children: [
                                     Text(
-                                      dataJdwl['no_rawat'],
+                                      (dataJdwl['no_rawat'] as String).sensor(8) ?? "-",
                                       style: const TextStyle(
                                         fontSize: 14,
                                       ),
                                     ),
                                     const SizedBox(width: 5),
                                     Text(
-                                      "( $ikRm. ${dataJdwl['reg_periksa']['no_rkm_medis']} )",
+                                      "( $ikRm. ${(dataJdwl['reg_periksa']['no_rkm_medis'] as String).sensor(4)} )",
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: fontSemiBold,
@@ -204,15 +205,10 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
                                 ),
                                 const SizedBox(height: 15),
                                 GenTable(data: {
-                                  labelDates:
-                                      Helper.formatDate(dataJdwl['tanggal']),
-                                  labelTime: dataJdwl['jam_mulai'] +
-                                      " - " +
-                                      dataJdwl['jam_selesai'],
-                                  ikDiagnosis: dataJdwl['rsia_diagnosa_operasi']
-                                      ['diagnosa'],
-                                  ikJenisOperasi: dataJdwl['paket_operasi']
-                                      ['nm_perawatan'],
+                                  labelDates: Helper.formatDate(dataJdwl['tanggal']),
+                                  labelTime: dataJdwl['jam_mulai'] + " - " + dataJdwl['jam_selesai'],
+                                  ikDiagnosis: dataJdwl['rsia_diagnosa_operasi']['diagnosa'],
+                                  ikJenisOperasi: dataJdwl['paket_operasi']['nm_perawatan'],
                                 }),
                               ],
                             ),
@@ -252,9 +248,9 @@ class _ListJadwalOperasiState extends State<ListJadwalOperasi> {
             bottom: 20,
           ),
           child: GenTable(data: {
-            ikPasien: dataJdwl['reg_periksa']['pasien']['nm_pasien'],
-            ikNoRawat: dataJdwl['no_rawat'],
-            ikNoRm: dataJdwl['reg_periksa']['no_rkm_medis'],
+            ikPasien: (dataJdwl['reg_periksa']['pasien']['nm_pasien'] as String).sensor(8),
+            ikNoRawat: (dataJdwl['no_rawat'] as String).sensor(8),
+            ikNoRm: (dataJdwl['reg_periksa']['no_rkm_medis'] as String).sensor(4),
             ikDiagnosis: dataJdwl['rsia_diagnosa_operasi']['diagnosa'],
             ikJenisOperasi: dataJdwl['paket_operasi']['nm_perawatan'],
             labelDates: Helper.formatDate(dataJdwl['tanggal']),
