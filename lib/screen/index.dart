@@ -84,8 +84,6 @@ class _IndexScreenState extends State<IndexScreen> {
         await FirebaseMessaging.instance.subscribeToTopic('radiologi');
       }
     });
-
-    await FirebaseMessaging.instance.unsubscribeFromTopic('dokter');
   }
 
   void _changeSelectedNavBar(int index) {
