@@ -10,12 +10,12 @@ import 'package:rsiap_dokter/screen/index.dart';
 late BuildContext ctx;
 
 FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-final _localNotification = FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 final _androidChannel = AndroidNotificationChannel(
-  'high_importance_channel',
-  'High Importance Notifications',
+  'high_importance_channel', // ID channel
+  'High Importance Notifications', // Nama channel
   description: 'This channel is used for important notifications',
-  importance: Importance.defaultImportance,
+  importance: Importance.high, // Ubah ke Importance.high
 );
 
 Future<void> handleNotificationAction(String action, Map<String, dynamic> data) async {
@@ -75,22 +75,27 @@ Future<void> handleMessage(RemoteMessage message) async {
   }
 }
 
+Future<void> onDidReceiveLocalNotification(NotificationResponse response) async {
+  handleMessage(RemoteMessage.fromMap(jsonDecode(response.payload!)));
+}
+
 Future initLocalNotification() async {
   const iOS = DarwinInitializationSettings();
   const android = AndroidInitializationSettings('@drawable/launcher_icon');
   final settings = InitializationSettings(iOS: iOS, android: android);
 
-  await _localNotification.initialize(
+  await flutterLocalNotificationsPlugin.initialize(
     settings,
-    onDidReceiveNotificationResponse: (details) {
-      final message = RemoteMessage.fromMap(jsonDecode(details.payload!));
-      handleMessage(message);
-    },
+    onDidReceiveNotificationResponse: onDidReceiveLocalNotification,
+    onDidReceiveBackgroundNotificationResponse: onDidReceiveLocalNotification,
   );
 
-  final platform = _localNotification.resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()!;
-  platform.createNotificationChannel(_androidChannel);
+  // Registrasikan channel untuk Android
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(_androidChannel);
+
+  flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
 }
 
 Future initPushNotification() async {
@@ -113,7 +118,7 @@ Future initPushNotification() async {
     final notification = message.notification;
     if (notification == null) return;
 
-    _localNotification.show(
+    flutterLocalNotificationsPlugin.show(
       notification.hashCode,
       notification.title,
       notification.body,
@@ -122,7 +127,8 @@ Future initPushNotification() async {
           _androidChannel.id,
           _androidChannel.name,
           channelDescription: _androidChannel.description,
-          importance: _androidChannel.importance,
+          importance: Importance.high, // Pastikan Importance tinggi
+          priority: Priority.high, // Pastikan priority tinggi
           icon: "@drawable/launcher_icon",
         ),
       ),
@@ -136,12 +142,12 @@ class FirebaseApi {
     ctx = context;
     await _firebaseMessaging.requestPermission(
       alert: true,
-      badge: true,
-      sound: true,
       announcement: false,
+      badge: true,
       carPlay: false,
       criticalAlert: false,
       provisional: false,
+      sound: true,
     );
     await FirebaseMessaging.instance.setDeliveryMetricsExportToBigQuery(true);
     final fCMToken = await _firebaseMessaging.getToken();
