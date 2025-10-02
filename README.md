@@ -1,9 +1,33 @@
-# Mobile dokter RSIA
-Aplikasi mobile untuk dokter RSIA Aisyiyah Pekajangan.
+# 🩺 RSIA Dokter App
 
-#### Config guide
-1. Clone this repo
-2. Run `flutter pub get`
-3. rename `example.api.dart` to `api.dart` inside `lib/config` folder
-4. change the value of required variable inside `api.dart` file
-5. Run `flutter run` to build and run the debug app on your emulator/phone
+Aplikasi **RSIA Dokter App** adalah aplikasi internal untuk membantu para dokter di **RSIA Aisyiyah Pekajangan** dalam memantau kondisi pasien.  
+Aplikasi ini dilengkapi dengan fitur **Early Warning System (EWS)** yang memberikan notifikasi dini kepada dokter jika kondisi pasien menunjukkan tanda bahaya.
+
+---
+
+## 🚀 Fitur Utama
+- **👨‍⚕️ Monitoring Pasien**  
+  Melihat status dan kondisi pasien secara real-time.
+
+- **⚠️ Early Warning System (EWS)**  
+  Sistem peringatan dini untuk mendeteksi kondisi pasien yang membutuhkan perhatian cepat.
+
+- **📊 Statistik Pasien**  
+  Menampilkan jumlah pasien berdasarkan rentang waktu tertentu:
+  - BPJS PBI  
+  - BPJS Non-PBI  
+  - Pasien Umum  
+
+- **📝 Resume Medis Pasien**  
+  Akses informasi ringkas mengenai riwayat medis pasien.
+
+- **🌡️ Grafik Suhu Pasien**  
+  Visualisasi data suhu pasien berdasarkan hasil pemeriksaan perawat.
+
+---
+
+## 🛠️ Teknologi
+- **Frontend**: Flutter  
+- **Backend**: Laravel API  
+- **Database**: MySQL  
+- **Notification**: FCM (Firebase Cloud Messaging)  
